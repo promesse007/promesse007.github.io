@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier photos — Souvenirs de mariage</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { background: var(--creme); }
+  .atelier { max-width: 900px; margin: 0 auto; padding: 34px 22px 80px; }
+  .atelier-entete { text-align: center; margin-bottom: 26px; }
+  .atelier-entete .noms { font-family: var(--manuscrite); font-size: clamp(2rem, 6vw, 2.7rem); color: var(--bordeaux); }
+  .atelier-entete p { color: var(--texte-doux); margin-top: 8px; }
+
+  .carte {
+    background: var(--blanc);
+    border: 1px solid rgba(201,162,39,.32);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+    padding: 22px;
+    margin-bottom: 22px;
+  }
+  .carte h2 { font-family: var(--titre); color: var(--bordeaux); font-size: 1.4rem; margin-bottom: 6px; }
+
+  #zone-depot {
+    border: 2px dashed rgba(201,162,39,.6);
+    border-radius: var(--rayon);
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: background .25s ease, border-color .25s ease;
+    background: rgba(255,255,255,.5);
+  }
+  #zone-depot:hover, #zone-depot.survol { background: rgba(201,162,39,.12); border-color: var(--dore); }
+  #zone-depot .icone { font-size: 2.6rem; }
+  #zone-depot p { margin-top: 10px; color: var(--texte-doux); }
+
+  .liste-en-attente { display: grid; gap: 14px; margin-top: 20px; }
+  .ligne-photo {
+    display: grid; grid-template-columns: 84px 1fr auto;
+    gap: 14px; align-items: center;
+    border: 1px solid rgba(201,162,39,.3);
+    border-radius: 12px; padding: 12px;
+    background: var(--blanc);
+  }
+  .ligne-photo img { width: 84px; height: 112px; object-fit: cover; border-radius: 8px; background: var(--beige); }
+  .ligne-photo .champs { display: grid; gap: 8px; }
+  .ligne-photo input, .ligne-photo select {
+    width: 100%; padding: 9px 11px;
+    border: 1px solid rgba(201,162,39,.45); border-radius: 8px;
+    font-family: var(--texte); font-size: .9rem; background: var(--blanc); color: var(--encre);
+  }
+  .bouton {
+    padding: 11px 22px; border-radius: 40px; border: 1px solid var(--dore);
+    background: transparent; color: var(--bordeaux); cursor: pointer;
+    font-family: var(--texte); font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
+    transition: all .25s ease;
+  }
+  .bouton:hover { background: var(--dore); color: #fff; }
+  .bouton.plein { background: var(--bordeaux); border-color: var(--bordeaux); color: #fff; }
+  .bouton.plein:hover { background: var(--dore); border-color: var(--dore); }
+  .bouton.petit { padding: 8px 14px; font-size: .7rem; }
+  .bouton.danger { border-color: #B04A3A; color: #B04A3A; }
+  .bouton.danger:hover { background: #B04A3A; color: #fff; }
+
+  .barre-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+  .grille-stock { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+  .vignette-stock {
+    border: 1px solid rgba(201,162,39,.3); border-radius: 12px;
+    background: var(--blanc); padding: 10px;
+  }
+  .vignette-stock img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; background: var(--beige); }
+  .vignette-stock .nom {
+    font-size: .8rem; color: var(--bordeaux); font-weight: 700;
+    margin-top: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .vignette-stock .cat { font-size: .72rem; color: var(--texte-doux); }
+  .vignette-stock input {
+    width: 100%; margin-top: 8px; padding: 7px 9px;
+    border: 1px solid rgba(201,162,39,.4); border-radius: 7px;
+    font-size: .78rem; font-family: var(--texte);
+  }
+  .vignette-stock .outils { display: flex; gap: 6px; margin-top: 8px; }
+
+  .message { margin-top: 14px; padding: 12px 16px; border-radius: 10px; font-size: .9rem; }
+  .message.ok  { background: #E8F4E4; color: #2F5D2A; border: 1px solid #B7DBAC; }
+  .message.info{ background: #FBF0DE; color: #7A5A22; border: 1px solid #E3CDA4; }
+
+  .retour { text-align: center; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<div class="atelier">
+  <div class="atelier-entete">
+    <p class="surtitre">Atelier de l'album</p>
+    <p class="noms">Ajouter vos photos</p>
+    <p>Vos images sont rangées dans une catégorie, avec une légende que vous choisissez.</p>
+  </div>
+
+  <!-- 1. Ajouter des photos -->
+  <div class="carte">
+    <h2>1. Choisir les photos à ajouter</h2>
+    <p style="color:var(--texte-doux);font-size:.92rem">
+      Sélectionnez plusieurs photos depuis votre ordinateur, indiquez une légende
+      et une catégorie, puis enregistrez-les.
+    </p>
+
+    <div id="zone-depot" style="margin-top:16px">
+      <div class="icone">📷</div>
+      <p><b>Cliquez ici</b> ou déposez vos photos</p>
+      <p style="font-size:.84rem">Formats acceptés : JPG, PNG, WEBP</p>
+      <input type="file" id="champ-fichiers" accept="image/*" multiple hidden>
+    </div>
+
+    <div class="liste-en-attente" id="attente"></div>
+
+    <div class="barre-actions">
+      <button class="bouton plein" id="tout-enregistrer" type="button" disabled>Enregistrer dans l'album</button>
+      <button class="bouton" id="tout-effacer" type="button" disabled>Tout annuler</button>
+    </div>
+    <div class="message" id="message" hidden></div>
+  </div>
+
+  <!-- 2. Photos déjà enregistrées -->
+  <div class="carte">
+    <h2>2. Photos enregistrées sur cet ordinateur</h2>
+    <p style="color:var(--texte-doux);font-size:.92rem">
+      Modifiez une légende ou supprimez une photo. Tout changement visible
+      immédiatement dans l'album (ouvrez <code>index.html</code>).
+    </p>
+    <div class="grille-stock" id="stock" style="margin-top:16px"></div>
+  </div>
+
+  <!-- 3. Mise en ligne -->
+  <div class="carte">
+    <h2>3. Envoyer l'album en ligne</h2>
+    <p style="color:var(--texte-doux);font-size:.92rem">
+      Les photos ajoutées ici sont stockées <b>dans le navigateur de cet ordinateur</b>.
+      Elles ne sont visibles que sur ce poste. Pour les partager avec vos proches sur Internet,
+      copiez les fichiers images dans <code>images/galerie/</code> puis ajoutez leurs noms
+      dans <code>galerie.js</code>, et publiez le dossier (voir « LISEZ-MOI.md »).
+    </p>
+    <div class="barre-actions">
+      <a class="bouton plein" href="index.html">Ouvrir l'album</a>
+      <button class="bouton" id="vider-stock" type="button">Supprimer toutes les photos locales</button>
+    </div>
+  </div>
+</div>
+
+<script src="galerie.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* raccourci pratique */
+  function $(sel) { return document.querySelector(sel); }
+  function $$(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+  var CATS = window.CATEGORIES || [];
+
+  /* ---------- Base locale (IndexedDB) ---------- */
+  var NOM_BASE = 'album-mariage';
+
+  function ouvrir() {
+    return new Promise(function (res, rej) {
+      var r = indexedDB.open(NOM_BASE, 1);
+      r.onupgradeneeded = function (e) {
+        var db = e.target.result;
+        if (!db.objectStoreNames.contains('photos')) {
+          db.createObjectStore('photos', { keyPath: 'id' });
+        }
+      };
+      r.onsuccess = function () { res(r.result); };
+      r.onerror   = function () { rej(r.error); };
+    });
+  }
+
+  function toutLire() {
+    return ouvrir().then(function (db) {
+      return new Promise(function (res) {
+        var tx = db.transaction('photos', 'readonly');
+        var out = [];
+        tx.objectStore('photos').openCursor().onsuccess = function (e) {
+          var c = e.target.result;
+          if (c) { out.push(c.value); c.continue(); }
+        };
+        tx.oncomplete = function () { res(out); };
+        tx.onerror   = function () { res([]); };
+      });
+    });
+  }
+
+  function enregistrer(objet) {
+    return ouvrir().then(function (db) {
+      return new Promise(function (res, rej) {
+        var tx = db.transaction('photos', 'readwrite');
+        tx.objectStore('photos').put(objet);
+        tx.oncomplete = res;
+        tx.onerror = function () { rej(tx.error); };
+      });
+    });
+  }
+
+  function supprimer(id) {
+    return ouvrir().then(function (db) {
+      return new Promise(function (res) {
+        var tx = db.transaction('photos', 'readwrite');
+        tx.objectStore('photos').delete(id);
+        tx.oncomplete = res;
+      });
+    });
+  }
+
+  function vider() {
+    return ouvrir().then(function (db) {
+      return new Promise(function (res) {
+        var tx = db.transaction('photos', 'readwrite');
+        tx.objectStore('photos').clear();
+        tx.oncomplete = res;
+      });
+    });
+  }
+
+  /* ---------- Réduction de l'image avant stockage ---------- */
+  function reduire(fichier, largeurMax) {
+    return new Promise(function (res, rej) {
+      var url = URL.createObjectURL(fichier);
+      var img = new Image();
+      img.onload = function () {
+        var w = img.width, h = img.height;
+        if (w > largeurMax) { h = Math.round(h * largeurMax / w); w = largeurMax; }
+        var c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        res(c.toDataURL('image/jpeg', 0.85));
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); rej(new Error('image illisible')); };
+      img.src = url;
+    });
+  }
+
+  /* ---------- Ajout de fichiers ---------- */
+  var attente = [];   // { id, src, nom, cat, legende }
+  var zone   = $('#' + 'zone-depot');
+  var champ  = $('#' + 'champ-fichiers');
+  var boiteAttente = $('#' + 'attente');
+  var message = $('#' + 'message');
+
+  zone.addEventListener('click', function () { champ.click(); });
+  zone.addEventListener('dragover', function (e) { e.preventDefault(); zone.classList.add('survol'); });
+  zone.addEventListener('dragleave', function () { zone.classList.remove('survol'); });
+  zone.addEventListener('drop', function (e) {
+    e.preventDefault(); zone.classList.remove('survol');
+    if (e.dataTransfer.files) ajouterFichiers(e.dataTransfer.files);
+  });
+  champ.addEventListener('change', function () { ajouterFichiers(champ.files); });
+
+  function dire(texte, type) {
+    message.hidden = false;
+    message.className = 'message ' + (type || 'info');
+    message.textContent = texte;
+  }
+
+  function ajouterFichiers(fichiers) {
+    Array.prototype.forEach.call(fichiers, function (f) {
+      if (f.type.indexOf('image/') !== 0) return;
+      reduire(f, 1100).then(function (src) {
+        attente.push({
+          id: 'local-' + Date.now() + '-' + Math.round(Math.random() * 1e6),
+          src: src,
+          nom: f.name,
+          cat: CATS.length ? CATS[0].id : 'meilleurs',
+          legende: ''
+        });
+        dessinerAttente();
+      }).catch(function () { dire('Le fichier « ' + f.name + ' » n\'a pas pu être lu.', 'info'); });
+    });
+  }
+
+  function optionsCategories(valeur) {
+    var s = '';
+    CATS.forEach(function (c) {
+      s += '<option value="' + c.id + '"' + (valeur === c.id ? ' selected' : '') + '>' + c.nom + '</option>';
+    });
+    return s;
+  }
+
+  function dessinerAttente() {
+    boiteAttente.innerHTML = '';
+    attente.forEach(function (p, i) {
+      var ligne = document.createElement('div');
+      ligne.className = 'ligne-photo';
+
+      var img = document.createElement('img');
+      img.src = p.src; img.alt = p.nom;
+
+      var champs = document.createElement('div');
+      champs.className = 'champs';
+      var leg = document.createElement('input');
+      leg.type = 'text'; leg.placeholder = 'Légende (ex. cérémonie à la mairie)'; leg.value = p.legende;
+      leg.addEventListener('input', function () { p.legende = leg.value; });
+      var sel = document.createElement('select');
+      sel.innerHTML = optionsCategories(p.cat);
+      sel.addEventListener('change', function () { p.cat = sel.value; });
+      champs.appendChild(leg); champs.appendChild(sel);
+
+      var retirer = document.createElement('button');
+      retirer.className = 'bouton danger petit';
+      retirer.type = 'button';
+      retirer.textContent = 'Retirer';
+      retirer.addEventListener('click', function () { attente.splice(i, 1); dessinerAttente(); });
+
+      ligne.appendChild(img); ligne.appendChild(champs); ligne.appendChild(retirer);
+      boiteAttente.appendChild(ligne);
+    });
+    $('#tout-enregistrer').disabled = attente.length === 0;
+    $('#tout-effacer').disabled   = attente.length === 0;
+  }
+
+  $('#tout-effacer').addEventListener('click', function () { attente = []; dessinerAttente(); });
+
+  $('#tout-enregistrer').addEventListener('click', function () {
+    var restantes = attente.slice();
+    var chaine = restantes.reduce(function (promesse, p) {
+      return promesse.then(function () {
+        return enregistrer(p);
+      });
+    }, Promise.resolve());
+    chaine.then(function () {
+      attente = []; dessinerAttente(); dessinerStock();
+      dire('Photos enregistrées dans l\'album de cet ordinateur. Ouvrez index.html pour les voir.', 'ok');
+    }).catch(function () {
+      dire('Une erreur est survenue pendant l\'enregistrement.', 'info');
+    });
+  });
+
+  /* ---------- Photos déjà stockées ---------- */
+  function dessinerStock() {
+    toutLire().then(function (liste) {
+      var boite = $('#stock');
+      boite.innerHTML = '';
+      if (!liste.length) {
+        boite.innerHTML = '<div class="galerie-vide" style="grid-column:1/-1">' +
+          '<div class="grand">🖼️</div><p>Aucune photo ajoutée pour l\'instant.</p></div>';
+        return;
+      }
+      liste.forEach(function (p) {
+        var carte = document.createElement('div');
+        carte.className = 'vignette-stock';
+
+        var img = document.createElement('img');
+        img.src = p.src; img.alt = p.legende || p.nom;
+
+        var nom = document.createElement('div');
+        nom.className = 'nom'; nom.textContent = p.legende || p.nom; nom.title = p.nom;
+
+        var cat = document.createElement('div');
+        cat.className = 'cat';
+        var trouvee = CATS.filter(function (c) { return c.id === p.cat; })[0];
+        cat.textContent = trouvee ? trouvee.nom : p.cat;
+
+        var legende = document.createElement('input');
+        legende.type = 'text'; legende.placeholder = 'Modifier la légende'; legende.value = p.legende || '';
+
+        var outils = document.createElement('div');
+        outils.className = 'outils';
+
+        var bSauver = document.createElement('button');
+        bSauver.className = 'bouton petit'; bSauver.type = 'button'; bSauver.textContent = 'Enregistrer';
+        bSauver.addEventListener('click', function () {
+          p.legende = legende.value.trim();
+          enregistrer(p).then(function () {
+            dessinerStock();
+            dire('Légende enregistrée.', 'ok');
+          });
+        });
+
+        var bSuppr = document.createElement('button');
+        bSuppr.className = 'bouton danger petit'; bSuppr.type = 'button'; bSuppr.textContent = 'Supprimer';
+        bSuppr.addEventListener('click', function () {
+          if (!confirm('Supprimer cette photo de l\'album ?')) return;
+          supprimer(p.id).then(function () { dessinerStock(); dire('Photo supprimée.', 'ok'); });
+        });
+
+        outils.appendChild(bSauver); outils.appendChild(bSuppr);
+        carte.appendChild(img); carte.appendChild(nom); carte.appendChild(cat);
+        carte.appendChild(legende); carte.appendChild(outils);
+        boite.appendChild(carte);
+      });
+    });
+  }
+
+  $('#vider-stock').addEventListener('click', function () {
+    if (!confirm('Supprimer TOUTES les photos ajoutées sur cet ordinateur ?')) return;
+    vider().then(function () { dessinerStock(); dire('Toutes les photos locales ont été supprimées.', 'ok'); });
+  });
+
+  dessinerStock();
+})();
+</script>
+</body>
+</html>

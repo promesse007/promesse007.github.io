@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olakiba Armand &amp; Bossenoura Josiane — Souvenirs de notre mariage</title>
+<meta name="description" content="Album numérique du mariage d'Olakiba Armand et Bossenoura Josiane, célébré le vendredi 11 décembre 2026 à la Mairie de Brazzaville, Congo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Barre de progression de lecture -->
+<div id="progression"></div>
+
+<!-- Pétales décoratifs -->
+<div id="petales"></div>
+
+<!-- ==========================================================
+     ÉCRAN D'OUVERTURE
+     ========================================================== -->
+<div id="ouverture">
+  <div class="ornement">&#10047;</div>
+  <p class="accroche">Amour &nbsp;&#9829;&nbsp; Engagement &nbsp;&#9829;&nbsp; Fidélité &nbsp;&#9829;&nbsp; Pour la vie</p>
+  <h2 class="noms">
+    Olakiba Armand
+    <span class="et">&amp;</span>
+    Bossenoura Josiane
+  </h2>
+  <p class="date-lieu">11 DÉCEMBRE 2026 &nbsp;&bull;&nbsp; MAIRIE DE BRAZZAVILLE &nbsp;&bull;&nbsp; CONGO</p>
+  <button id="bouton-ouvrir" type="button">Découvrir nos souvenirs</button>
+</div>
+
+<!-- Bouton musique (jamais de lecture automatique) -->
+<button id="musique" type="button" title="Activer ou couper la musique" aria-label="Activer ou couper la musique">&#9835;</button>
+<audio id="lecteur" loop preload="none"></audio>
+
+<!-- ==========================================================
+     NAVIGATION
+     ========================================================== -->
+<nav id="navigation" aria-label="Navigation principale">
+  <ul>
+    <li><a href="#accueil">Accueil</a></li>
+    <li><a href="#histoire">Notre histoire</a></li>
+    <li><a href="#portraits">Les mariés</a></li>
+    <li><a href="#galerie">Galerie</a></li>
+    <li><a href="#famille">Famille &amp; invités</a></li>
+    <li><a href="#livre-or">Livre d'or</a></li>
+  </ul>
+</nav>
+
+<!-- ==========================================================
+     ACCUEIL
+     ========================================================== -->
+<header id="accueil">
+  <div id="video-fond">
+    <video id="video-souvenirs" muted loop playsinline preload="none" poster="images/affiche.jpg"></video>
+  </div>
+
+  <div class="accueil-interne">
+    <p class="petit">Vendredi 11 décembre 2026</p>
+    <h1>
+      Olakiba Armand
+      <span class="et">&amp;</span>
+      Bossenoura Josiane
+    </h1>
+    <p class="accueil-phrase">« Deux vies, un amour, une seule histoire à écrire. »</p>
+
+    <div class="accueil-infos">
+      <span class="puce"><span class="icone">&#128197;</span><span>Vendredi <b>11 décembre 2026</b></span></span>
+      <span class="puce"><span class="icone">&#128205;</span><span><b>Mairie de Brazzaville</b>, Congo</span></span>
+      <span class="puce"><span class="icone">&#128141;</span><span>Mairie 08h00 &nbsp;&bull;&nbsp; Dot 12h00 &nbsp;&bull;&nbsp; Mariage 16h00</span></span>
+    </div>
+
+    <a id="bouton-decouvrir" href="#histoire">Découvrir nos souvenirs</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ==========================================================
+       COMPTE À REBOURS
+       ========================================================== -->
+  <section id="compte-a-rebours">
+    <div class="contour">
+      <p class="surtitre">Le grand jour approche</p>
+      <h2>Compte à rebours</h2>
+      <div class="griffe-horloge">
+        <div class="case-horloge"><span class="nombre" id="cb-jours">00</span><span class="mot">Jours</span></div>
+        <div class="case-horloge"><span class="nombre" id="cb-heures">00</span><span class="mot">Heures</span></div>
+        <div class="case-horloge"><span class="nombre" id="cb-minutes">00</span><span class="mot">Minutes</span></div>
+        <div class="case-horloge"><span class="nombre" id="cb-secondes">00</span><span class="mot">Secondes</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       NOTRE HISTOIRE
+       ========================================================== -->
+  <section id="histoire" class="zone">
+    <div class="contour">
+      <div class="centre">
+        <p class="surtitre">Les souvenirs de notre union</p>
+        <h2 class="titre">Notre histoire</h2>
+        <p class="sous-titre">Chaque instant de cette journée mérite d'être conservé avec soin.</p>
+        <div class="separateur">&#9829;</div>
+      </div>
+
+      <div class="recit" id="recit-liste"><!-- rempli par script.js --></div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       LES MARIÉS
+       ========================================================== -->
+  <section id="portraits" class="zone">
+    <div class="contour">
+      <div class="centre">
+        <p class="surtitre">Deux âmes, une seule histoire</p>
+        <h2 class="titre">Les mariés</h2>
+        <div class="separateur">&#9829;</div>
+      </div>
+
+      <div class="duo">
+        <article class="carte-portrait apparait">
+          <div class="portrait-enveloppe">
+            <div class="cadre-photo">
+              <span class="angle haut-gauche"></span><span class="angle bas-droite"></span>
+              <img src="images/portraits/armand.jpg" alt="Portrait d'Olakiba Armand, le marié" loading="eager" decoding="async">
+            </div>
+          </div>
+          <h3 class="nom-portrait">Olakiba Armand</h3>
+          <p class="role-portrait">Le marié</p>
+        </article>
+
+        <article class="carte-portrait apparait retard-1">
+          <div class="portrait-enveloppe">
+            <div class="cadre-photo">
+              <span class="angle haut-gauche"></span><span class="angle bas-droite"></span>
+              <img src="images/portraits/josiane.jpg" alt="Portrait de Bossenoura Josiane, la mariée" loading="eager" decoding="async">
+            </div>
+          </div>
+          <h3 class="nom-portrait">Bossenoura Josiane</h3>
+          <p class="role-portrait">La mariée</p>
+        </article>
+      </div>
+
+      <p class="phrase-union apparait retard-2">Deux vies, un amour, une seule histoire à écrire.</p>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       GALERIE DE SOUVENIRS
+       ========================================================== -->
+  <section id="galerie" class="zone">
+    <div class="contour">
+      <div class="centre">
+        <p class="surtitre">Notre album</p>
+        <h2 class="titre">Galerie de souvenirs</h2>
+        <p class="sous-titre">Cliquez sur une image pour l'agrandir, puis naviguez avec les flèches.</p>
+        <div class="separateur">&#9829;</div>
+      </div>
+
+      <div class="filtres" id="filtres" role="group" aria-label="Filtrer les photos par catégorie"></div>
+      <div class="grille-album" id="grille"></div>
+      <div class="galerie-vide" id="galerie-vide" hidden>
+        <div class="grand">&#128247;</div>
+        <p>Aucune photo n'est encore rangée dans cette catégorie.</p>
+        <p style="margin-top:12px">Pour ajouter vos photos, utilisez la page <code>studio.html</code> (ajout depuis cet ordinateur)
+        ou placez les fichiers dans <code>images/galerie/</code> puis listez-les dans <code>galerie.js</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       FAMILLE & INVITÉS
+       ========================================================== -->
+  <section id="famille" class="zone">
+    <div class="contour">
+      <div class="centre">
+        <p class="surtitre">Ils étaient là</p>
+        <h2 class="titre">Famille &amp; invités</h2>
+        <p class="sous-titre">Les visages de ceux qui ont partagé notre bonheur.</p>
+        <div class="separateur">&#9829;</div>
+      </div>
+
+      <div id="famille-liste"><!-- rempli par script.js --></div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       LIVRE D'OR
+       ========================================================== -->
+  <section id="livre-or" class="zone">
+    <div class="contour">
+      <div class="centre">
+        <p class="surtitre">Laissez-nous un mot</p>
+        <h2 class="titre">Livre d'or</h2>
+        <p class="sous-titre">Vos vœux seront conservés précieusement.</p>
+      </div>
+
+      <div class="cadre-livre">
+        <form id="formulaire-or" action="#" method="post" novalidate>
+          <div>
+            <label for="or-nom">Votre nom</label>
+            <input type="text" id="or-nom" name="nom" placeholder="Ex. Marie Koumba" required>
+          </div>
+          <div>
+            <label for="or-message">Votre message</label>
+            <textarea id="or-message" name="message" placeholder="Félicitations, vœux, souvenir de la journée…" required></textarea>
+          </div>
+          <button type="submit" id="or-envoyer">Signer le livre d'or</button>
+          <p class="reponse-livre" id="or-reponse" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="encadre-info">
+          <b>Comment fonctionne le livre d'or</b><br>
+          Un site composé uniquement de fichiers HTML/CSS/JS ne peut pas enregistrer de message
+          sur Internet : il a besoin d'un service de réception. La formule ci-dessus est prête à
+          être branchée sur <b>Formspree</b> (formspree.io) : vous créez un compte, vous récupérez
+          votre adresse de formulaire, puis vous remplacez <code>VOTRE-ID-FORMSPREE</code>
+          par celle-ci dans <code>galerie.js</code> (ligne <code>formspree</code>).
+          Tant que cette étape n'est pas faite, le formulaire l'indique honnêtement au lieu
+          d'enregistrer un message qui n'existerait pas.
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==========================================================
+     PIED DE PAGE
+     ========================================================== -->
+<footer class="pied">
+  <p class="noms-pied">Olakiba Armand &amp; Bossenoura Josiane</p>
+  <p class="ligne">11 décembre 2026 &nbsp;&bull;&nbsp; Mairie de Brazzaville &nbsp;&bull;&nbsp; Congo</p>
+  <div class="separateur">&#10047;</div>
+  <p class="mention">Album souvenirs — fait avec amour pour ceux qui étaient à nos côtés.</p>
+</footer>
+
+<!-- ==========================================================
+     VISIONNEUSE D'IMAGES
+     ========================================================== -->
+<div id="visionneuse" role="dialog" aria-modal="true" aria-label="Image agrandie">
+  <div class="vision-contenu">
+    <button id="vision-fermer" type="button" title="Fermer (Échap)" aria-label="Fermer">&#10005;</button>
+    <img class="vision-photo" id="vision-image" alt="">
+    <p class="vision-legende" id="vision-legende"></p>
+    <p class="vision-compteur" id="vision-compteur"></p>
+    <button class="vision-bouton vision-precedent" id="vision-precedent" type="button" title="Photo précédente" aria-label="Photo précédente">&#10094;</button>
+    <button class="vision-bouton vision-suivant" id="vision-suivant" type="button" title="Photo suivante" aria-label="Photo suivante">&#10095;</button>
+  </div>
+</div>
+
+<script src="galerie.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

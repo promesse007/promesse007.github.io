@@ -1,0 +1,12 @@
+﻿Placez ici votre fichier musical nomme exactement : musique.mp3
+
+Formats acceptes par les navigateurs : .mp3, .m4a, .ogg, .wav
+Poids conseille : moins de 4 Mo (musique libre de droits)
+
+Sites de musique libre de droits (utilisation legale) :
+  - Pixabay Music ....... https://pixabay.com/music/
+  - Free Music Archive .. https://freemusicarchive.org/
+  - YouTube Audio Library  https://www.youtube.com/audiolibrary
+
+Le site ne jouera jamais la musique automatiquement :
+l'invite devra cliquer sur le bouton pour l'ecouter.
