@@ -1,5 +1,5 @@
 /* ==========================================================
-   DONNÉES DE L'ALBUM — Olakiba Armand & Bossenoura Josiane
+   DONNÉES DE L'ALBUM — Olakiba Armand & Bosseno Josiane
    ----------------------------------------------------------
    C'EST LE SEUL FICHIER À MODIFIER POUR AJOUTER VOS PHOTOS.
    Il se lit avec un simple éditeur de texte (le Bloc-notes
@@ -46,7 +46,7 @@ window.REGLAGES = {
   formspree: 'VOTRE-ID-FORMSPREE',
 
   /* Nom affiché dans les messages du livre d'or */
-  mariage: 'Olakiba Armand et Bossenoura Josiane'
+  mariage: 'Olakiba Armand et Bosseno Josiane'
 };
 
 /* ---------- Notre histoire ----------
@@ -112,7 +112,7 @@ window.FAMILLE = [
    • legende  : texte affiché sous la photo (facultatif, peut être '')  */
 window.PHOTOS = [
   { src: 'images/portraits/armand.jpg',  cat: 'portraits', legende: "Olakiba Armand — portrait des mariés" },
-  { src: 'images/portraits/josiane.jpg', cat: 'portraits', legende: "Bossenoura Josiane — portrait des mariés" },
+  { src: 'images/portraits/josiane.jpg', cat: 'portraits', legende: "Bosseno Josiane — portrait des mariés" },
   { src: 'images/affiche.jpg',           cat: 'civil',     legende: "Notre invitation de mariage" }
 ];
 

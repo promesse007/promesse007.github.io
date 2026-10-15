@@ -1,4 +1,4 @@
-# 💍 Souvenirs de notre mariage — Olakiba Armand & Bossenoura Josiane
+# 💍 Souvenirs de notre mariage — Olakiba Armand & Bosseno Josiane
 
 Album numérique du mariage célébré le **vendredi 11 décembre 2026** à la **Mairie de Brazzaville, Congo**.
 
@@ -197,7 +197,7 @@ Tant que cette étape n'est pas faite, le formulaire l'indique honnêtement
 
 ## ✅ 10. Vérifications déjà effectuées
 
-- Noms corrects partout : **Olakiba Armand** et **Bossenoura Josiane**
+- Noms corrects partout : **Olakiba Armand** et **Bosseno Josiane**
   (aucune occurrence de l'ancienne orthographe)
 - Date et lieu affichés : vendredi 11 décembre 2026, Mairie de Brazzaville, Congo
 - Horaires conservés : Mairie 08h00 • Dot 12h00 • Mariage 16h00

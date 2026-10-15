@@ -1,6 +1,6 @@
 /* ==========================================================
    Souvenirs de mariage — interactions
-   Olakiba Armand & Bossenoura Josiane
+   Olakiba Armand & Bosseno Josiane
    ========================================================== */
 (function () {
   'use strict';
