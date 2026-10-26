@@ -48,31 +48,122 @@
   }
 
   /* ==========================================================
-     2. MUSIQUE (uniquement après un clic du visiteur)
+     1 bis. BARRE DE MESSAGE (annonces discrètes)
+     ========================================================== */
+  function floater(texte, duree) {
+    var boite = $('#message-flottant');
+    if (!boite) return;
+    boite.textContent = texte;
+    boite.hidden = false;
+    clearTimeout(floater._t);
+    floater._t = setTimeout(function () { boite.hidden = true; }, duree || 7000);
+  }
+
+  /* ==========================================================
+     2. MUSIQUE (jamais de lecture automatique)
+     ----------------------------------------------------------
+     Sources possibles, dans cet ordre :
+     1. la musique choisie sur cet appareil (enregistrée dans le
+        navigateur du visiteur, pour lui seul) ;
+     2. le fichier indiqué dans galerie.js (audio/musique.mp3) ;
+     3. rien : alors un clic sur ♪ ouvre le choix de fichiers
+        audio du PC ou du téléphone. Double clic : en changer.
      ========================================================== */
   var boutonMusique = $('#musique');
   var lecteur       = $('#lecteur');
+  var champMusique  = null;
 
-  if (lecteur && REG.musique) {
-    lecteur.src = REG.musique;
-    lecteur.addEventListener('error', function () {
-      // Aucun fichier audio présent : on l'explique au lieu de faire semblant
-      boutonMusique.title = 'Aucune musique fournie (voir le dossier audio/)';
-      boutonMusique.setAttribute('aria-disabled', 'true');
-      boutonMusique.style.opacity = '.55';
+  function ouvrirBase() {
+    return new Promise(function (resoudre, rejeter) {
+      var r = indexedDB.open('album-mariage', 2);
+      r.onupgradeneeded = function (e) {
+        var db = e.target.result;
+        if (!db.objectStoreNames.contains('photos'))  db.createObjectStore('photos',  { keyPath: 'id' });
+        if (!db.objectStoreNames.contains('musique')) db.createObjectStore('musique', { keyPath: 'id' });
+      };
+      r.onsuccess = function () { resoudre(r.result); };
+      r.onerror   = function () { rejeter(r.error); };
+    });
+  }
+
+  function lirePisteEnregistree() {
+    return ouvrirBase().then(function (db) {
+      return new Promise(function (resoudre) {
+        if (!db.objectStoreNames.contains('musique')) return resoudre(null);
+        var tx = db.transaction('musique', 'readonly');
+        var rq = tx.objectStore('musique').get('piste');
+        rq.onsuccess = function () { resoudre(rq.result && rq.result.blob ? rq.result : null); };
+        rq.onerror   = function () { resoudre(null); };
+      });
+    }).catch(function () { return null; });
+  }
+
+  function enregistrerPiste(blob, nom) {
+    return ouvrirBase().then(function (db) {
+      return new Promise(function (resoudre) {
+        var tx = db.transaction('musique', 'readwrite');
+        tx.objectStore('musique').put({ id: 'piste', blob: blob, nom: nom || 'musique', date: Date.now() });
+        tx.oncomplete = function () { resoudre(true); };
+        tx.onerror    = function () { resoudre(false); };
+      });
+    });
+  }
+
+  function joueurActiver() {
+    lecteur.volume = 0.35;
+    lecteur.play().then(function () {
+      boutonMusique.classList.add('actif');
+    }).catch(function () {
+      floater('La lecture n\'a pas pu démarrer. Cliquez encore une fois sur le bouton ♪.');
+    });
+  }
+
+  function choisirMusique() {
+    if (!champMusique) {
+      champMusique = document.createElement('input');
+      champMusique.type = 'file';
+      champMusique.accept = 'audio/*';
+      champMusique.hidden = true;
+      document.body.appendChild(champMusique);
+      champMusique.addEventListener('change', function () {
+        if (!champMusique.files || !champMusique.files[0]) return;
+        var f = champMusique.files[0];
+        enregistrerPiste(f, f.name).then(function () {
+          lecteur.src = URL.createObjectURL(f);
+          boutonMusique.title = 'Musique : ' + f.name + ' (double clic pour en changer)';
+          joueurActiver();
+          floater('Musique « ' + f.name + ' » enregistrée dans cet appareil. Elle n\'est pas visible chez les autres visiteurs : chaque appareil garde sa propre piste.');
+        });
+      });
+    }
+    champMusique.click();
+  }
+
+  if (lecteur) {
+    lirePisteEnregistree().then(function (piste) {
+      if (piste) {
+        // la musique choisie sur cet appareil a la priorité
+        lecteur.src = URL.createObjectURL(piste.blob);
+        boutonMusique.title = 'Musique : ' + piste.nom + ' (double clic : en choisir une autre)';
+      } else if (REG.musique) {
+        lecteur.src = REG.musique;
+        lecteur.addEventListener('error', function () {
+          // fichier absent : on l'explique au lieu de faire semblant
+          boutonMusique.title = 'Aucune musique configurée : cliquez pour en choisir une';
+        });
+      }
     });
   }
 
   if (boutonMusique && lecteur) {
+    boutonMusique.addEventListener('dblclick', function (e) {
+      e.preventDefault();
+      choisirMusique();
+    });
     boutonMusique.addEventListener('click', function () {
-      if (!lecteur.src) return;                       // aucun fichier configuré
+      if (!lecteur.src || lecteur.error) { choisirMusique(); return; }
       if (lecteur.paused) {
-        lecteur.volume = 0.35;
-        lecteur.play().then(function () {
-          boutonMusique.classList.add('actif');
-        }).catch(function () {
-          boutonMusique.title = 'Lecture impossible pour ce navigateur';
-        });
+        joueurActiver();
       } else {
         lecteur.pause();
         boutonMusique.classList.remove('actif');
@@ -80,10 +171,14 @@
     });
   }
 
-  /* protection des photos : clic droit, glisser-déposer et menu d'appui long
-     sont bloqués sur les images (une vraie capture d'écran reste possible :
-     aucun site web ne peut l'empêcher, c'est le téléphone qui photographie
-     son propre écran) */
+  /* ==========================================================
+     2 bis. PROTECTION DES PHOTOS
+     ----------------------------------------------------------
+     clic droit « enregistrer l'image », glisser-déposer et menu
+     d'appui long sont bloqués sur les images. NB : une vraie
+     capture d'écran reste possible — aucun site web ne peut
+     l'empêcher, c'est le téléphone qui photographie son écran.
+     ========================================================== */
   document.addEventListener('contextmenu', function (e) {
     if (e.target && e.target.tagName === 'IMG') e.preventDefault();
   });
@@ -232,31 +327,154 @@
   };
 
   function chargerPhotosLocales() {
-    // Photos ajoutées depuis studio.html, stockées dans le navigateur
-    return new Promise(function (resoudre) {
-      if (!('indexedDB' in window)) return resoudre([]);
-      var requete = indexedDB.open('album-mariage', 1);
-      requete.onupgradeneeded = function (e) {
-        var db = e.target.result;
-        if (!db.objectStoreNames.contains('photos')) {
-          db.createObjectStore('photos', { keyPath: 'id' });
+    // Photos ajoutées sur cet appareil (studio ou bouton « Ajouter »),
+    // stockées dans le navigateur de l'appareil.
+    return ouvrirBase().then(function (db) {
+      return new Promise(function (resoudre) {
+        if (!db.objectStoreNames.contains('photos')) return resoudre([]);
+        var tx = db.transaction('photos', 'readonly');
+        var out = [];
+        tx.objectStore('photos').openCursor().onsuccess = function (e) {
+          var c = e.target.result;
+          if (c) { out.push(c.value); c.continue(); }
+        };
+        tx.oncomplete = function () { resoudre(out); };
+        tx.onerror    = function () { resoudre([]); };
+      });
+    }).catch(function () { return []; });
+  }
+
+  function enregistrerPhotoLocale(objet) {
+    return ouvrirBase().then(function (db) {
+      return new Promise(function (resoudre, rejeter) {
+        var tx = db.transaction('photos', 'readwrite');
+        tx.objectStore('photos').put(objet);
+        tx.oncomplete = function () { resoudre(true); };
+        tx.onerror    = function () { rejeter(tx.error); };
+      });
+    });
+  }
+
+  /* réduit une image avant de l'enregistrer (plus léger sur le téléphone) */
+  function reduire(fichier, largeurMax) {
+    return new Promise(function (resoudre, rejeter) {
+      var url = URL.createObjectURL(fichier);
+      var img = new Image();
+      img.onload = function () {
+        var w = img.width, h = img.height;
+        if (w > largeurMax) { h = Math.round(h * largeurMax / w); w = largeurMax; }
+        var c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        resoudre(c.toDataURL('image/jpeg', 0.85));
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); rejeter(new Error('image illisible')); };
+      img.src = url;
+    });
+  }
+
+  /* ---------- Ajouter des photos depuis la barre des catégories ----------
+     Chaque photo est lue par l'assistant intelligent (intelligence.js)
+     qui propose la catégorie, puis rangée sur cet appareil.               */
+  var champAjout = null;
+
+  function choisirDesPhotos() {
+    if (!champAjout) {
+      champAjout = document.createElement('input');
+      champAjout.type = 'file';
+      champAjout.accept = 'image/*';
+      champAjout.multiple = true;
+      champAjout.hidden = true;
+      document.body.appendChild(champAjout);
+      champAjout.addEventListener('change', function () {
+        if (champAjout.files && champAjout.files.length) {
+          ajouterPhotosDepuisFichiers(champAjout.files);
+          champAjout.value = '';
         }
-      };
-      requete.onsuccess = function () {
-        try {
-          var db = requete.result;
-          if (!db.objectStoreNames.contains('photos')) return resoudre([]);
-          var tx = db.transaction('photos', 'readonly');
-          var out = [];
-          tx.objectStore('photos').openCursor().onsuccess = function (e) {
-            var c = e.target.result;
-            if (c) { out.push(c.value); c.continue(); }
-          };
-          tx.oncomplete = function () { resoudre(out); };
-          tx.onerror = function () { resoudre([]); };
-        } catch (err) { resoudre([]); }
-      };
-      requete.onerror = function () { resoudre([]); };
+      });
+    }
+    champAjout.click();
+  }
+
+  function ajouterPhotosDepuisFichiers(fichiers) {
+    var images = Array.prototype.filter.call(fichiers || [], function (f) {
+      return f.type.indexOf('image/') === 0;
+    });
+    if (!images.length) return;
+
+    var IA = window.AssistantImage || null;
+    var disponible = !!(IA && IA.suggerer);
+    var enLigne = navigator.onLine;
+    if (disponible && enLigne) {
+      floater('Assistant intelligent : lecture des ' + images.length + ' photo(s)…', 20000);
+    }
+
+    var resume = { ajoutees: 0, categories: {}, exemples: [], avecIA: 0 };
+    var suite = Promise.resolve();
+
+    images.forEach(function (f) {
+      suite = suite.then(function () {
+        return reduire(f, 1100);
+      }).then(function (src) {
+        if (disponible && enLigne) {
+          return IA.suggerer(src).then(function (s) {
+            return { src: src, cat: s.cat, classe: s.classe || '' };
+          }).catch(function () {
+            return { src: src, cat: 'meilleurs', classe: '' };
+          });
+        }
+        return { src: src, cat: 'meilleurs', classe: '' };
+      }).then(function (r) {
+        resume.categories[r.cat] = (resume.categories[r.cat] || 0) + 1;
+        resume.ajoutees++;
+        if (r.classe) { resume.exemples.push(r.classe); resume.avecIA++; }
+        return enregistrerPhotoLocale({
+          id: 'local-' + Date.now() + '-' + Math.round(Math.random() * 1e6),
+          src: r.src,
+          nom: f.name,
+          cat: r.cat,
+          legende: ''
+        });
+      }).catch(function () {
+        floater('Le fichier « ' + f.name + ' » n\'a pas pu être ajouté sur cet appareil.');
+      });
+    });
+
+    suite.then(function () {
+      var parties = Object.keys(resume.categories).map(function (id) {
+        return nomCategorie(id) + ' : ' + resume.categories[id];
+      });
+      var texte = resume.ajoutees + ' photo(s) ajoutée(s) sur cet appareil — ' + parties.join(', ') + '.';
+      if (resume.avecIA) {
+        texte += ' Rangement automatique par l\'assistant intelligent' +
+          (resume.exemples.length ? ' (sujet reconnu : « ' + resume.exemples[0] + ' »)' : '') + '.';
+      } else {
+        texte += ' L\'assistant intelligent n\'a pas pu analyser (pas de connexion Internet) : voyez le studio pour les classer.';
+      }
+      if (resume.categories.meilleurs) {
+        texte += ' Une correction manuelle reste possible dans le studio.';
+      }
+      floater(texte, 11000);
+      return rafraichirAlbum();
+    });
+  }
+
+  /* reconstruit tout l'album après un ajout (galerie + famille + films) */
+  function rafraichirAlbum() {
+    return chargerPhotosLocales().then(function (locales) {
+      galerie.liste = PHOTOS.slice();
+      locales.forEach(function (p) {
+        galerie.liste.push({
+          src: p.src,                       // image encodée en mémoire locale
+          cat: p.cat || 'meilleurs',
+          legende: p.legende || (p.nom || 'Photo ajoutée')
+        });
+      });
+      if (!galerie.liste.length) return construireGalerie();
+      construireGalerie();
+      dessinerFamille();
+      observerApparitions();
     });
   }
 
@@ -264,6 +482,10 @@
     var zoneFiltres = $('#filtres');
     var grille      = $('#grille');
     if (!zoneFiltres || !grille) return;
+
+    /* réinitialisation (utile après l'ajout de nouvelles photos) */
+    zoneFiltres.innerHTML = '';
+    grille.innerHTML = '';
 
     /* --- filtres --- */
     var comptes = {};
@@ -285,6 +507,15 @@
       b.innerHTML = c.nom + ' <span class="compte">' + comptes[c.id] + '</span>';
       zoneFiltres.appendChild(b);
     });
+
+    /* --- bouton ajouter des photos --- */
+    var ajouter = document.createElement('button');
+    ajouter.className = 'filtre-ajout';
+    ajouter.type = 'button';
+    ajouter.title = 'Choisir des photo(s) depuis cet appareil : l\'assistant intelligent les range automatiquement dans une catégorie.';
+    ajouter.textContent = '+ Ajouter des photos';
+    ajouter.addEventListener('click', choisirDesPhotos);
+    zoneFiltres.appendChild(ajouter);
 
     zoneFiltres.addEventListener('click', function (e) {
       var b = e.target.closest('.filtre');
@@ -576,25 +807,275 @@
   }
 
   /* ==========================================================
-     12. DÉMARRAGE
+     12. FILM DES SOUVENIRS (montage automatique)
+     ----------------------------------------------------------
+     Fabrique un petit film : titre, chaque photo défilée avec un
+     léger effet de zoom, générique. Montage affiché en direct ;
+     possibilité d'enregistrer la vidéo (WebM/MP4 selon navigateur),
+     avec la musique choisie quand le navigateur le permet.
      ========================================================== */
-  chargerPhotosLocales().then(function (locales) {
-    // fusion : photos du fichier galerie.js + photos ajoutées sur cet ordinateur
-    locales.forEach(function (p) {
-      galerie.liste.push({
-        src: p.src,                       // image encodée en mémoire locale
-        cat: p.cat || 'meilleurs',
-        legende: p.legende || (p.nom || 'Photo ajoutée')
-      });
+  var film = null;
+
+  function initFilm() {
+    film = {
+      boite:       $('#film'),
+      canvas:      $('#film-canvas'),
+      ctx:         $('#film-canvas') ? $('#film-canvas').getContext('2d') : null,
+      apercu:      $('#film-apercu'),
+      info:        $('#film-info'),
+      lancer:      $('#film-lancer'),
+      stop:        $('#film-stop'),
+      enregistrer: $('#film-enregistrer'),
+      fermer:      $('#film-fermer'),
+      raf: 0,
+      enCours: false,
+      enregistreur: null,
+      url: null
+    };
+    if (!film.boite || !film.canvas) return;
+
+    $('#bouton-film').addEventListener('click', function () {
+      film.canvas.hidden = false;
+      film.apercu.hidden = true;
+      film.lancer.hidden = false;
+      film.stop.hidden = true;
+      film.enregistrer.hidden = true;
+      film.info.textContent = 'Le film se fabrique à partir des ' + galerie.liste.length +
+        ' photo(s) de cet appareil. Vous pouvez d\'abord choisir une catégorie ci-dessus : ' +
+        'redéfinissez-la puis c\'est cette catégorie qui sera filmée.';
+      film.boite.hidden = false;
     });
-    construireGalerie();
-    dessinerFamille();
-    observerApparitions();
-    // le message de la galerie vide doit refléter la situation réelle
-    if (!galerie.liste.length) {
-      $('#galerie-vide').hidden = false;
-      $('#grille').style.display = 'none';
+    film.fermer.addEventListener('click', fermerFilm);
+    film.boite.addEventListener('click', function (e) { if (e.target === film.boite) fermerFilm(); });
+    film.lancer.addEventListener('click', lancerFilm);
+    film.stop.addEventListener('click', function () { terminerMontage('Film arrêté — voici votre vidéo.'); });
+    film.enregistrer.addEventListener('click', function () {
+      var a = document.createElement('a');
+      a.href = film.url;
+      a.download = 'film-des-souvenirs.' + (film.extension || 'webm');
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+  }
+
+  function fermerFilm() {
+    if (film.enCours) terminerMontage(null);
+    film.boite.hidden = true;
+    if (film.url) { try { URL.revokeObjectURL(film.url); } catch (e) {} film.url = null; }
+    film.canvas.hidden = false;
+    film.apercu.hidden = true;
+    film.lancer.hidden = false;
+    film.stop.hidden = true;
+    film.enregistrer.hidden = true;
+  }
+
+  function chargerImagePourFilm(src) {
+    return new Promise(function (resoudre, rejeter) {
+      var img = new Image();
+      img.onload = function () { resoudre(img); };
+      img.onerror = rejeter;
+      img.src = src;
+    });
+  }
+
+  function dessinerCouverture(ctx, img, w, h, zoom, decalX, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    var r = Math.max(w / img.width, h / img.height) * zoom;
+    var dw = img.width * r, dh = img.height * r;
+    ctx.drawImage(img, (w - dw) / 2 + decalX, (h - dh) / 2, dw, dh);
+    ctx.restore();
+  }
+
+  function dessinerCarte(ctx, w, h, lignes, petitDessus) {
+    var g = ctx.createLinearGradient(0, 0, w, h);
+    g.addColorStop(0, '#4A121C');
+    g.addColorStop(.55, '#6B1F2A');
+    g.addColorStop(1, '#5B1A24');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(201,162,39,.75)';
+    ctx.lineWidth = Math.max(2, w * 0.002);
+    ctx.strokeRect(w * 0.06, h * 0.08, w * 0.88, h * 0.84);
+
+    ctx.fillStyle = 'rgba(251,245,236,.96)';
+    ctx.textAlign = 'center';
+    var taille = Math.round(h * 0.11);
+    ctx.font = taille + 'px "Great Vibes", "Playfair Display", serif';
+    lignes.forEach(function (ligne, i) {
+      ctx.fillText(ligne, w / 2, h * (petitDessus ? 0.34 : 0.40) + i * taille * 1.18);
+    });
+    ctx.restore();
+  }
+
+  function lancerFilm() {
+    if (film.enCours) return;
+    var photosF = (galerie.affichees.length ? galerie.affichees : galerie.liste).slice();
+    if (!photosF.length) { film.info.textContent = 'Aucune photo disponible pour faire le film.'; return; }
+
+    film.lancer.hidden = true;
+    film.enregistrer.hidden = true;
+    film.apercu.hidden = true;
+    film.canvas.hidden = false;
+    film.stop.hidden = false;
+    film.info.textContent = 'Le film se prépare…';
+
+    var W = 1128, H = 636;
+    film.canvas.width = W;
+    film.canvas.height = H;
+    var ctx = film.ctx;
+
+    Promise.all(photosF.map(function (p) { return chargerImagePourFilm(p.src); }))
+      .then(function (imgs) {
+        // la musique choisie (s'il y en a une) accompagne le film
+        if (lecteur && lecteur.src && lecteur.paused) {
+          lecteur.currentTime = 0;
+          lecteur.volume = 0.35;
+          lecteur.play().catch(function () {});
+          boutonMusique.classList.add('actif');
+        }
+
+        /* --- enregistrement (quand le navigateur le permet) --- */
+        var flux = null, typeChoisi = null;
+        try {
+          if (film.canvas.captureStream && window.MediaRecorder) {
+            flux = film.canvas.captureStream(30);
+            var types = ['video/mp4', 'video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+            types.some(function (t) {
+              if (MediaRecorder.isTypeSupported(t)) { typeChoisi = t; return true; }
+              return false;
+            });
+            try {
+              if (lecteur.captureStream) {
+                lecteur.captureStream().getAudioTracks().forEach(function (t) { flux.addTrack(t); });
+              }
+            } catch (err) { /* musique non enregistrable : film muet, c'est indiqué */ }
+            if (typeChoisi) {
+              film.recording = new MediaRecorder(flux, { mimeType: typeChoisi });
+              film.tranches = [];
+              film.recording.ondataavailable = function (e) {
+                if (e.data && e.data.size) film.tranches.push(e.data);
+              };
+              film.recording.start(1000);
+            }
+          }
+        } catch (err) { /* pas d'enregistrement ici ; le film reste visible */ }
+
+        /* --- chronologie --- */
+        var TITRE = 3000, PHOTO = 3400, FADE = 650, FIN = 2800;
+        var totalMs = TITRE + imgs.length * PHOTO + FIN;
+        var debut = performance.now();
+        film.enCours = true;
+        var dernierAff = -1;
+
+        function calque(t) { return t * t * (3 - 2 * t); }   // easing doux
+
+        function image(t) {
+          ctx.fillStyle = '#2B0A0F';
+          ctx.fillRect(0, 0, W, H);
+
+          if (t < TITRE) {
+            dessinerCarte(ctx, W, H, ['Olakiba Armand', '&', 'Bosseno Josiane'], false);
+            return;
+          }
+          if (t >= totalMs - FIN) {
+            var d = REG.dateMariage ? new Date(REG.dateMariage) : null;
+            var texteDate = d ? 'Le ' + d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : 'Notre mariage';
+            dessinerCarte(ctx, W, H, ['Deux vies, un amour,', 'une seule histoire à écrire.', texteDate], true);
+            return;
+          }
+
+          var idx = Math.floor((t - TITRE) / PHOTO);
+          var dans = (t - TITRE) - idx * PHOTO;
+          var img = imgs[idx];
+          var prochaine = imgs[idx + 1] || null;
+
+          if (idx !== dernierAff) {
+            dernierAff = idx;
+            film.info.textContent = 'Souvenir ' + (idx + 1) + ' / ' + imgs.length + '…';
+          }
+
+          var sensibilite = calque(Math.min(1, dans / PHOTO));
+          var zoom = (idx % 2 === 0) ? 1.02 + 0.08 * sensibilite : 1.10 - 0.08 * sensibilite;
+          var decalX = (idx % 2 === 0 ? -1 : 1) * W * 0.012 * sensibilite;
+          dessinerCouverture(ctx, img, W, H, zoom, decalX, 1);
+
+          if (prochaine && dans > PHOTO - FADE) {
+            var fondu = calque((dans - (PHOTO - FADE)) / FADE);
+            densiteCouverture(ctx, prochaine, W, H, 1.03, 0, fondu);
+          }
+
+          /* voile doré léger pour l'esthétique du film */
+          ctx.save();
+          ctx.fillStyle = 'rgba(74,18,28,0.08)';
+          ctx.fillRect(0, 0, W, H);
+          ctx.restore();
+        }
+
+        function boucle() {
+          if (!film.enCours) return;
+          var t = performance.now() - debut;
+          image(t);
+          if (t >= totalMs) {
+            terminerMontage('Film terminé ! Voici votre vidéo de souvenirs.');
+            return;
+          }
+          film.raf = requestAnimationFrame(boucle);
+        }
+        film.raf = requestAnimationFrame(boucle);
+      })
+      .catch(function () {
+        film.info.textContent = 'Certaines photo(s) n\'ont pas pu être lues pour le film.';
+        film.lancer.hidden = false;
+        film.stop.hidden = true;
+      });
+  }
+
+  function densiteCouverture(ctx, img, w, h, zoom, decalX, alpha) {
+    /* alias volontaire de dessinerCouverture pour un appel plus lisible au fondu */
+    dessinerCouverture(ctx, img, w, h, zoom, decalX, alpha);
+  }
+
+  function terminerMontage(message) {
+    if (!film.enCours) return;
+    film.enCours = false;
+    cancelAnimationFrame(film.raf);
+    if (lecteur && !lecteur.paused) {
+      lecteur.pause();
+      boutonMusique.classList.remove('actif');
     }
-  });
+    if (film.recording && film.recording.state !== 'inactive') {
+      film.recording.onstop = function () {
+        var blob = new Blob(film.tranches || [], { type: film.recording.mimeType || 'video/webm' });
+        if (film.url) { try { URL.revokeObjectURL(film.url); } catch (e) {} }
+        film.url = URL.createObjectURL(blob);
+        film.extension = (film.recording.mimeType || '').indexOf('mp4') !== -1 ? 'mp4' : 'webm';
+        film.canvas.hidden = true;
+        film.apercu.hidden = false;
+        film.apercu.src = film.url;
+        film.enregistrer.hidden = false;
+        film.stop.hidden = true;
+        film.info.textContent = message + ' Format : ' + film.extension.toUpperCase() + '.' +
+          (film.tranches.length ? '' : ' (Ce navigateur n\'a pas enregistré la vidéo : le film n\'a été que visionné.)');
+      };
+      film.recording.stop();
+    } else {
+      film.canvas.hidden = false;
+      film.apercu.hidden = true;
+      film.lancer.hidden = false;
+      film.stop.hidden = true;
+      film.info.textContent = 'Film terminé. ' +
+        'Ce navigateur ne permet pas d\'enregistrer la vidéo : utilisez Chrome ou Edge pour exporter le fichier.';
+    }
+  }
+
+  /* ==========================================================
+     13. DÉMARRAGE
+     ========================================================== */
+  rafraichirAlbum();
+  initFilm();
 
 })();

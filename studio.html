@@ -165,11 +165,14 @@
 
   function ouvrir() {
     return new Promise(function (res, rej) {
-      var r = indexedDB.open(NOM_BASE, 1);
+      var r = indexedDB.open(NOM_BASE, 2);
       r.onupgradeneeded = function (e) {
         var db = e.target.result;
         if (!db.objectStoreNames.contains('photos')) {
           db.createObjectStore('photos', { keyPath: 'id' });
+        }
+        if (!db.objectStoreNames.contains('musique')) {
+          db.createObjectStore('musique', { keyPath: 'id' });
         }
       };
       r.onsuccess = function () { res(r.result); };
