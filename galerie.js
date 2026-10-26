@@ -47,6 +47,10 @@ window.REGLAGES = {
      l'adresse complète obtenue (elle ressemble à https://formspree.io/f/abcdwxyz). */
   formspree: 'VOTRE-ID-FORMSPREE',
 
+  /* MOT DE PASSE DU PROPRIÉTAIRE (cadenas ✏️ de la partie administrateur)
+     Changez ce mot de passe par le vôtre ici, puis enregistrez le fichier. */
+  adminMdp: 'album-2026',
+
   /* Nom affiché dans les messages du livre d'or */
   mariage: 'Olakiba Armand et Bosseno Josiane'
 };

@@ -37,6 +37,9 @@
 <button id="musique" type="button" title="Activer ou couper la musique" aria-label="Activer ou couper la musique">&#9835;</button>
 <audio id="lecteur" loop preload="none"></audio>
 
+<!-- Cadenas : accès de l'administrateur (propriétaire de l'album uniquement) -->
+<button id="admin-acces" type="button" title="Espace du propriétaire (administrateur)" aria-label="Espace du propriétaire">&#128274;</button>
+
 <!-- ==========================================================
      NAVIGATION
      ========================================================== -->
@@ -253,5 +256,25 @@
 
 <script src="galerie.js"></script>
 <script src="script.js"></script>
+<!-- ==========================================================
+     ÉCRAN DU PROPRIÉTAIRE (mot de passe administrateur)
+     ========================================================== -->
+<div id="ecran-admin" hidden>
+  <div class="ecran-admin-carte">
+    <span class="icone" aria-hidden="true">&#128273;</span>
+    <h3>Espace du propriétaire</h3>
+    <p class="explication">Ici, seul l'administrateur de l'album peut ajouter,
+      masquer ou supprimer des photos, et gérer la musique.</p>
+    <input type="password" id="admin-mdp" placeholder="Mot de passe du propriétaire" autocomplete="off">
+    <p id="admin-erreur" class="erreur" hidden>Mot de passe incorrect. Veuillez réessayer.</p>
+    <div class="choix">
+      <button type="button" id="admin-valider" class="vision-bouton-principal">Entrer</button>
+      <button type="button" id="admin-annuler" class="vision-bouton-principal secondaire">Annuler</button>
+    </div>
+    <p class="note-honnete">Protection simple du propriétaire : les photos ajoutées
+      restent enregistrées dans ce téléphone uniquement.</p>
+  </div>
+</div>
+
 </body>
 </html>

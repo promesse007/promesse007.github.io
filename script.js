@@ -81,6 +81,52 @@
   }
 
   /* ==========================================================
+     2 bis. PARTIE ADMINISTRATEUR (cadenas du propriétaire)
+     ========================================================== */
+  var boutonAdmin  = $('#admin-acces');
+  var ecranAdmin   = $('#ecran-admin');
+  var champMdp     = $('#admin-mdp');
+  var erreurAdmin  = $('#admin-erreur');
+
+  function ouvrirEcranAdmin() {
+    ecranAdmin.hidden = false;
+    erreurAdmin.hidden = true;
+    setTimeout(function () { champMdp.focus(); }, 50);
+  }
+  function essayerEntrerAdmin() {
+    if (champMdp.value === REG.adminMdp) {
+      // on mémorise l'accès pour la suite de la session
+      try { sessionStorage.setItem('album-admin', '1'); } catch (e) {}
+      location.href = 'studio.html';
+    } else {
+      erreurAdmin.hidden = false;
+      champMdp.value = '';
+      champMdp.focus();
+    }
+  }
+
+  if (boutonAdmin && ecranAdmin) {
+    boutonAdmin.addEventListener('click', ouvrirEcranAdmin);
+    $('#admin-valider').addEventListener('click', essayerEntrerAdmin);
+    $('#admin-annuler').addEventListener('click', function () { ecranAdmin.hidden = true; });
+    ecranAdmin.addEventListener('click', function (e) { if (e.target === ecranAdmin) ecranAdmin.hidden = true; });
+    champMdp.addEventListener('keydown', function (e) { if (e.key === 'Enter') essayerEntrerAdmin(); });
+  }
+
+  /* ==========================================================
+     2 ter. PROTECTION DES PHOTOS (clic droit / glisser / appui long)
+     ========================================================== */
+  /* NB : aucune page web ne peut empêcher une vraie capture d'écran.
+     Ceci bloque en revanche le clic droit « enregistrer l'image »,
+     le glisser-déposer et le menu d'appui long sur téléphone. */
+  document.addEventListener('contextmenu', function (e) {
+    if (e.target && e.target.tagName === 'IMG') e.preventDefault();
+  });
+  document.addEventListener('dragstart', function (e) {
+    if (e.target && e.target.tagName === 'IMG') e.preventDefault();
+  });
+
+  /* ==========================================================
      3. PÉTALES DÉCORATIFS
      ========================================================== */
   (function petales() {
@@ -576,6 +622,14 @@
         legende: p.legende || (p.nom || 'Photo ajoutée')
       });
     });
+
+    // photos que l'administrateur a masquées depuis studio.html (sur cet appareil)
+    var masquees = [];
+    try { masquees = JSON.parse(localStorage.getItem('album-masquees') || '[]'); } catch (e) {}
+    if (masquees.length) {
+      galerie.liste = galerie.liste.filter(function (p) { return masquees.indexOf(p.src) === -1; });
+    }
+
     construireGalerie();
     dessinerFamille();
     observerApparitions();
