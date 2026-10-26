@@ -190,72 +190,6 @@ h2.titre {
 #musique.actif { animation: tourne 4.5s linear infinite; }
 @keyframes tourne { to { transform: rotate(360deg); } }
 
-/* ---------- Bouton cadenas (administrateur / propriétaire) ---------- */
-#admin-acces {
-  position: fixed; right: 20px; bottom: 84px; z-index: 85;
-  width: 54px; height: 54px; border-radius: 50%;
-  border: 1px solid var(--dore);
-  background: rgba(255, 253, 250, .94);
-  color: var(--bordeaux);
-  display: grid; place-items: center;
-  font-size: 1.15rem; cursor: pointer;
-  box-shadow: var(--ombre);
-  transition: transform .3s ease, background .3s ease, color .3s ease;
-}
-#admin-acces:hover { background: var(--dore); color: #fff; transform: scale(1.09); }
-
-/* ---------- Écran de saisie du mot de passe ---------- */
-#ecran-admin {
-  position: fixed; inset: 0; z-index: 120;
-  display: grid; place-items: center;
-  background: rgba(40, 12, 16, .78);
-  padding: 22px;
-}
-.ecran-admin-carte {
-  width: min(360px, 100%);
-  background: var(--blanc);
-  border: 1px solid rgba(201,162,39,.4);
-  border-radius: 18px;
-  box-shadow: var(--ombre);
-  padding: 28px 24px;
-  text-align: center;
-}
-.ecran-admin-carte .icone { font-size: 2rem; }
-.ecran-admin-carte h3 { font-family: var(--titre); color: var(--bordeaux); margin: 8px 0 6px; font-size: 1.25rem; }
-.ecran-admin-carte .explication { font-size: .88rem; color: var(--texte-doux); margin-bottom: 14px; }
-.ecran-admin-carte input {
-  width: 100%; padding: 11px 13px; text-align: center;
-  border: 1px solid rgba(201,162,39,.5); border-radius: 10px;
-  font-family: var(--texte); font-size: .95rem; letter-spacing: .08em;
-}
-.ecran-admin-carte .erreur { color: #B04A3A; font-size: .82rem; margin-top: 8px; }
-.ecran-admin-carte .choix { display: flex; gap: 10px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
-.ecran-admin-carte .note-honnete {
-  font-size: .72rem; color: var(--texte-doux); margin-top: 16px;
-  border-top: 1px solid rgba(201,162,39,.25); padding-top: 10px;
-}
-.vision-bouton-principal {
-  padding: 10px 20px; border-radius: 40px; cursor: pointer;
-  border: 1px solid var(--bordeaux); background: var(--bordeaux); color: #fff;
-  font-family: var(--texte); font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
-  transition: background .25s ease, border-color .25s ease;
-}
-.vision-bouton-principal:hover { background: var(--dore); border-color: var(--dore); }
-.vision-bouton-principal.secondaire { background: transparent; color: var(--bordeaux); }
-.vision-bouton-principal.secondaire:hover { color: #fff; }
-
-/* ---------- Protection des photos contre l'enregistrement direct ---------- */
-/* On ne peut pas empêcher une vraie capture d'écran (c'est le téléphone qui
-   photographie son propre écran), mais on empêche le clic droit, le glisser-déposer
-   et l'appui long « Enregistrer l'image » de copier les photos. */
-img {
-  -webkit-touch-callout: none;      /* iPhone : pas de menu d'appui long */
-  -webkit-user-select: none;        /* pas de sélection de l'image */
-  user-select: none;
-  -webkit-user-drag: none;          /* pas de glisser-déposer hors du site */
-  -webkit-user-drag: element;
-}
-
 /* ==========================================================
    NAVIGATION
    ========================================================== */
@@ -727,16 +661,26 @@ section.zone:nth-of-type(even) .recit-bloc { background: var(--creme); }
   .grille-album { grid-template-columns: 1fr 1fr; }
 }
 
-/* ---------- Mouvement réduit (accessibilité) ---------- */
+/* Mouvement réduit (accessibilité) */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .apparait { opacity: 1; transform: none; }
   html { scroll-behavior: auto; }
 }
 
+/* Protection des photos contre l'enregistrement direct (clic droit, glisser,
+   appui long « Enregistrer l'image » sur téléphone). NB : une vraie capture
+   d'écran reste possible — aucun site web ne peut l'empêcher. */
+img {
+  -webkit-touch-callout: none;      /* iPhone : pas de menu d'appui long */
+  -webkit-user-select: none;        /* pas de sélection de l'image */
+  user-select: none;
+  -webkit-user-drag: none;          /* pas de glisser-déposer hors du site */
+}
+
 /* ---------- Impression (aperçu avant impression du souvenir) ---------- */
 @media print {
-  #ouverture, #navigation, #video-fond, #petales, #musique, #admin-acces, #progression,
+  #ouverture, #navigation, #video-fond, #petales, #musique, #progression,
   .filtres, #bouton-decouvrir, #visionneuse { display: none !important; }
   body { background: #fff; color: #000; }
   section.zone { padding: 20px 0; }

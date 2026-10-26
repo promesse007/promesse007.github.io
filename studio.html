@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Espace du propriétaire — Souvenirs de mariage</title>
+<title>Atelier photos — Souvenirs de mariage</title>
 <link rel="stylesheet" href="style.css">
 <style>
   body { background: var(--creme); }
@@ -88,66 +88,15 @@
   .message.info{ background: #FBF0DE; color: #7A5A22; border: 1px solid #E3CDA4; }
 
   .retour { text-align: center; margin-top: 10px; }
-
-  /* ---------- Écran de verrouillage (mot de passe du propriétaire) ---------- */
-  #verrou {
-    position: fixed; inset: 0; z-index: 999;
-    display: grid; place-items: center;
-    background: var(--creme);
-    padding: 22px;
-  }
-  #verrou .carte-verrou {
-    width: min(360px, 100%);
-    background: var(--blanc);
-    border: 1px solid rgba(201,162,39,.4);
-    border-radius: 18px; box-shadow: var(--ombre);
-    padding: 30px 24px; text-align: center;
-  }
-  #verrou .icone { font-size: 2.2rem; }
-  #verrou h1 { font-family: var(--titre); color: var(--bordeaux); font-size: 1.3rem; margin: 8px 0 6px; }
-  #verrou input {
-    width: 100%; padding: 11px 13px; text-align: center;
-    border: 1px solid rgba(201,162,39,.5); border-radius: 10px;
-    font-family: var(--texte); font-size: .95rem; letter-spacing: .08em; margin-top: 12px;
-  }
-  #verrou .erreur { color: #B04A3A; font-size: .82rem; margin-top: 8px; }
-  #verrou .retour-site { margin-top: 16px; font-size: .82rem; }
-  body.verrouille .atelier { display: none; }
-
-  /* ---------- Téléphones : lignes empilées ---------- */
-  @media (max-width: 560px) {
-    .ligne-photo { grid-template-columns: 64px 1fr; }
-    .ligne-photo img { width: 64px; height: 86px; }
-    .ligne-photo .bouton { grid-column: 2; justify-self: start; }
-    .barre-actions .bouton { width: 100%; text-align: center; }
-  }
 </style>
 </head>
 <body>
 
-<!-- Écran de verrouillage : protège l'espace du propriétaire -->
-<div id="verrou">
-  <div class="carte-verrou">
-    <span class="icone" aria-hidden="true">&#128274;</span>
-    <h1>Espace du propriétaire</h1>
-    <p style="color:var(--texte-doux);font-size:.9rem">
-      Cette partie permet d'ajouter, de masquer et de supprimer des photos de l'album.
-    </p>
-    <input type="password" id="verrou-mdp" placeholder="Mot de passe du propriétaire" autocomplete="off">
-    <p id="verrou-erreur" class="erreur" hidden>Mot de passe incorrect. Veuillez réessayer.</p>
-    <p class="retour-site"><a href="index.html">&larr; Revenir à l'album</a></p>
-    <p style="font-size:.72rem;color:var(--texte-doux);margin-top:12px">
-      Protection simple pour le propriétaire du site, pas une sécurité de banque.
-    </p>
-  </div>
-</div>
-
 <div class="atelier">
   <div class="atelier-entete">
-    <p class="surtitre">Partie administrateur</p>
-    <p class="noms">Espace du propriétaire</p>
-    <p>Bienvenue. Ici vous pouvez tout gérer : ajouter des photos, changer les légendes,
-       masquer ou supprimer — et ajuster la musique.</p>
+    <p class="surtitre">Atelier de l'album</p>
+    <p class="noms">Ajouter vos photos</p>
+    <p>Vos images sont rangées dans une catégorie, avec une légende que vous choisissez.</p>
   </div>
 
   <!-- 1. Ajouter des photos -->
@@ -176,32 +125,17 @@
 
   <!-- 2. Photos déjà enregistrées -->
   <div class="carte">
-    <h2>2. Photos ajoutées sur cet appareil (téléphone ou ordinateur)</h2>
+    <h2>2. Photos enregistrées sur cet ordinateur</h2>
     <p style="color:var(--texte-doux);font-size:.92rem">
-      Modifiez une légende ou supprimez une photo. Les photos ajoutées ici restent
-      enregistrées dans ce navigateur : les visiteurs des autres téléphones ne les voient pas.
+      Modifiez une légende ou supprimez une photo. Tout changement visible
+      immédiatement dans l'album (ouvrez <code>index.html</code>).
     </p>
     <div class="grille-stock" id="stock" style="margin-top:16px"></div>
   </div>
 
-  <!-- 3. Photos d'origine de l'album (fichiers du site) -->
+  <!-- 3. Mise en ligne -->
   <div class="carte">
-    <h2>3. Photos d'origine de l'album (celles du site)</h2>
-    <p style="color:var(--texte-doux);font-size:.92rem">
-      Ce sont les 45 photos installées avec le site (la séance studio, etc.).
-      Ici vous pouvez les <b>masquer</b> ou les afficher de nouveau, sans jamais
-      supprimer les fichiers — rien ne se perd, et vous pouvez tout restaurer d'un clic.
-      Le masquage s'applique sur <b>cet appareil</b>.
-    </p>
-    <div class="grille-stock" id="stock-origine" style="margin-top:16px"></div>
-    <div class="barre-actions">
-      <button class="bouton" id="restaurer-tout" type="button">Réafficher toutes les photos masquées</button>
-    </div>
-  </div>
-
-  <!-- 4. Mise en ligne et musique -->
-  <div class="carte">
-    <h2>4. Envoyer l'album en ligne</h2>
+    <h2>3. Envoyer l'album en ligne</h2>
     <p style="color:var(--texte-doux);font-size:.92rem">
       Les photos ajoutées ici sont stockées <b>dans le navigateur de cet ordinateur</b>.
       Elles ne sont visibles que sur ce poste. Pour les partager avec vos proches sur Internet,
@@ -211,12 +145,7 @@
     <div class="barre-actions">
       <a class="bouton plein" href="index.html">Ouvrir l'album</a>
       <button class="bouton" id="vider-stock" type="button">Supprimer toutes les photos locales</button>
-      <button class="bouton danger" id="fermer-session" type="button" title="Empêche l'ouverture de cette partie sans le mot de passe">Verrouiller cette partie</button>
     </div>
-    <p style="margin-top:14px;font-size:.78rem;color:var(--texte-doux)">
-      La musique se règle dans <code>galerie.js</code> (ligne <code>musique</code>) :
-      mettez le fichier dans le dossier <code>audio/</code> puis notez son nom.
-    </p>
   </div>
 </div>
 
@@ -230,67 +159,6 @@
   function $$(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
 
   var CATS = window.CATEGORIES || [];
-
-  /* ==========================================================
-     VERROU : mot de passe du propriétaire
-     ========================================================== */
-  var MDP = (window.REGLAGES && window.REGLAGES.adminMdp) || '';
-  var verrou = $('#verrou');
-  var dejaOuvert = false;
-  try { dejaOuvert = sessionStorage.getItem('album-admin') === '1'; } catch (e) {}
-
-  function deverrouiller() {
-    verrou.hidden = true;
-    document.body.classList.remove('verrouille');
-  }
-  function essayer() {
-    var champ = $('#verrou-mdp');
-    if (champ.value === MDP) {
-      try { sessionStorage.setItem('album-admin', '1'); } catch (e) {}
-      deverrouiller();
-    } else {
-      $('#verrou-erreur').hidden = false;
-      champ.value = '';
-      champ.focus();
-    }
-  }
-
-  if (!MDP) {
-    // Aucun mot de passe défini dans galerie.js : accès libre,
-    // mais un message est affiché pour l'expliquer honnêtement.
-    deverrouiller();
-  } else if (dejaOuvert) {
-    deverrouiller();
-  } else {
-    // verrou affiché jusqu'à l'entrée du bon mot de passe
-    document.body.classList.add('verrouille');
-    verrou.hidden = false;
-
-    var b = document.createElement('button');
-    b.className = 'bouton plein';
-    b.type = 'button';
-    b.textContent = 'Entrer';
-    b.style.margin = '12px auto 0';
-    b.style.display = 'block';
-    b.addEventListener('click', essayer);
-    var carte = verrou.querySelector('.carte-verrou');
-    carte.insertBefore(b, carte.querySelector('.retour-site'));
-
-    $('#verrou-mdp').addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') essayer();
-    });
-    setTimeout(function () { $('#verrou-mdp').focus(); }, 120);
-  }
-
-  /* fermer la session administrateur */
-  var bFermer = $('#fermer-session');
-  if (bFermer) {
-    bFermer.addEventListener('click', function () {
-      try { sessionStorage.removeItem('album-admin'); } catch (e) {}
-      document.body.classList.add('verrouille');
-      verrou.hidden = false;
-    });
-  }
 
   /* ---------- Base locale (IndexedDB) ---------- */
   var NOM_BASE = 'album-mariage';
@@ -525,93 +393,12 @@
     });
   }
 
-  /* ---------- Photos d'origine du site (fichiers galerie.js) ---------- */
-  var CLE_MASQUEES = 'album-masquees';
-
-  function lectureMasquees() {
-    try { return JSON.parse(localStorage.getItem(CLE_MASQUEES) || '[]'); }
-    catch (e) { return []; }
-  }
-  function garderMasquees(tableau) {
-    try { localStorage.setItem(CLE_MASQUEES, JSON.stringify(tableau)); } catch (e) {}
-  }
-  function basculerMasque(src) {
-    var liste = lectureMasquees();
-    var i = liste.indexOf(src);
-    if (i > -1) liste.splice(i, 1); else liste.push(src);
-    garderMasquees(liste);
-    dessinerOrigine();
-    return liste.indexOf(src) === -1;   // true = photo désormais affichée
-  }
-
-  function dessinerOrigine() {
-    var boite = $('#stock-origine');
-    if (!boite) return;
-    var masquees = lectureMasquees();
-    boite.innerHTML = '';
-
-    var origine = (window.PHOTOS || []).slice();
-    if (!origine.length) {
-      boite.innerHTML = '<div class="galerie-vide" style="grid-column:1/-1">' +
-        '<div class="grand">🖼️</div><p>Aucune photo d\'origine trouvée.</p></div>';
-      return;
-    }
-    origine.forEach(function (p) {
-      var estMasquee = masquees.indexOf(p.src) !== -1;
-      var nomFichier = p.src.split('/').pop();
-
-      var carte = document.createElement('div');
-      carte.className = 'vignette-stock';
-      if (estMasquee) { carte.style.opacity = '.45'; carte.style.outline = '2px dashed rgba(176,74,58,.55)'; }
-
-      var img = document.createElement('img');
-      img.src = p.src; img.alt = p.legende || nomFichier;
-
-      var nom = document.createElement('div');
-      nom.className = 'nom';
-      nom.textContent = p.legende || nomFichier;
-      nom.title = nomFichier;
-
-      var cat = document.createElement('div');
-      cat.className = 'cat';
-      var trouvee = CATS.filter(function (c) { return c.id === p.cat; })[0];
-      cat.textContent = trouvee ? trouvee.nom : p.cat;
-
-      var outils = document.createElement('div');
-      outils.className = 'outils';
-      var bBasculer = document.createElement('button');
-      bBasculer.className = 'bouton petit' + (estMasquee ? '' : ' danger');
-      bBasculer.type = 'button';
-      bBasculer.textContent = estMasquee ? 'Réafficher' : 'Masquer';
-      bBasculer.addEventListener('click', function () {
-        var affichee = basculerMasque(p.src);
-        dire(affichee
-          ? 'Photo de nouveau visible dans l\'album sur cet appareil.'
-          : 'Photo masquée dans l\'album sur cet appareil (le fichier reste conservé).', 'ok');
-      });
-      outils.appendChild(bBasculer);
-
-      carte.appendChild(img);
-      carte.appendChild(nom);
-      carte.appendChild(cat);
-      carte.appendChild(outils);
-      boite.appendChild(carte);
-    });
-  }
-
-  $('#restaurer-tout').addEventListener('click', function () {
-    garderMasquees([]);
-    dessinerOrigine();
-    dire('Toutes les photos d\'origine sont de nouveau affichées sur cet appareil.', 'ok');
-  });
-
   $('#vider-stock').addEventListener('click', function () {
-    if (!confirm('Supprimer TOUTES les photos ajoutées sur cet appareil ?')) return;
+    if (!confirm('Supprimer TOUTES les photos ajoutées sur cet ordinateur ?')) return;
     vider().then(function () { dessinerStock(); dire('Toutes les photos locales ont été supprimées.', 'ok'); });
   });
 
   dessinerStock();
-  dessinerOrigine();
 })();
 </script>
 </body>
