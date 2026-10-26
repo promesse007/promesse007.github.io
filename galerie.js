@@ -37,8 +37,10 @@ window.REGLAGES = {
   /* Fichier musical à jouer depuis le dossier audio/ (ou '' pour aucun) */
   musique: 'audio/musique.mp3',
 
-  /* Vidéo d'accueil depuis le dossier video/ (ou '' pour n'afficher que l'affiche) */
-  video: 'video/souvenirs.mp4',
+  /* Vidéo d'accueil : retirée de la page d'accueil à la demande.
+     Pour la rétablir, remettez 'video/souvenirs.mp4' et ajoutez de nouveau
+     la balise vidéo dans index.html (voir le guide LISEZ-MOI.md). */
+  video: '',
 
   /* LIVRE D'OR — laissez 'VOTRE-ID-FORMSPREE' tant que le service n'est pas configuré.
      Créez un compte sur https://formspree.io, créez un formulaire, puis collez ici

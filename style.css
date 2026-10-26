@@ -224,17 +224,30 @@ h2.titre {
   overflow: hidden;
   text-align: center;
   color: var(--creme);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(201, 162, 39, .18), transparent 55%),
+    radial-gradient(circle at 85% 85%, rgba(201, 162, 39, .10), transparent 40%),
+    linear-gradient(165deg, #4A121C 0%, #6B1F2A 55%, #5B1A24 100%);
 }
-#video-fond, #video-fond video {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-}
-#video-fond::after {
+/* anneaux dorés décoratifs en arrière-plan de l'accueil */
+#accueil::before {
   content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg,
-    rgba(74,18,28,.62) 0%, rgba(74,18,28,.42) 42%, rgba(251,245,236,.96) 100%);
+  position: absolute;
+  top: -140px; right: -140px;
+  width: 420px; height: 420px;
+  border: 1px solid rgba(201, 162, 39, .28);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 28px rgba(201, 162, 39, .05);
+  pointer-events: none;
+}
+#accueil::after {
+  content: '';
+  position: absolute;
+  bottom: -120px; left: -120px;
+  width: 340px; height: 340px;
+  border: 1px solid rgba(201, 162, 39, .22);
+  border-radius: 50%;
+  pointer-events: none;
 }
 .accueil-interne { position: relative; z-index: 3; max-width: 780px; }
 .accueil-interne .petit {
@@ -618,13 +631,12 @@ section.zone:nth-of-type(even) .recit-bloc { background: var(--creme); }
 .retard-3 { transition-delay: .36s; }
 .retard-4 { transition-delay: .48s; }
 
-/* effet Ken Burns lent sur la vidéo d'accueil */
+/* animation Ken Burns (rouvre pour la vidéo d'accueil si réutilisée) */
 @keyframes kenburns {
   0%   { transform: scale(1.04) translate(0, 0); }
   50%  { transform: scale(1.11) translate(-1.4%, -1.2%); }
   100% { transform: scale(1.04) translate(0, 0); }
 }
-#video-fond video.anime { animation: kenburns 26s ease-in-out infinite; }
 
 /* ==========================================================
    RESPONSIVE
