@@ -744,6 +744,24 @@ section.zone:nth-of-type(even) .recit-bloc { background: var(--creme); }
 }
 #film-fermer:hover { background: var(--dore); color: #fff; }
 
+/* ---------- Agrandissement plein écran du film ---------- */
+.film-contenu:fullscreen {
+  width: 100%; height: 100%;
+  max-height: none; border-radius: 0;
+  background: #1d0810;
+  padding: 30px 6vw;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.film-contenu:fullscreen #film-canvas,
+.film-contenu:fullscreen #film-apercu {
+  width: auto; height: calc(100vh - 230px);
+  max-width: 100%;
+  margin: 0 auto;
+}
+.film-contenu:fullscreen .film-info { color: #E9D8BE; }
+.film-contenu:fullscreen .film-note { color: #B9A78F; }
+
 /* Protection des photos contre l'enregistrement direct (clic droit, glisser,
    appui long « Enregistrer l'image » sur téléphone). NB : une vraie capture
    d'écran reste possible — aucun site web ne peut l'empêcher. */

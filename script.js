@@ -835,14 +835,15 @@
     if (!film.boite || !film.canvas) return;
 
     $('#bouton-film').addEventListener('click', function () {
+      var sujet = galerie.affichees.length ? galerie.affichees : galerie.liste;
       film.canvas.hidden = false;
       film.apercu.hidden = true;
       film.lancer.hidden = false;
       film.stop.hidden = true;
       film.enregistrer.hidden = true;
-      film.info.textContent = 'Le film se fabrique à partir des ' + galerie.liste.length +
-        ' photo(s) de cet appareil. Vous pouvez d\'abord choisir une catégorie ci-dessus : ' +
-        'redéfinissez-la puis c\'est cette catégorie qui sera filmée.';
+      film.info.textContent = 'Le film se fabrique avec les ' + sujet.length +
+        ' photo(s) affichées actuellement. Astuce : choisissez d\'abord une catégorie ci-dessus' +
+        ' (ex. « Portraits des mariés ») avant de rouvrir le film — c\'est alors celle-ci qui sera filmée.';
       film.boite.hidden = false;
     });
     film.fermer.addEventListener('click', fermerFilm);
@@ -857,6 +858,37 @@
       a.click();
       a.remove();
     });
+
+    /* agrandissement plein écran de la séance de visionnage */
+    film.agrandir = $('#film-agrandir');
+    if (film.agrandir) {
+      film.agrandir.addEventListener('click', function () { basculerEcran(film.boite.querySelector('.film-contenu')); });
+    }
+    /* double-clic sur le film ou sur l'aperçu : agrandir */
+    film.canvas.addEventListener('dblclick', function () { basculerEcran(film.boite.querySelector('.film-contenu')); });
+    film.apercu.addEventListener('dblclick', function () {
+      // l'iPhone n'accepte le plein écran que pour une vraie vidéo
+      if (film.apercu.webkitEnterFullscreen) { film.apercu.webkitEnterFullscreen(); return; }
+      basculerEcran(film.boite.querySelector('.film-contenu'));
+    });
+  }
+
+  /* plein écran : agrandit la séance de visionnage ; Échap pour rebasculer */
+  function basculerEcran(cible) {
+    if (!cible) return;
+    try {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else if (cible.requestFullscreen) {
+        cible.requestFullscreen().catch(function () {
+          floater('Votre navigateur n\'a pas autorisé l\'agrandissement. Téléchargez la vidéo pour la voir en grand.');
+        });
+      } else {
+        floater('Ce navigateur ne permet pas le plein écran. Téléchargez la vidéo pour la voir en grand.');
+      }
+    } catch (err) {
+      floater('Ce navigateur ne permet pas le plein écran. Téléchargez la vidéo pour la voir en grand.');
+    }
   }
 
   function fermerFilm() {
