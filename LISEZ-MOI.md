@@ -1,6 +1,6 @@
-# 💍 Souvenirs de notre mariage — Olakiba Armand & Bosseno Josiane
+# 💍 Souvenirs de notre mariage — Bosseno Josiane & Olakiba Armand
 
-Album numérique du mariage d'**Olakiba Armand** & **Bosseno Josiane** — célébré les **jeudi 10 et samedi 12 décembre 2026** à **Brazzaville (Kintélé, Talangaï), Congo**.
+Album numérique du mariage de **Bosseno Josiane** & **Olakiba Armand** — célébré les **jeudi 10 et samedi 12 décembre 2026** à **Brazzaville (Kintélé, Talangaï), Congo**.
 
 ---
 
@@ -197,7 +197,7 @@ Tant que cette étape n'est pas faite, le formulaire l'indique honnêtement
 
 ## ✅ 10. Vérifications déjà effectuées
 
-- Noms corrects partout : **Olakiba Armand** et **Bosseno Josiane**
+- Noms corrects partout : **Bosseno Josiane** (la mariée, toujours en premier) et **Olakiba Armand**
   (aucune occurrence de l'ancienne orthographe)
 - Dates et lieux affichés : jeudi 10 décembre 2026 (Dot, Espace Dongou Zidane, Kintélé) ; samedi 12 décembre 2026 (civil 10h Mairie de Talangaï, bénédiction 12h à l'église)
 - Horaires conservés : Mairie 08h00 • Dot 12h00 • Mariage 16h00

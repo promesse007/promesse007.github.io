@@ -1,5 +1,5 @@
 /* ==========================================================
-   ASSISTANT INTELLIGENT DE L'ALBUM — Olakiba Armand & Bosseno Josiane
+   ASSISTANT INTELLIGENT DE L'ALBUM — Bosseno Josiane & Olakiba Armand
    ----------------------------------------------------------
    Quand une photo est ajoutée, elle est « lue » par l'assistant
    qui propose automáticamente la catégorie de souvenirs qui

@@ -1,6 +1,7 @@
 /* ==========================================================
    Souvenirs de mariage — interactions
-   Olakiba Armand & Bosseno Josiane
+   Olakiba Armand & Bosseno Josiane → noms affichés : la mariée en premier
+   Bosseno Josiane & Olakiba Armand
    ========================================================== */
 (function () {
   'use strict';
@@ -1001,11 +1002,21 @@
     ctx.restore();
   }
 
+  /* couleur venue du réglage du site (tombe sur une valeur sûre si absente) */
+  function couleurTheme(nom, defaut) {
+    try {
+      var v = getComputedStyle(document.documentElement).getPropertyValue(nom);
+      return (v || '').trim() || defaut;
+    } catch (e) { return defaut; }
+  }
+
   function dessinerCarte(ctx, w, h, lignes, petitDessus) {
+    var cbf = couleurTheme('--bordeaux-f', '#4A121C');
+    var cb  = couleurTheme('--bordeaux', '#6B1F2A');
     var g = ctx.createLinearGradient(0, 0, w, h);
-    g.addColorStop(0, '#4A121C');
-    g.addColorStop(.55, '#6B1F2A');
-    g.addColorStop(1, '#5B1A24');
+    g.addColorStop(0, cbf);
+    g.addColorStop(.55, cb);
+    g.addColorStop(1, cbf);
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, w, h);
 
@@ -1101,7 +1112,7 @@
           ctx.fillRect(0, 0, W, H);
 
           if (t < TITRE) {
-            dessinerCarte(ctx, W, H, ['Olakiba Armand', '&', 'Bosseno Josiane'], false);
+            dessinerCarte(ctx, W, H, ['Bosseno Josiane', '&', 'Olakiba Armand'], false);
             return;
           }
           if (t >= totalMs - FIN) {
@@ -1203,7 +1214,69 @@
     }
   }
 
-  /* ---------- Bouton « Haut de page » : un clic remonte à l'accueil ---------- */
+  /* ---------- Réglages : harmonie de couleurs ----------
+     Des palettes sobres et professionnelles uniquement.
+     Le choix est conservé sur l'appareil (localStorage). */
+  var THEMES = {
+    bordeaux: { vars: {
+      '--bordeaux': '#6B1F2A', '--bordeaux-f': '#4A121C',
+      '--dore': '#C9A227', '--dore-clair': '#E6C877',
+      '--ombre': '0 16px 44px rgba(74, 18, 28, .10)',
+      '--ombre-forte': '0 22px 60px rgba(74, 18, 28, .18)' } },
+    bleu: { vars: {
+      '--bordeaux': '#1F2A44', '--bordeaux-f': '#141F33',
+      '--dore': '#C9A227', '--dore-clair': '#E6C877',
+      '--ombre': '0 16px 44px rgba(20, 31, 51, .12)',
+      '--ombre-forte': '0 22px 60px rgba(20, 31, 51, .20)' } },
+    vert: { vars: {
+      '--bordeaux': '#1F4636', '--bordeaux-f': '#143024',
+      '--dore': '#C9A227', '--dore-clair': '#E6C877',
+      '--ombre': '0 16px 44px rgba(20, 48, 36, .12)',
+      '--ombre-forte': '0 22px 60px rgba(20, 48, 36, .20)' } },
+    prune: { vars: {
+      '--bordeaux': '#4A1F44', '--bordeaux-f': '#33122E',
+      '--dore': '#C9A227', '--dore-clair': '#E6C877',
+      '--ombre': '0 16px 44px rgba(51, 18, 46, .12)',
+      '--ombre-forte': '0 22px 60px rgba(51, 18, 46, .20)' } },
+    bronze: { vars: {
+      '--bordeaux': '#4A2E1C', '--bordeaux-f': '#2E1B10',
+      '--dore': '#C9A227', '--dore-clair': '#E6C877',
+      '--ombre': '0 16px 44px rgba(46, 27, 16, .12)',
+      '--ombre-forte': '0 22px 60px rgba(46, 27, 16, .20)' } }
+  };
+
+  function appliquerTheme(cle) {
+    var t = THEMES[cle];
+    if (!t) return;
+    Object.keys(t.vars).forEach(function (k) {
+      document.documentElement.style.setProperty(k, t.vars[k]);
+    });
+    try { localStorage.setItem('theme-couleur', cle); } catch (e) {}
+    var boutons = document.querySelectorAll('.reglage-theme');
+    for (var i = 0; i < boutons.length; i++) {
+      boutons[i].classList.toggle('actif', boutons[i].getAttribute('data-theme') === cle);
+    }
+  }
+
+  function initReglages() {
+    var bouton = $('#reglages');
+    var panneau = $('#panneau-reglages');
+    if (!bouton || !panneau) return;
+    bouton.addEventListener('click', function () { panneau.hidden = !panneau.hidden; });
+    $('#reglages-fermer').addEventListener('click', function () { panneau.hidden = true; });
+    panneau.addEventListener('click', function (e) { if (e.target === panneau) panneau.hidden = true; });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !panneau.hidden) panneau.hidden = true;
+    });
+    var liste = panneau.querySelectorAll('.reglage-theme');
+    for (var i = 0; i < liste.length; i++) {
+      liste[i].addEventListener('click', function () { appliquerTheme(this.getAttribute('data-theme')); });
+    }
+    var sauve = null;
+    try { sauve = localStorage.getItem('theme-couleur'); } catch (e) {}
+    appliquerTheme(THEMES[sauve] ? sauve : 'bordeaux');
+  }
+
   function initBoutonHaut() {
     var bouton = $('#bouton-haut');
     if (!bouton) return;
@@ -1221,6 +1294,7 @@
      ========================================================== */
   initRecherche();
   initBoutonHaut();
+  initReglages();
   rafraichirAlbum();
   initFilm();
 

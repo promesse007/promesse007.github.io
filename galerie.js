@@ -1,5 +1,5 @@
 /* ==========================================================
-   DONNÉES DE L'ALBUM — Olakiba Armand & Bosseno Josiane
+   ALBUM NUMÉRIQUE — Bosseno Josiane & Olakiba Armand
    ----------------------------------------------------------
    C'EST LE SEUL FICHIER À MODIFIER POUR AJOUTER VOS PHOTOS.
    Il se lit avec un simple éditeur de texte (le Bloc-notes
@@ -49,7 +49,7 @@ window.REGLAGES = {
   formspree: 'VOTRE-ID-FORMSPREE',
 
   /* Nom affiché dans les messages du livre d'or */
-  mariage: 'Olakiba Armand et Bosseno Josiane'
+  mariage: 'Bosseno Josiane et Olakiba Armand'
 };
 
 /* ---------- Notre histoire ----------
