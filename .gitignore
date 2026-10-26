@@ -1,0 +1,7 @@
+﻿# fichiers privés : restent sur l'ordinateur, ne sont pas publiés
+video/
+correspondance-photos-studio.txt
+*.psd
+*.crea
+Thumbs.db
+desktop.ini
