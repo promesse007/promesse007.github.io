@@ -355,7 +355,7 @@ section.zone:nth-of-type(even) .recit-bloc { background: var(--creme); }
   background: linear-gradient(150deg, var(--beige), var(--beige-foncé));
   border: 1px solid rgba(201,162,39,.34);
 }
-.recit-photo img { width: 100%; height: 100%; object-fit: cover; }
+.recit-photo img { width: 100%; height: 100%; object-fit: contain; }
 .recit-texte h3 {
   font-family: var(--titre); font-size: 1.6rem;
   color: var(--bordeaux); margin-bottom: 8px;
@@ -437,14 +437,18 @@ section.zone:nth-of-type(even) .recit-bloc { background: var(--creme); }
 .filtre.actif { background: var(--bordeaux); border-color: var(--bordeaux); color: #fff; }
 .filtre .compte { opacity: .65; margin-left: 5px; font-size: .9em; }
 
+/* Mosaïque souple : chaque photo garde ses proportions naturelles.
+   Plus de recadrage forcé (fini les têtes coupées) et plus de
+   tailler la photo pour tout écraser. */
 .grille-album {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
-  gap: 18px;
+  columns: 240px 4;
+  column-gap: 16px;
 }
 .vignette {
   position: relative;
-  aspect-ratio: 3 / 4;
+  display: block; width: 100%;
+  margin: 0 0 16px;
+  break-inside: avoid; -webkit-column-break-inside: avoid;
   border: 0; padding: 0;
   border-radius: 12px; overflow: hidden;
   background: linear-gradient(150deg, var(--beige), var(--beige-foncé));
@@ -454,7 +458,7 @@ section.zone:nth-of-type(even) .recit-bloc { background: var(--creme); }
 }
 .vignette:hover { transform: translateY(-5px); box-shadow: var(--ombre-forte); }
 .vignette img {
-  width: 100%; height: 100%; object-fit: cover;
+  width: 100%; height: auto; display: block;
   transition: transform 1.2s ease;
 }
 .vignette:hover img { transform: scale(1.08); }
@@ -649,7 +653,7 @@ section.zone:nth-of-type(even) .recit-bloc { background: var(--creme); }
 @media (max-width: 680px) {
   .duo { grid-template-columns: 1fr; gap: 26px; }
   .duo .cadre-photo, .portrait-enveloppe { max-width: 330px; margin: 0 auto; }
-  .grille-album { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .grille-album { columns: 150px 2; column-gap: 12px; }
   section.zone { padding: 62px 0; }
   .vision-bouton { width: 44px; height: 44px; }
   .vision-precedent { left: 2px; }
@@ -658,7 +662,7 @@ section.zone:nth-of-type(even) .recit-bloc { background: var(--creme); }
   .case-horloge { padding: 15px 4px; }
 }
 @media (max-width: 420px) {
-  .grille-album { grid-template-columns: 1fr 1fr; }
+  .grille-album { columns: 140px 2; }
 }
 
 /* Mouvement réduit (accessibilité) */

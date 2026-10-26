@@ -715,7 +715,7 @@
       } else {
         var vide = document.createElement('div');
         vide.className = 'galerie-vide';
-        vide.style.gridColumn = '1 / -1';
+        vide.style.columnSpan = 'all';
         vide.innerHTML = '<div class="grand">👨‍👩‍👧‍👦</div><p>Les photos de ce groupe apparaîtront ici.</p>' +
           '<p style="margin-top:10px">Ajoutez vos images avec <code>studio.html</code> en choisissant la catégorie « ' +
           nomCategorie(bloc.categorie) + ' ».</p>';
