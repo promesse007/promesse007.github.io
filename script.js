@@ -729,6 +729,18 @@
       if (e.key === 'ArrowLeft')  allerA(-1);
       if (e.key === 'ArrowRight') allerA(1);
     });
+
+    /* Échap ferme aussi la fenêtre du film des souvenirs
+       (en plus du ✕ en haut à droite et du clic en dehors).
+       Si le film est en plein écran, Échap d'abord le fait
+       sortir du plein écran — un second Échap ferme la fenêtre. */
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      var boiteFilm = document.getElementById('film');
+      if (!boiteFilm || boiteFilm.hidden) return;
+      if (document.fullscreenElement) return; // le 1er Échap sort du plein écran seul
+      fermerFilm();
+    });
   }
 
   /* ==========================================================
