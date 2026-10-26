@@ -6,6 +6,10 @@
 /* ---------- Réinitialisation & variables ---------- */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* protection : tout élément marqué « hidden » est vraiment invisible,
+   même s'il a un style d'affichage par ailleurs (fenêtre du film, etc.) */
+[hidden] { display: none !important; }
+
 :root {
   --creme:      #FBF5EC;
   --blanc:      #FFFDFA;
