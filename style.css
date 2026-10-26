@@ -190,6 +190,22 @@ h2.titre {
 #musique.actif { animation: tourne 4.5s linear infinite; }
 @keyframes tourne { to { transform: rotate(360deg); } }
 
+/* ---------- Bouton « Haut de page » (retour à l'accueil) ---------- */
+#bouton-haut {
+  position: fixed; left: 20px; bottom: 20px; z-index: 85;
+  width: 54px; height: 54px; border-radius: 50%;
+  border: 1px solid var(--dore);
+  background: rgba(255, 253, 250, .94);
+  color: var(--bordeaux);
+  display: grid; place-items: center;
+  font-size: 1.25rem; cursor: pointer;
+  box-shadow: var(--ombre);
+  opacity: 0; visibility: hidden; transform: translateY(10px);
+  transition: opacity .3s ease, transform .3s ease, background .3s ease, color .3s ease;
+}
+#bouton-haut.visible { opacity: 1; visibility: visible; transform: none; }
+#bouton-haut:hover { background: var(--dore); color: #fff; transform: scale(1.09); }
+
 /* ==========================================================
    NAVIGATION
    ========================================================== */

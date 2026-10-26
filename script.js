@@ -1203,10 +1203,24 @@
     }
   }
 
+  /* ---------- Bouton « Haut de page » : un clic remonte à l'accueil ---------- */
+  function initBoutonHaut() {
+    var bouton = $('#bouton-haut');
+    if (!bouton) return;
+    bouton.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    window.addEventListener('scroll', function () {
+      bouton.classList.toggle('visible', window.scrollY > 220);
+    }, { passive: true });
+    if (window.scrollY > 220) bouton.classList.add('visible');
+  }
+
   /* ==========================================================
      13. DÉMARRAGE
      ========================================================== */
   initRecherche();
+  initBoutonHaut();
   rafraichirAlbum();
   initFilm();
 
