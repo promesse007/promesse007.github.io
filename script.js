@@ -233,7 +233,7 @@
      5. COMPTE À REBOURS
      ========================================================== */
   (function compteARebours() {
-    var cible = new Date(REG.dateMariage || '2026-12-11T16:00:00').getTime();
+    var cible = new Date(REG.dateMariage || '2026-12-12T10:00:00').getTime();
     var j = $('#cb-jours'), h = $('#cb-heures'), m = $('#cb-minutes'), s = $('#cb-secondes');
     if (!j || !h || !m || !s) return;
     function deux(n) { return (n < 10 ? '0' : '') + n; }

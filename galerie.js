@@ -31,8 +31,9 @@ window.CATEGORIES = [
 
 /* ---------- Réglages ---------- */
 window.REGLAGES = {
-  /* Date et heure du mariage (année, 1 à 12, jour, heure, minute) */
-  dateMariage: '2026-12-11T16:00:00',
+  /* Date et heure de la cérémonie civile (année, mois, jour, heure, minute)
+     10 décembre 2026 : dot   — 12 décembre 2026 : civil + bénédiction */
+  dateMariage: '2026-12-12T10:00:00',
 
   /* Fichier musical à jouer depuis le dossier audio/ (ou '' pour aucun) */
   musique: 'audio/musique.mp3',
@@ -72,8 +73,8 @@ window.HISTOIRE = [
   {
     image: null,
     titre: 'Le jour de la cérémonie',
-    texte: "Le vendredi 11 décembre 2026 : la cérémonie civile à la Mairie de Brazzaville, le dot, puis la célébration de notre union entourés de nos familles et de nos amis. Cette page accueillera les photos de cette journée.",
-    date: 'Vendredi 11 décembre 2026'
+    texte: "Notre union se vit en deux temps : le jeudi 10 décembre 2026 à 10 h, le dot à l'Espace Dongou Zidane (arrêt Deuxième Terre Jaune, Kintélé) ; puis le samedi 12 décembre 2026 à 10 h, notre mariage civil à la Mairie de Talangaï, suivi à 12 h de la bénédiction nuptiale à l'église. Cette page accueillera les photos de ces belles journées.",
+    date: '10 & 12 décembre 2026'
   },
   {
     image: 'images/galerie/studio-42.jpg',
@@ -95,7 +96,7 @@ window.FAMILLE = [
   {
     categorie: 'amis',
     titre: 'Les amis et les invités',
-    texte: "Ceux qui ont fait le déplacement et partagé notre joie en ce vendredi 11 décembre 2026."
+    texte: "Ceux qui ont fait le déplacement et partagé notre joie en ces 10 et 12 décembre 2026."
   },
   {
     categorie: 'groupe',
