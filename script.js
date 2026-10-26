@@ -319,6 +319,10 @@
     });
     galerie.enCours += suite.length;
 
+    // les nouvelles vignettes doivent elles aussi être observées,
+    // sinon elles restent invisibles (opacity: 0) après un changement de filtre
+    observerApparitions();
+
     var ancien = $('#bouton-plus');
     if (ancien) ancien.remove();
     if (galerie.enCours < galerie.affichees.length) {
@@ -380,14 +384,18 @@
     index: 0
   };
 
-  function ouvrirVisionneuse(i) {
-    if (!galerie.affichees.length) return;
-    vis.index = (i + galerie.affichees.length) % galerie.affichees.length;
-    var p = galerie.affichees[vis.index];
+  function ouvrirVisionneuse(i, depuisListeComplete) {
+    // Normal : on navigue dans la catégorie affichée.
+    // depuisListeComplete = true quand on part d'une autre section
+    // (ex. Famille & invités) : on navigue alors dans tout l'album.
+    var source = depuisListeComplete ? galerie.liste : galerie.affichees;
+    if (!source.length) return;
+    vis.index = (i + source.length) % source.length;
+    var p = source[vis.index];
     vis.image.src = p.src;
     vis.image.alt = p.legende || nomCategorie(p.cat);
     vis.legende.textContent = p.legende || nomCategorie(p.cat);
-    vis.compteur.textContent = (vis.index + 1) + ' / ' + galerie.affichees.length;
+    vis.compteur.textContent = (vis.index + 1) + ' / ' + source.length;
     vis.boite.classList.add('ouverte');
     document.body.style.overflow = 'hidden';
     vis.fermer.focus();
@@ -441,7 +449,7 @@
         var v = e.target.closest('.vignette');
         if (!v) return;
         var idx = galerie.liste.indexOf(galerie.liste.filter(function (p) { return p.src === v.dataset.src; })[0]);
-        if (idx > -1) ouvrirVisionneuse(idx);
+        if (idx > -1) ouvrirVisionneuse(idx, true);
       });
 
       var trouvees = galerie.liste.filter(function (p) { return p.cat === bloc.categorie; });
