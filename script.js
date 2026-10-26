@@ -930,29 +930,39 @@
 
     Promise.all(photosF.map(function (p) { return chargerImagePourFilm(p.src); }))
       .then(function (imgs) {
-        // la musique choisie (s'il y en a une) accompagne le film
-        if (lecteur && lecteur.src && lecteur.paused) {
+        // la musique choisie (s'il y en a une) accompagne le film ;
+        // on attend que le lanceur de musique ait répondu pour savoir
+        // si une piste sonore peut être enregistrée avec la vidéo
+        var lancerMusique = Promise.resolve();
+        if (lecteur && lecteur.src && lecteur.error === null && lecteur.paused) {
           lecteur.currentTime = 0;
           lecteur.volume = 0.35;
-          lecteur.play().catch(function () {});
-          boutonMusique.classList.add('actif');
+          lancerMusique = lecteur.play().then(function () {
+            boutonMusique.classList.add('actif');
+          }).catch(function () { /* lecture refusée : film silencieux */ });
         }
-
+        return lancerMusique.then(function () { return imgs; });
+      })
+      .then(function (imgs) {
         /* --- enregistrement (quand le navigateur le permet) --- */
-        var flux = null, typeChoisi = null;
         try {
           if (film.canvas.captureStream && window.MediaRecorder) {
-            flux = film.canvas.captureStream(30);
-            var types = ['video/mp4', 'video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+            var typeChoisi = null;
+            var flux = film.canvas.captureStream(30);
+            /* WebM d'abord : le plus fiable sur Chrome et Edge ;
+               MP4 ensuite pour Safari. */
+            var types = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm', 'video/mp4'];
             types.some(function (t) {
               if (MediaRecorder.isTypeSupported(t)) { typeChoisi = t; return true; }
               return false;
             });
-            try {
-              if (lecteur.captureStream) {
+            /* la musique n'est enregistrée que si elle joue réellement :
+               une piste venue d'un lecteur en erreur rend le fichier vide */
+            if (lecteur && lecteur.captureStream && !lecteur.paused && !lecteur.error && lecteur.readyState >= 2) {
+              try {
                 lecteur.captureStream().getAudioTracks().forEach(function (t) { flux.addTrack(t); });
-              }
-            } catch (err) { /* musique non enregistrable : film muet, c'est indiqué */ }
+              } catch (err) { /* musique non enregistrable : film muet, c'est indiqué */ }
+            }
             if (typeChoisi) {
               film.recording = new MediaRecorder(flux, { mimeType: typeChoisi });
               film.tranches = [];
@@ -1023,9 +1033,10 @@
             terminerMontage('Film terminé ! Voici votre vidéo de souvenirs.');
             return;
           }
-          film.raf = requestAnimationFrame(boucle);
         }
-        film.raf = requestAnimationFrame(boucle);
+        /* moteur à chronomètre (plus fiable que l'animation-rAF :
+           fonctionne aussi quand le navigateur limite requestAnimationFrame) */
+        film.raf = setInterval(boucle, 33);
       })
       .catch(function () {
         film.info.textContent = 'Certaines photo(s) n\'ont pas pu être lues pour le film.';
@@ -1042,7 +1053,7 @@
   function terminerMontage(message) {
     if (!film.enCours) return;
     film.enCours = false;
-    cancelAnimationFrame(film.raf);
+    if (film.raf) { clearInterval(film.raf); film.raf = 0; }
     if (lecteur && !lecteur.paused) {
       lecteur.pause();
       boutonMusique.classList.remove('actif');
@@ -1050,16 +1061,23 @@
     if (film.recording && film.recording.state !== 'inactive') {
       film.recording.onstop = function () {
         var blob = new Blob(film.tranches || [], { type: film.recording.mimeType || 'video/webm' });
-        if (film.url) { try { URL.revokeObjectURL(film.url); } catch (e) {} }
-        film.url = URL.createObjectURL(blob);
-        film.extension = (film.recording.mimeType || '').indexOf('mp4') !== -1 ? 'mp4' : 'webm';
-        film.canvas.hidden = true;
-        film.apercu.hidden = false;
-        film.apercu.src = film.url;
-        film.enregistrer.hidden = false;
-        film.stop.hidden = true;
-        film.info.textContent = message + ' Format : ' + film.extension.toUpperCase() + '.' +
-          (film.tranches.length ? '' : ' (Ce navigateur n\'a pas enregistré la vidéo : le film n\'a été que visionné.)');
+        if (blob.size) {
+          if (film.url) { try { URL.revokeObjectURL(film.url); } catch (e) {} }
+          film.url = URL.createObjectURL(blob);
+          film.extension = (film.recording.mimeType || '').indexOf('mp4') !== -1 ? 'mp4' : 'webm';
+          film.canvas.hidden = true;
+          film.apercu.hidden = false;
+          film.apercu.src = film.url;
+          film.enregistrer.hidden = false;
+          film.stop.hidden = true;
+          film.info.textContent = message + ' Format : ' + film.extension.toUpperCase() + '.';
+        } else {
+          film.lancer.hidden = false;
+          film.stop.hidden = true;
+          film.info.textContent = 'Le film s\'est bien affiché.' +
+            ' Le navigateur n\'a pas enregistré d\'images cette fois-ci —' +
+            ' réessayez en gardant cette page bien visible à l\'écran pendant tout le film.';
+        }
       };
       film.recording.stop();
     } else {
