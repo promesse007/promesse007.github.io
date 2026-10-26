@@ -1258,6 +1258,57 @@
     }
   }
 
+  /* ---------- Choix personnel de couleurs ----------
+     Deux teintes choisies ; les nuances sombres, claires et les
+     ombres sont calculées automatiquement pour garder la tenue. */
+  function hexVersRgb(hex) {
+    var m = /^#?([0-9a-f]{6})$/i.exec((hex || '').trim());
+    if (!m) return null;
+    var n = parseInt(m[1], 16);
+    return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+  }
+  function assombrir(hex, facteur) {
+    var c = hexVersRgb(hex);
+    if (!c) return '#4A121C';
+    var f = function (v) { return Math.max(0, Math.round(v * (1 - facteur))); };
+    return 'rgb(' + f(c.r) + ',' + f(c.g) + ',' + f(c.b) + ')';
+  }
+  function eclaircir(hex, part) {
+    var c = hexVersRgb(hex);
+    if (!c) return '#E6C877';
+    var f = function (v) { return Math.min(255, Math.round(v + (255 - v) * part)); };
+    return 'rgb(' + f(c.r) + ',' + f(c.g) + ',' + f(c.b) + ')';
+  }
+
+  function assombrirRgb(hex, facteur) {
+    var c = hexVersRgb(hex);
+    if (!c) return { r: 74, g: 18, b: 28 };
+    var f = function (v) { return Math.max(0, Math.round(v * (1 - facteur))); };
+    return { r: f(c.r), g: f(c.g), b: f(c.b) };
+  }
+
+  function appliquerPersonalise(principale, accent) {
+    if (!hexVersRgb(principale) || !hexVersRgb(accent)) return false;
+    var foncen  = assombrir(principale, .34);
+    var accentC = eclaircir(accent, .35);
+    var ombreRg = assombrirRgb(principale, .34);
+    var ombre   = '0 16px 44px rgba(' + ombreRg.r + ',' + ombreRg.g + ',' + ombreRg.b + ',.12)';
+    var ombreF  = '0 22px 60px rgba(' + ombreRg.r + ',' + ombreRg.g + ',' + ombreRg.b + ',.20)';
+    document.documentElement.style.setProperty('--bordeaux', principale);
+    document.documentElement.style.setProperty('--bordeaux-f', foncen);
+    document.documentElement.style.setProperty('--dore', accent);
+    document.documentElement.style.setProperty('--dore-clair', accentC);
+    document.documentElement.style.setProperty('--ombre', ombre);
+    document.documentElement.style.setProperty('--ombre-forte', ombreF);
+    try {
+      localStorage.setItem('theme-couleur', 'perso');
+      localStorage.setItem('theme-perso', JSON.stringify({ p: principale, a: accent }));
+    } catch (e) {}
+    var boutons = document.querySelectorAll('.reglage-theme');
+    for (var i = 0; i < boutons.length; i++) boutons[i].classList.remove('actif');
+    return true;
+  }
+
   function initReglages() {
     var bouton = $('#reglages');
     var panneau = $('#panneau-reglages');
@@ -1272,8 +1323,33 @@
     for (var i = 0; i < liste.length; i++) {
       liste[i].addEventListener('click', function () { appliquerTheme(this.getAttribute('data-theme')); });
     }
+
+    /* choix personnel */
+    var inpP = $('#couleur-principale'), inpA = $('#couleur-accent');
+    if (inpP && inpA) {
+      bouton.addEventListener('click', function () {
+        if (!panneau.hidden) {
+          // à l'ouverture : les sélecteurs montrent la tenue actuelle
+          var cs = getComputedStyle(document.documentElement);
+          inpP.value = (cs.getPropertyValue('--bordeaux') || '#6B1F2A').trim();
+          inpA.value = (cs.getPropertyValue('--dore') || '#C9A227').trim();
+        }
+      });
+      $('#couleur-appliquer').addEventListener('click', function () {
+        var ok = appliquerPersonalise(inpP.value, inpA.value);
+        if (!ok) floater('Choix impossible : ces teintes ne sont pas reconnues. Prenez plutôt une couleur franche.');
+      });
+      $('#couleur-reset').addEventListener('click', function () { appliquerTheme('bordeaux'); });
+    }
+
     var sauve = null;
     try { sauve = localStorage.getItem('theme-couleur'); } catch (e) {}
+    if (sauve === 'perso') {
+      try {
+        var perso = JSON.parse(localStorage.getItem('theme-perso') || 'null');
+        if (perso && appliquerPersonalise(perso.p, perso.a)) return;
+      } catch (e) {}
+    }
     appliquerTheme(THEMES[sauve] ? sauve : 'bordeaux');
   }
 
