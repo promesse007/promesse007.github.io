@@ -323,7 +323,9 @@
     liste: PHOTOS.slice(),      // photos du fichier galerie.js
     affichees: [],              // photos de la catégorie choisie
     enCours: 0,
-    pas: 36                     // nombre de vignettes affichées par lot
+    pas: 36,                    // nombre de vignettes affichées par lot
+    catActive: 'tout',          // catégorie sélectionnée
+    recherche: ''               // texte de recherche courant
   };
 
   function chargerPhotosLocales() {
@@ -536,13 +538,71 @@
   }
 
   function appliquerFiltre(cat) {
-    galerie.affichees = cat === 'tout'
+    galerie.catActive = cat;
+    reagirCherche();
+  }
+
+  /* ---------- Barre de recherche ----------
+     Cherche sur les légendes, le nom des catégories et les noms
+     de fichier (sans accent ni majuscule : « Josiane », « mairie »,
+     « studio 9 »… reprochent tous un résultat). */
+  var champRecherche = null;
+
+  function epure(texte) {
+    return (texte || '')
+      .toLowerCase()
+      .replace(/[àáâãä]/g, 'a').replace(/[èéêë]/g, 'e')
+      .replace(/[îï]/g, 'i').replace(/[ôö]/g, 'o')
+      .replace(/[ùûü]/g, 'u').replace(/ç/g, 'c');
+  }
+
+  function reactionRecherche(texte) {
+    galerie.recherche = epure(texte).replace(/[-_]+/g, ' ').trim();
+    var effacer = $('#cherche-effacer');
+    if (effacer) effacer.hidden = !texte;
+    reagirCherche();
+  }
+
+  function reagirCherche() {
+    var cat = galerie.catActive || 'tout';
+    var base = cat === 'tout'
       ? galerie.liste.slice()
       : galerie.liste.filter(function (p) { return p.cat === cat; });
+
+    if (galerie.recherche) {
+      base = base.filter(function (p) {
+        var nomFichier = p.src.split('/').pop() || '';
+        nomFichier = nomFichier.replace(/\.[a-z0-9]+$/i, '').replace(/[-_]+/g, ' ');
+        var champs = [p.legende || '', nomCategorie(p.cat), nomFichier];
+        for (var i = 0; i < champs.length; i++) {
+          if (epure(champs[i]).indexOf(galerie.recherche) !== -1) return true;
+        }
+        return false;
+      });
+    }
+
+    galerie.affichees = base;
     galerie.enCours = 0;
-    var grille = $('#grille');
-    grille.innerHTML = '';
+    $('#grille').innerHTML = '';
     ajouterLot();
+  }
+
+  function initRecherche() {
+    champRecherche = $('#cherche');
+    if (!champRecherche) return;
+    var retard = null;
+    champRecherche.addEventListener('input', function () {
+      clearTimeout(retard);
+      retard = setTimeout(function () { reactionRecherche(champRecherche.value); }, 140);
+    });
+    var effacer = $('#cherche-effacer');
+    if (effacer) {
+      effacer.addEventListener('click', function () {
+        champRecherche.value = '';
+        reactionRecherche('');
+        champRecherche.focus();
+      });
+    }
   }
 
   function ajouterLot() {
@@ -552,6 +612,15 @@
 
     if (!galerie.affichees.length) {
       vide.hidden = false;
+      var texteVide = $('#galerie-vide-texte');
+      var noteVide  = $('#galerie-vide-note');
+      if (texteVide && galerie.recherche) {
+        texteVide.textContent = 'Aucune photo ne correspond à « ' + $('#cherche').value + ' » dans cette catégorie.';
+        noteVide.hidden = true;
+      } else if (texteVide && noteVide) {
+        texteVide.textContent = 'Aucune photo n\'est encore rangée dans cette catégorie.';
+        noteVide.hidden = false;
+      }
       return;
     }
     vide.hidden = true;
@@ -1125,6 +1194,7 @@
   /* ==========================================================
      13. DÉMARRAGE
      ========================================================== */
+  initRecherche();
   rafraichirAlbum();
   initFilm();
 

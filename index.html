@@ -159,13 +159,18 @@
         <div class="separateur">&#9829;</div>
       </div>
 
+      <div class="barre-cherche">
+        <span class="icone-cherche" aria-hidden="true">&#128269;</span>
+        <input type="search" id="cherche" placeholder="Rechercher une photo (mariée, mairie, studio…)" autocomplete="off" spellcheck="false" aria-label="Rechercher une photo">
+        <button type="button" id="cherche-effacer" title="Effacer la recherche" aria-label="Effacer la recherche" hidden>&#10005;</button>
+      </div>
       <div class="filtres" id="filtres" role="group" aria-label="Filtrer les photos par catégorie"></div>
       <button id="bouton-film" type="button" class="bouton-film" title="Crée automatiquement un petit film des souvenirs affichés">&#127916; Créer le film des souvenirs</button>
       <div class="grille-album" id="grille"></div>
       <div class="galerie-vide" id="galerie-vide" hidden>
         <div class="grand">&#128247;</div>
-        <p>Aucune photo n'est encore rangée dans cette catégorie.</p>
-        <p style="margin-top:12px">Pour ajouter vos photos, utilisez la page <code>studio.html</code> (ajout depuis cet ordinateur)
+        <p id="galerie-vide-texte">Aucune photo n'est encore rangée dans cette catégorie.</p>
+        <p id="galerie-vide-note" style="margin-top:12px">Pour ajouter vos photos, utilisez la page <code>studio.html</code> (ajout depuis cet ordinateur)
         ou placez les fichiers dans <code>images/galerie/</code> puis listez-les dans <code>galerie.js</code>.</p>
       </div>
     </div>

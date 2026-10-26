@@ -683,6 +683,32 @@ section.zone:nth-of-type(even) .recit-bloc { background: var(--creme); }
   box-shadow: var(--ombre); text-align: center;
 }
 
+/* ---------- Barre de recherche des souvenirs ---------- */
+.barre-cherche {
+  display: flex; align-items: center; gap: 10px;
+  max-width: 460px; margin: 0 auto 18px;
+  padding: 4px 14px;
+  background: var(--blanc);
+  border: 1px solid rgba(201,162,39,.45);
+  border-radius: 40px;
+  box-shadow: var(--ombre);
+  transition: border-color .25s ease;
+}
+.barre-cherche:focus-within { border-color: var(--dore); }
+.barre-cherche .icone-cherche { font-size: .95rem; opacity: .7; }
+#cherche {
+  flex: 1; border: none; outline: none; background: transparent;
+  padding: 11px 2px;
+  font-family: var(--texte); font-size: .95rem; color: var(--encre);
+}
+#cherche::placeholder { color: var(--texte-doux); font-size: .88rem; }
+#cherche-effacer {
+  border: none; background: transparent; color: var(--texte-doux);
+  font-size: 1rem; cursor: pointer; padding: 4px 6px;
+  transition: color .2s ease;
+}
+#cherche-effacer:hover { color: var(--bordeaux); }
+
 /* ---------- Bouton « Ajouter des photos » (dans la barre des catégories) ---------- */
 .filtre-ajout {
   display: inline-block; margin: 3px 0 3px 8px;
