@@ -211,6 +211,27 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
   font-family:var(--texte); font-size:.78rem; font-weight:600;
 }
 .bloc-verrou button:hover { background:var(--dore); color:#fff; }
+
+/* ---------- Modération des souvenirs des invités ---------- */
+.mod-ligne {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 0; border-bottom:1px dashed rgba(200,169,107,.4);
+}
+.mod-ligne:last-child { border-bottom:none; }
+.mod-apercu {
+  width:88px; height:110px; object-fit:cover;
+  border-radius:10px; flex:none;
+  border:1px solid rgba(200,169,107,.5);
+  background:var(--beige);
+}
+.mod-infos { flex:1; min-width:0; }
+.mod-legende { font-weight:700; color:var(--encre); margin:0 0 4px; line-height:1.4; }
+.mod-meta { font-size:.78rem; color:var(--texte-doux); margin:0; line-height:1.6; }
+.mod-actions { flex:none; text-align:right; }
+@media (max-width: 620px) {
+  .mod-ligne { flex-wrap:wrap; }
+  .mod-actions { width:100%; text-align:left; margin-top:6px; }
+}
 </style>
 </head>
 <body>
@@ -254,6 +275,7 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
       <li><button data-sec="invites"><span>&#128100;</span><span class="tx">Invités</span></button></li>
       <li><button data-sec="livre"><span>&#9997;</span><span class="tx">Livre d'or</span></button></li>
       <li><button data-sec="livresouvenirs"><span>&#128214;</span><span class="tx">Livre des souvenirs</span></button></li>
+<li><button data-sec="moderation"><span>&#127970;</span><span class="tx">Souvenirs des invités</span></button></li>
       <li><button data-sec="reglages"><span>&#9881;</span><span class="tx">Réglages &amp; couleurs</span></button></li>
     </ul>
   </nav>
@@ -494,6 +516,37 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
       <h2>Télécharger la version mise à jour</h2>
       <p class="descr">Téléchargez le nouveau <code>livre-data.js</code>, remplacez l'ancien dans le dossier du site, puis repoussez sur GitHub.</p>
       <button class="btn fonce" id="livre-exporter">&#8679; Télécharger livre-data.js mis à jour</button>
+    </div>
+  </section>
+
+  <!-- ============ SOUVENIRS DES INVITÉS (modération) ============ -->
+  <section id="sec-moderation" hidden>
+    <div class="en-tete-sec">
+      <h1>Souvenirs des invités</h1>
+      <p>Les photos et textes déposés par les invités, directement depuis le site. Rien ne paraît en ligne avant ton accord&nbsp;: « Publier » montre le souvenir à tout le monde, « Refuser » le supprime définitivement.</p>
+    </div>
+    <div class="carte">
+      <h2>Clé de modération</h2>
+      <p class="descr">La clé que l'assistant t'a remise (fichier <code>CLE-MODERATION.txt</code>). Elle reste dans ce navigateur&nbsp;— elle n'est jamais écrite dans les fichiers du site.</p>
+      <div class="deux-cols">
+        <div>
+          <label>Clé de modération</label>
+          <input type="password" id="mod-cle" autocomplete="off" placeholder="Colle la clé ici">
+        </div>
+      </div>
+      <button class="btn principal" id="mod-cle-enregistrer" style="margin-top:14px">&#128274; Enregistrer la clé et charger les souvenirs</button>
+    </div>
+    <div class="carte" id="mod-carte-attente" hidden>
+      <h2>&#9203; En attente de ta décision</h2>
+      <div id="mod-liste-attente"></div>
+    </div>
+    <div class="carte" id="mod-carte-publies" hidden>
+      <h2>&#10003; Déjà publiés sur le site</h2>
+      <div id="mod-liste-publies"></div>
+    </div>
+    <div class="carte">
+      <h2>&#8635; Tout rafraîchir</h2>
+      <button class="btn secondaire" id="mod-rafraichir">Recharger les souvenirs</button>
     </div>
   </section>
 
@@ -962,6 +1015,160 @@ window.__demarrerAdmin = function () {
     traiterLot('', '', $('#sou-cat').value || 'meilleurs', '');
   });
   $('#sou-annuler').addEventListener('click', fermerAssistant);
+
+  /* ========== MODÉRATION : souvenirs des invités ========== */
+  /* Dépôt en ligne → clé secrète de modération (jamais dans le site,
+     stockée uniquement dans ce navigateur via localStorage). */
+  var URL_API      = 'https://br-falling-lab-b9lsl3j6-souvenirs.compute.c-7.eu-central-1.aws.neon.tech';
+  var CLE_STOCKAGE = 'cle-moderation-souvenirs';
+
+  function lireCleModo() {
+    try { return localStorage.getItem(CLE_STOCKAGE) || ''; } catch (e) { return ''; }
+  }
+  function sauverCleModo(cle) {
+    try {
+      if (cle) localStorage.setItem(CLE_STOCKAGE, cle);
+      else localStorage.removeItem(CLE_STOCKAGE);
+    } catch (e) {}
+  }
+  function cleModo() {
+    return $('#mod-cle').value.trim() || lireCleModo();
+  }
+  function entetesModo() {
+    return { 'X-Admin-Cle': cleModo() || '' };
+  }
+
+  function apercuPhoto(id, cible) {
+    var marqueur = 'apro-' + id;
+    fetch(URL_API + '/photo/' + id, { headers: entetesModo() })
+      .then(function (r) { if (!r.ok) throw new Error('réponse ' + r.status); return r.blob(); })
+      .then(function (b) { cible.src = URL.createObjectURL(b); cible.dataset.charge = marqueur; })
+      .catch(function () { cible.remove(); });
+  }
+
+  function carteModeration(s, attente) {
+    var ligne = document.createElement('div');
+    ligne.className = 'mod-ligne';
+
+    if (s.type === 'photo') {
+      var img = document.createElement('img');
+      img.className = 'mod-apercu';
+      img.alt = '';
+      img.loading = 'lazy';
+      apercuPhoto(s.id, img);
+      ligne.appendChild(img);
+    }
+
+    var infos = document.createElement('div');
+    infos.className = 'mod-infos';
+    var titre = document.createElement('p');
+    titre.className = 'mod-legende';
+    titre.textContent = s.legende || (s.type === 'photo' ? '(photo sans légende)' : 'Souvenir écrit');
+    infos.appendChild(titre);
+
+    var morceaux = [];
+    if (s.auteur) morceaux.push('Par ' + s.auteur);
+    if (s.moment) morceaux.push(s.moment);
+    if (s.date_prise) {
+      var d = new Date(s.date_prise + 'T00:00:00');
+      if (!isNaN(d)) morceaux.push('prise le ' + d.toLocaleDateString('fr-FR'));
+    }
+    var meta = document.createElement('p');
+    meta.className = 'mod-meta';
+    meta.textContent = morceaux.join(' · ');
+    infos.appendChild(meta);
+    ligne.appendChild(infos);
+
+    var actions = document.createElement('div');
+    actions.className = 'mod-actions';
+
+    var bPrincipal = document.createElement('button');
+    bPrincipal.className = 'btn principal';
+    bPrincipal.textContent = attente ? '✓ Publier sur le site' : 'Retirer du site';
+    bPrincipal.addEventListener('click', function () {
+      if (!attente && !window.confirm('Retirer ce souvenir du site en ligne ? (il sera supprimé pour de vrai)')) return;
+      bPrincipal.disabled = true;
+      fetch(URL_API + '/admin/souvenirs/' + s.id + (attente ? '/publier' : '/refuser'),
+            { method: 'POST', headers: entetesModo() })
+        .then(function (r) { if (!r.ok) throw new Error('réponse ' + r.status); return r.json(); })
+        .then(function () {
+          floater(attente ? 'Souvenir publié — visible par tous les invités du site.'
+                          : 'Souvenir retiré du site (supprimé).');
+          chargerModeration();
+        })
+        .catch(function () {
+          bPrincipal.disabled = false;
+          floater('Action impossible — la clé est-elle correcte ? La connexion tient-elle ?');
+        });
+    });
+    actions.appendChild(bPrincipal);
+
+    if (attente) {
+      var bRefuser = document.createElement('button');
+      bRefuser.className = 'btn dangereux';
+      bRefuser.style.marginLeft = '8px';
+      bRefuser.textContent = '✕ Refuser';
+      bRefuser.addEventListener('click', function () {
+        if (!window.confirm('Refuser ce souvenir ? Il sera supprimé définitivement.')) return;
+        bRefuser.disabled = true;
+        fetch(URL_API + '/admin/souvenirs/' + s.id + '/refuser',
+              { method: 'POST', headers: entetesModo() })
+          .then(function (r) { if (!r.ok) throw new Error('réponse ' + r.status); return r.json(); })
+          .then(function () { floater('Souvenir refusé et supprimé.'); chargerModeration(); })
+          .catch(function () {
+            bRefuser.disabled = false;
+            floater('Action impossible — la clé est-elle correcte ?');
+          });
+      });
+      actions.appendChild(bRefuser);
+    }
+    ligne.appendChild(actions);
+    return ligne;
+  }
+
+  function chargerModeration() {
+    if (!$('#mod-carte-attente') || !cleModo()) return;
+    fetch(URL_API + '/admin/souvenirs', { headers: entetesModo() })
+      .then(function (r) { if (!r.ok) throw new Error('réponse ' + r.status); return r.json(); })
+      .then(function (liste) {
+        var enAttente = liste.filter(function (s) { return s.statut === 'attente'; });
+        var publies   = liste.filter(function (s) { return s.statut === 'publie'; });
+        var zoneA = $('#mod-liste-attente');
+        var zoneP = $('#mod-liste-publies');
+        zoneA.innerHTML = '';
+        zoneP.innerHTML = '';
+        $('#mod-carte-attente').hidden = enAttente.length === 0;
+        $('#mod-carte-publies').hidden = publies.length === 0;
+        enAttente.forEach(function (s) { zoneA.appendChild(carteModeration(s, true)); });
+        publies.forEach(function (s) { zoneP.appendChild(carteModeration(s, false)); });
+        if (!liste.length) floater('Aucun souvenir déposé pour l\'instant — les invités déposent depuis le site en ligne.');
+        else floater(enAttente.length + ' souvenir(s) en attente · ' + publies.length + ' publié(s).');
+      })
+      .catch(function () {
+        floater('Chargement impossible : clé fausse ou connexion manquante.');
+      });
+  }
+
+  $('#mod-cle').value = lireCleModo();
+  $('#mod-cle-enregistrer').addEventListener('click', function () {
+    var cle = $('#mod-cle').value.trim();
+    if (!cle) { floater('La clé est vide — colle-la depuis CLE-MODERATION.txt.'); return; }
+    sauverCleModo(cle);
+    fetch(URL_API + '/admin/souvenirs', { headers: { 'X-Admin-Cle': cle } })
+      .then(function (r) {
+        if (!r.ok) throw new Error('clé fausse');
+        return r.json();
+      })
+      .then(function () {
+        floater('Clé enregistrée dans ce navigateur — souvenirs chargés.');
+        chargerModeration();
+      })
+      .catch(function () {
+        sauverCleModo('');
+        floater('Cette clé est refusée par le serveur — vérifie-la (copie complète, sans espaces).');
+      });
+  });
+  $('#mod-rafraichir').addEventListener('click', chargerModeration);
 
   /* ========== EXPORT galerie.js ========== */
   function q(s) { return "'" + String(s == null ? '' : s).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'"; }

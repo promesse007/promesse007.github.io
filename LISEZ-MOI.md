@@ -39,6 +39,21 @@ La vidéo d'accueil démarre alors et vous faites défiler les sections.
 > automatiquement la bonne date** — et la catégorie. Le souvenir porte
 > alors sa date et son moment avec lui.
 
+## 💬 Souvenirs des invités en ligne (modéré par vous)
+
+Section « **Souvenirs** » du site public : chaque invité peut déposer une
+photo + le moment + la date depuis son téléphone (API Neon Function
+« souvenirs », voir ETAPES-COMPTES.md et le fichier `souvenirs.js`).
+
+- Rien ne paraît en ligne tant que les mariés n'ont pas dit oui.
+- La modération se fait dans l'administration, rubrique
+  **« Souvenirs des invités »** : collez la clé du fichier
+  `CLE-MODERATION.txt` (elle reste dans le navigateur), puis
+  **Publier / Refuser** chaque souvenir, aperçu photo à l'appui.
+- « Retirer du site » supprime un souvenir déjà publié.
+- Syntaxe vérifiée : le dépôt invité (photo compressée jusqu'à 1600 px,
+  JPEG max 8 Mo) et les 15 tests serveur ont été validés de bout en bout.
+
 ### Méthode A — l'atelier (la plus simple, sans coder)
 
 1. Ouvrez **`studio.html`** dans votre navigateur.

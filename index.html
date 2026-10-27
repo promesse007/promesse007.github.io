@@ -48,6 +48,7 @@
     <li><a href="#galerie">Galerie</a></li>
     <li><a href="livre.html">Le livre</a></li>
     <li><a href="#famille">Famille &amp; invités</a></li>
+    <li><a href="#souvenirs">Souvenirs</a></li>
     <li><a href="#livre-or">Livre d'or</a></li>
     <li class="lien-pro"><a href="administration.html" title="Espace du propriétaire">Administration</a></li>
   </ul>
@@ -231,6 +232,59 @@
   </section>
 
   <!-- ==========================================================
+       SOUVENIRS DES INVITÉS (branche le cloud des mariés)
+       ========================================================== -->
+  <section id="souvenirs" class="zone">
+    <div class="contour">
+      <div class="centre">
+        <p class="surtitre">Le livre de tous les souvenirs</p>
+        <h2 class="titre">Souvenirs des invités</h2>
+        <p class="sous-titre">Une photo, un mot, la date du moment&nbsp;— le souvenir arrive aux mariés, qui le publient ensuite ici pour tout le monde.</p>
+        <div class="separateur">&#9829;</div>
+      </div>
+
+      <div class="cadre-souvenirs">
+        <form id="formulaire-souvenir" novalidate>
+          <div class="deux-champs-souvenirs">
+            <div>
+              <label for="sou-inv-nom">Votre nom</label>
+              <input type="text" id="sou-inv-nom" placeholder="Ex. Marie Koumba" maxlength="60" required>
+            </div>
+            <div>
+              <label for="sou-inv-moment">Moment du mariage</label>
+              <select id="sou-inv-moment"></select>
+            </div>
+          </div>
+          <div class="deux-champs-souvenirs">
+            <div>
+              <label for="sou-inv-date">Date du moment (facultatif — suggérée selon le moment)</label>
+              <input type="date" id="sou-inv-date">
+            </div>
+            <div>
+              <label for="sou-inv-photo">Votre photo (JPEG, PNG ou WebP — 8&nbsp;Mo max)</label>
+              <input type="file" id="sou-inv-photo" accept="image/jpeg,image/png,image/webp">
+            </div>
+          </div>
+          <div>
+            <label for="sou-inv-legende">Votre souvenir, en quelques mots</label>
+            <textarea id="sou-inv-legende" maxlength="240" placeholder="Ex. Le sourire de Josiane quand le couvre-chef est tombé…"></textarea>
+          </div>
+          <button type="submit" id="sou-inv-envoyer">Déposer mon souvenir</button>
+          <p class="reponse-souvenir" id="sou-inv-reponse" role="status" aria-live="polite"></p>
+        </form>
+        <div class="encadre-souvenirs">
+          <b>Modération avec le plus grand soin</b><br>
+          Chaque souvenir arrive d'abord dans le carnet des mariés&nbsp;: dès que Josiane et Armand
+          l'acceptent dans leur administration, il apparaît ici, visible par tous les invités.
+        </div>
+      </div>
+
+      <div class="grille-souvenirs" id="grille-souvenirs"></div>
+      <p class="note-souvenirs" id="note-souvenirs" hidden></p>
+    </div>
+  </section>
+
+  <!-- ==========================================================
        LIVRE D'OR
        ========================================================== -->
   <section id="livre-or" class="zone">
@@ -374,6 +428,7 @@
 
 <script src="galerie.js"></script>
 <script src="intelligence.js"></script>
+<script src="souvenirs.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

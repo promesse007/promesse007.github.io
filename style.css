@@ -683,6 +683,98 @@ section.zone:nth-of-type(even) .recit-bloc { background: var(--creme); }
 }
 .encadre-info b { color: var(--dore-clair); }
 
+/* ---------- Souvenirs des invités ---------- */
+.cadre-souvenirs {
+  max-width: 760px; margin: 40px auto 0;
+  background: var(--blanc);
+  border: 1px solid rgba(201,162,39,.3);
+  border-radius: var(--rayon);
+  padding: 28px;
+  box-shadow: var(--ombre);
+}
+#formulaire-souvenir { display: grid; gap: 14px; }
+#formulaire-souvenir label {
+  font-size: .78rem; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--bordeaux);
+}
+#formulaire-souvenir input, #formulaire-souvenir textarea, #formulaire-souvenir select {
+  width: 100%; padding: 12px 14px;
+  border: 1px solid rgba(201,162,39,.4);
+  border-radius: 10px; background: var(--creme);
+  color: var(--encre); font: inherit; font-size: .95rem;
+}
+#formulaire-souvenir input:focus, #formulaire-souvenir textarea:focus, #formulaire-souvenir select:focus {
+  outline: 2px solid var(--dore); outline-offset: 1px;
+}
+#formulaire-souvenir textarea { min-height: 92px; resize: vertical; }
+#formulaire-souvenir button {
+  font: inherit; font-weight: 700; cursor: pointer;
+  border: none; border-radius: 999px;
+  padding: 13px 26px; color: #fff;
+  background: linear-gradient(135deg, var(--rose-profond), var(--bordeaux-f));
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+#formulaire-souvenir button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ombre-forte);
+}
+#formulaire-souvenir button:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+.deux-champs-souvenirs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.reponse-souvenir { font-size: .92rem; min-height: 22px; }
+.reponse-souvenir.ok { color: var(--rose-profond); }
+.reponse-souvenir.err  { color: #A33B27; }
+#souvenirs .encadre-souvenirs {
+  margin-top: 18px; font-size: .86rem; line-height: 1.6;
+  color: var(--texte-doux);
+  background: var(--beige);
+  border: 1px solid rgba(201,162,39,.34);
+  border-left: 3px solid var(--dore);
+  border-radius: 10px; padding: 14px 16px;
+}
+#souvenirs .encadre-souvenirs b { color: var(--bordeaux); }
+.grille-souvenirs {
+  max-width: 1140px; margin: 34px auto 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 20px;
+}
+.carte-souvenir {
+  background: var(--blanc);
+  border: 1px solid rgba(201,162,39,.3);
+  border-radius: var(--rayon);
+  overflow: hidden;
+  box-shadow: var(--ombre);
+  display: flex; flex-direction: column;
+  transition: transform .4s ease, box-shadow .4s ease;
+}
+.carte-souvenir:hover { transform: translateY(-5px); box-shadow: var(--ombre-forte); }
+.carte-souvenir img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
+.souvenir-texte {
+  aspect-ratio: 4 / 5;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(150deg, var(--beige), var(--beige-foncé));
+}
+.souvenir-texte .guillemet {
+  font-family: var(--titre); font-size: 3.4rem; color: var(--dore);
+  line-height: 1; align-self: flex-start; margin: 18px 0 0 18px;
+}
+.pied-souvenir { padding: 14px 16px 18px; }
+.legende-souvenir {
+  font-family: var(--titre); font-size: 1.02rem; line-height: 1.45;
+  color: var(--encre); margin-bottom: 8px;
+}
+.meta-souvenir { font-size: .74rem; color: var(--texte-doux); line-height: 1.6; }
+.note-souvenirs {
+  max-width: 760px; margin: 26px auto 0; text-align: center;
+  font-size: .92rem; color: var(--texte-doux); font-style: italic;
+}
+.note-souvenirs.err { color: #A33B27; }
+@media (max-width: 680px) {
+  .deux-champs-souvenirs { grid-template-columns: 1fr; }
+  .cadre-souvenirs { padding: 20px; }
+  .grille-souvenirs { grid-template-columns: 1fr 1fr; gap: 12px; }
+}
+html[data-theme="noiretblanc"] .carte-souvenir img { filter: grayscale(1); }
+
 /* ---------- Pied de page ---------- */
 .pied {
   background: var(--bordeaux-f);
