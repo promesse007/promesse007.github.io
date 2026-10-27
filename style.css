@@ -1149,6 +1149,17 @@ img {
 }
 .carte-moment h3 { font-family: var(--titre); color: var(--rose-profond); font-size: 1.35rem; }
 .texte-moment { font-size: .92rem; color: var(--texte-doux); line-height: 1.6; margin-top: 8px; }
+.lien-localisation {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 12px; padding: 8px 12px;
+  border: 1px solid rgba(201,162,39,.48); border-radius: 999px;
+  color: var(--bordeaux); background: var(--creme);
+  font-size: .78rem; font-weight: 700; text-decoration: none;
+  transition: background .25s ease, color .25s ease, transform .25s ease;
+}
+.lien-localisation:hover {
+  background: var(--bordeaux); color: #fff; transform: translateY(-1px);
+}
 @media (max-width: 760px) {
   .cartes-moments { grid-template-columns: 1fr; gap: 14px; }
   #bouton-infos { margin: 18px 0 0; }
