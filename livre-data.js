@@ -16,15 +16,15 @@ window.LIVRE = {
   /* musique d'ambiance : coupée par défaut, le lecteur ♪ du livre permet de l'activer */
   musique: window.REGLAGES.livre.musique,
 
-  sousTitreCouverture: 'Le livre de nos souvenirs',
-  basCouverture: '11 décembre 2026 séance studio — Brazzaville, Congo',
+  sousTitreCouverture: 'Le plus beau chapitre commence ensemble',
+  basCouverture: '10 & 12 décembre 2026 — Brazzaville, Congo',
 
   chapitres: [
     {
       num: 'I',
-      titre: 'Les mariés',
+      titre: 'Deux cœurs, une promesse',
       photoOuverture: 31,          /* photo en pleine page, ouverture du chapitre */
-      intro: 'Avant les invités, avant les paroles et les vœux, il y a eu vous deux. Ces portraits sont ceux de la promesse : un regard lumineux, un sourire qui avance vers l\u2019avenir. Chaque photo raconte à sa manière la patience d\u2019un amour qui grandit, et la joie d\u2019être enfin mariés. Tournez les pages doucement : c\u2019est votre histoire qui commence.',
+      intro: "Avant les cérémonies, il y a déjà l’essentiel : deux regards qui se répondent et une promesse qui grandit. Ces portraits gardent la douceur d’un amour choisi, les sourires qui rassurent et cette joie discrète de se dire : l’avenir, nous l’écrirons à deux. Que ces premières pages ouvrent le récit d’une vie à construire, main dans la main.",
       photos: [
         { n: 1,  legende: 'L\u2019élégance dans la sérénité.' },
         { n: 6,  legende: 'Rayonnante dans sa dentelle corail.' },
@@ -37,8 +37,8 @@ window.LIVRE = {
     },
     {
       num: 'II',
-      titre: 'Famille et proches',
-      intro: 'Une union de deux cœurs, c\u2019est aussi une rencontre de deux familles. Ici, les visages qui nous ont vu grandir, qui nous ont conseillés et portés depuis toujours. Leur fierté se lit sur chaque portrait, leurs sourires soutiennent notre pas. Ces pages leur appartiennent, car le bonheur, sans les leurs, ne serait pas complet. (Prénoms à personnaliser dans les légendes.)',
+      titre: 'Premiers regards',
+      intro: "Dans la lumière du studio, chaque pose révèle un peu de leur complicité. Un sourire offert, un regard échangé, une présence qui apaise : rien n’a besoin d’être dit quand deux personnes se comprennent ainsi. Ces premières images racontent la beauté simple d’avancer côte à côte.",
       photos: [
         { n: 2,  legende: 'Élégance en fleurs, de profil.' },
         { n: 3,  legende: 'Un sourire franc, une pose spontanée.' },
@@ -50,7 +50,7 @@ window.LIVRE = {
       num: 'III',
       titre: 'Tendresse',
       photoOuvertureTexte: true,
-      intro: 'Tenue brune, regards doux : ce moment du studio garde la couleur de la confiance. Ce sont les gestes simples qui parlent le plus fort — une main posée, un dos-à-dos, un bouquet tendu. Rien n\u2019est joué, tout est vrai. Ces pages gardent la mémoire d\u2019une tendresse qui ne demande rien, et qui donne tout.',
+      intro: "La tendresse habite souvent les gestes les plus simples : une main posée, une épaule offerte, un bouquet tendu avec le cœur. Dans ces images, les regards se répondent sans bruit et la confiance se devine dans chaque sourire. Une douceur à feuilleter lentement, comme une promesse que l’on garde près de soi.",
       photos: [
         { n: 12, legende: 'Un regard qui dit tout.' },
         { n: 13, legende: 'Complices, tout simplement.' },
@@ -68,7 +68,7 @@ window.LIVRE = {
     {
       num: 'IV',
       titre: 'Élégance',
-      intro: 'Le bleu roi des grandes occasions, le port altier des amoureux. Dans ces images, la tenue se fait lumière et les silhouettes dessinent une promesse. Un baiser sur le front vaut tous les discours ; une main dans la main vaut tous les serments. C\u2019est l\u2019élégance d\u2019un amour qui a choisi de durer.',
+      intro: "Le bleu des grandes occasions, l’éclat des tenues et la sérénité des regards composent ces portraits. Mais la plus belle élégance se trouve dans les attentions : un geste protecteur, une main qui rejoint l’autre, un sourire qui dit « je suis là ». La beauté d’un amour se lit aussi dans ces détails.",
       photos: [
         { n: 24, legende: 'Un baiser sur le front, la tendresse en silence.' },
         { n: 25, legende: 'Elle rit, la main posée sur son épaule.' },
@@ -85,7 +85,7 @@ window.LIVRE = {
     {
       num: 'V',
       titre: 'Complicité',
-      intro: 'Les carreaux assortis, les rires qui s\u2019étonnent eux-mêmes : la complicité, c\u2019est de la joie qui marche à deux. Ici tout est léger, spontané, sincère — une étreinte douce, un regard en coin, une épaule qui soutient. Le bonheur des mariés ne se décrète pas, il se voit. Ces pages en sont la preuve vivante.',
+      intro: "La complicité, c’est cette joie qui trouve naturellement son chemin à deux. Un regard en coin, un rire partagé, une épaule contre laquelle se reposer : ces instants ont la légèreté des choses sincères. Que ces images rappellent toujours à Josiane et Armand le bonheur de se choisir, jour après jour.",
       photos: [
         { n: 33, legende: 'Assortis, complices, heureux.' },
         { n: 35, legende: 'Enlacés, dans la chaleur d\u2019un même regard.' },
@@ -102,8 +102,8 @@ window.LIVRE = {
     },
     {
       num: 'VI',
-      titre: 'Remerciements',
-      intro: 'Gratitude à nos parents, nos familles et nos parrains, pour leur force et leurs prières. Merci à nos témoins et à nos amis, pour leur présence et leurs éclats de rire. Merci à ceux venus de loin, et à ceux qui, de près, ont tout rendu possible. Vous avez écrit, avec nous, les plus belles pages de ce livre.',
+      titre: 'À ceux que nous aimons',
+      intro: "À nos parents, à nos familles, à nos parrains, à nos témoins et à nos amis : merci pour votre affection, vos prières, vos conseils et la place que vous avez dans nos vies. Votre présence à nos côtés rend cette promesse plus belle. Puisse ce livre garder un peu de cette joie et vous rappeler que vous en faites partie.",
       photos: []
     }
   ],
@@ -111,6 +111,6 @@ window.LIVRE = {
   /* page du livre d'or intégrée au livre */
   livreDor: {
     titre: 'Le livre d\u2019or',
-    intro: 'Quelques mots dans ces pages vivront plus longtemps que la fête. Écrivez votre vœu, votre souvenir ou un fragment de votre joie : il sera déposé précieusement dans notre livre d\u2019or.'
+    intro: "Un mot tendre, un vœu de bonheur ou un souvenir partagé : confiez-nous quelques lignes. Les mariés les liront avec émotion et, après leur accord, votre message rejoindra les souvenirs visibles par tous."
   }
 };

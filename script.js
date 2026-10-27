@@ -816,7 +816,7 @@
   }
 
   /* ==========================================================
-     10. LIVRE D'OR (connexion réelle à Formspree, si configuré)
+     10. LIVRE D'OR (mots confiés aux mariés, soumis à validation)
      ========================================================== */
   (function livre() {
     var form = $('#formulaire-or');
@@ -824,7 +824,7 @@
     var bouton = $('#or-envoyer');
     if (!form) return;
 
-    var pret = REG.formspree && REG.formspree.indexOf('VOTRE-ID-FORMSPREE') === -1;
+    var URL_API = 'https://br-falling-lab-b9lsl3j6-souvenirs.compute.c-7.eu-central-1.aws.neon.tech';
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -836,35 +836,24 @@
         sortie.textContent = 'Merci d\'écrire votre nom et un petit message.';
         return;
       }
-      if (!pret) {
-        sortie.className = 'reponse-livre err';
-        sortie.textContent = 'Le livre d\'or n\'est pas encore connecté à un service de réception : ' +
-          'votre message n\'a donc pas été enregistré. Renseignez votre identifiant Formspree dans galerie.js pour activer cette fonction.';
-        return;
-      }
-
       bouton.disabled = true;
       sortie.className = 'reponse-livre';
       sortie.textContent = 'Envoi en cours…';
 
-      fetch(REG.formspree, {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: (function () {
-          var d = new FormData();
-          d.append('nom', nom);
-          d.append('message', msg);
-          d.append('mariage', REG.mariage || '');
-          return d;
-        })()
-      }).then(function (r) {
-        if (!r.ok) throw new Error('réponse ' + r.status);
+      var d = new FormData();
+      d.append('auteur', nom);
+      d.append('legende', msg);
+      d.append('moment', 'Livre d’or');
+      fetch(URL_API + '/souvenirs', { method: 'POST', body: d }).then(function (r) {
+        if (!r.ok) return r.json().then(function (x) { throw new Error(x.erreur || 'Envoi impossible.'); });
+        return r.json();
+      }).then(function () {
         sortie.className = 'reponse-livre ok';
-        sortie.textContent = 'Merci ' + nom + ' ! Votre message a bien été envoyé.';
+        sortie.textContent = 'Merci ' + nom + ' : votre mot est bien arrivé aux mariés. Il sera partagé après leur accord.';
         form.reset();
-      }).catch(function () {
+      }).catch(function (erreur) {
         sortie.className = 'reponse-livre err';
-        sortie.textContent = 'L\'envoi a échoué. Veuillez réessayer dans quelques instants.';
+        sortie.textContent = erreur.message || 'L\'envoi a échoué. Veuillez réessayer dans quelques instants.';
       }).then(function () {
         bouton.disabled = false;
       });

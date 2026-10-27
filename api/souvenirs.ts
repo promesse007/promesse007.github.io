@@ -196,7 +196,7 @@ app.post("/admin/souvenirs/:id/publier", async (c) =>
   gardeAdmin(c, async () => {
     const r = await pool.query(
       `update souvenirs set statut = 'publie', modere_le = now()
-        where id = $1 and photo_donnees is not null returning id`,
+        where id = $1 and (type = 'texte' or photo_donnees is not null) returning id`,
       [c.req.param("id")]
     );
     if (!r.rows.length) return c.text("Souvenir introuvable (ou déjà lu).", 404);

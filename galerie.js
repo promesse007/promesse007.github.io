@@ -43,11 +43,6 @@ window.REGLAGES = {
      la balise vidéo dans index.html (voir le guide LISEZ-MOI.md). */
   video: '',
 
-  /* LIVRE D'OR — laissez 'VOTRE-ID-FORMSPREE' tant que le service n'est pas configuré.
-     Créez un compte sur https://formspree.io, créez un formulaire, puis collez ici
-     l'adresse complète obtenue (elle ressemble à https://formspree.io/f/abcdwxyz). */
-  formspree: 'VOTRE-ID-FORMSPREE',
-
   /* Nom affiché dans les messages du livre d'or */
   mariage: 'Bosseno Josiane et Olakiba Armand',
 
@@ -76,25 +71,25 @@ window.HISTOIRE = [
   {
     image: null,                       /* ex. 'images/galerie/ensemble.jpg' */
     titre: 'Le début de notre histoire',
-    texte: "Notre rencontre, nos premiers projets communs et la décision de faire notre vie ensemble : voilà le début de tout. Cet espace est prévu pour les photos et les souvenirs qui ont marqué nos premières années.",
-    date: 'À compléter'
+    texte: "Il y a des histoires qui se construisent au fil des jours, dans la confiance, l’écoute et les projets partagés. Celle de Bosseno Josiane et Olakiba Armand s’écrit avec patience, tendresse et le désir d’avancer côte à côte. En décembre 2026, entourés de ceux qui leur sont chers, ils ouvriront un nouveau chapitre.",
+    date: 'Une histoire à écrire à deux'
   },
   {
     image: 'images/galerie/studio-02.webp',
     titre: 'Les préparatifs',
-    texte: "Les essayages, les préparatifs de la cérémonie, les derniers détails et l'impatience qui monte à mesure que la date approche. Cette séance photo de studio, prise en tenue, en est déjà un beau premier souvenir.",
+    texte: "À mesure que le grand jour approche, chaque détail prend une place particulière. Cette séance en studio en garde une trace lumineuse : deux sourires, une complicité et la joie douce de se préparer à écrire la suite ensemble.",
     date: 'Octobre 2026 — séance studio'
   },
   {
     image: null,
-    titre: 'Le jour de la cérémonie',
-    texte: "Notre union se vit en deux temps : le jeudi 10 décembre 2026 à 10 h, le dot à l'Espace Dongou Zidane (arrêt Deuxième Terre Jaune, Kintélé) ; puis le samedi 12 décembre 2026 à 10 h, notre mariage civil à la Mairie de Talangaï, suivi à 12 h de la bénédiction nuptiale à l'église. Cette page accueillera les photos de ces belles journées.",
+    titre: 'La promesse célébrée en famille',
+    texte: "Le jeudi 10 décembre 2026 à 10 h, la dot réunira nos familles à l’Espace Dongou Zidane, arrêt Deuxième Terre Jaune, à Kintélé. Le samedi 12 décembre à 10 h, nous célébrerons notre mariage civil à la mairie de Talangaï, puis la bénédiction nuptiale à l’église à 12 h. Deux journées de joie, de gratitude et de promesses, que nous avons hâte de partager avec vous.",
     date: '10 & 12 décembre 2026'
   },
   {
     image: 'images/galerie/studio-42.webp',
     titre: 'Les instants partagés',
-    texte: "Les échanges avec nos proches, les prières, les conseils reçus et les promesses échangées. La famille déjà réunie pour la séance photo : un avant-goût du grand jour.",
+    texte: "Un regard complice, une main posée sur l’épaule, les sourires de nos proches : ces instants simples disent déjà beaucoup. Cette photo de famille est un avant-goût de la joie que nous espérons partager avec vous lors de notre union.",
     date: 'Octobre 2026 — avec nos proches'
   }
 ];
@@ -106,17 +101,17 @@ window.FAMILLE = [
   {
     categorie: 'familles',
     titre: 'Les familles',
-    texte: "Parents, frères et sœurs, oncles et tantes, les visages de ceux qui nous ont vu grandir."
+    texte: "Parents, frères et sœurs, oncles et tantes : vos visages sont les racines de notre histoire et votre affection, une force précieuse pour le chemin qui s’ouvre."
   },
   {
     categorie: 'amis',
     titre: 'Les amis et les invités',
-    texte: "Ceux qui ont fait le déplacement et partagé notre joie en ces 10 et 12 décembre 2026."
+    texte: "À nos amis et à chacun de nos invités : merci de venir entourer notre bonheur et de faire partie de ces journées que nous garderons dans nos cœurs."
   },
   {
     categorie: 'groupe',
     titre: 'Les photos de groupe',
-    texte: "Les souvenirs collectifs de la journée, pour que chacun retrouve sa place."
+    texte: "Un même cadre, mille sourires et une joie partagée : que chacun retrouve ici sa place dans notre album de famille."
   }
 ];
 

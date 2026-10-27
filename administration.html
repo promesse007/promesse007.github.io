@@ -472,17 +472,11 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
   <section id="sec-livre" hidden>
     <div class="en-tete-sec">
       <h1>Livre d'or</h1>
-      <p>Consultation et modération des messages de vos invités.</p>
+      <p>Les petits mots du livre d’or rejoignent la même file de modération que les autres souvenirs.</p>
     </div>
     <div class="carte">
-      <h2>Adresse de réception (Formspree)</h2>
-      <label>Adresse du formulaire Formspree</label>
-      <input type="url" id="livre-adresse" placeholder="https://formspree.io/f/abcdwxyz">
-      <div style="margin-top:14px">
-        <button class="btn principal" id="livre-enregistrer">Enregistrer l'adresse</button>
-        <a class="btn secondaire" style="text-decoration:none" href="https://formspree.io" target="_blank" rel="noopener">Ouvrir formspree.io &rarr;</a>
-      </div>
-      <p class="descr" style="margin-top:12px">Une fois l'adresse enregistrée (puis exportée dans galerie.js et publiée), les messages des invités arrivent <b>dans votre tableau de bord Formspree</b> : vous y lisez, répondez et masquez ce que vous voulez. Le site ne conserve pas les messages localement — c'est le service externe qui les reçoit.</p>
+      <h2>Des mots confiés en privé</h2>
+      <p class="descr" style="margin-bottom:0">Les messages du livre d’or sont enregistrés dans la base du site avec le statut « en attente ». Retrouvez-les dans la rubrique <b>Souvenirs des invités</b> : vous pourrez les publier pour vos proches ou les refuser. Aucun mot n’est affiché avant votre accord.</p>
     </div>
     <div class="carte">
       <h2>État actuel</h2>
@@ -738,12 +732,8 @@ window.__demarrerAdmin = function () {
                    bordeaux: 'Bordeaux passion', noiretblanc: 'Noir & blanc chic',
                    perso: 'Choix personnel' };
       $('#res-couleur').textContent = noms[theme] || 'Sakura (par défaut)';
-      var ok = REG.formspree && REG.formspree.indexOf('VOTRE-ID') === -1;
-      $('#res-livre').textContent = ok ? 'Configuré via Formspree' : 'Pas encore configuré (service externe requis)';
-      $('#livre-etat').textContent = ok
-        ? 'Adresse configurée (' + REG.formspree + '). Les messages arrivent dans votre compte Formspree après publication du site.'
-        : 'Pas encore configuré. Créez un compte gratuit sur formspree.io, créez un formulaire, collez son adresse ci-dessous, puis exportez galerie.js et publiez.';
-      if (ok && $('#livre-adresse').value === '') $('#livre-adresse').value = REG.formspree;
+      $('#res-livre').textContent = 'Connecté à la base — messages en attente de modération';
+      $('#livre-etat').textContent = 'Les messages sont protégés par la modération. Ouvrez « Souvenirs des invités » pour lire, publier ou refuser les mots déposés.';
     };
     lireTout('photos').then(function (locals) {
       $('#nb-locals').textContent = locals.length;
@@ -1395,18 +1385,6 @@ window.__demarrerAdmin = function () {
       lignes.push([g.nom, g.tel, g.presence, g.note].join(';'));
     });
     telecharger('invites-mariage.csv', '\uFEFF' + lignes.join('\n'), 'text/csv;charset=utf-8');
-  });
-
-  /* ========== LIVRE D'OR ========== */
-  $('#livre-enregistrer').addEventListener('click', function () {
-    var v = $('#livre-adresse').value.trim();
-    if (v && v.indexOf('https://formspree.io') !== 0) {
-      floater('L\u2019adresse doit ressembler à https://formspree.io/f/abcdwxyz');
-      return;
-    }
-    REG.formspree = v;
-    rafraichirDashboard();
-    floater('Adresse enregistrée — exportez galerie.js puis publiez pour la rendre active.');
   });
 
   /* ========== LIVRE DES SOUVENIRS ========== */

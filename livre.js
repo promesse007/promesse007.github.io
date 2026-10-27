@@ -213,33 +213,37 @@
     }
     var f = document.createElement('form');
     f.innerHTML =
-      '<label>Votre prénom</label>' +
-      '<input type="text" name="nom" required autocomplete="name" placeholder="Ex. Marie">' +
-      '<label>Votre message</label>' +
-      '<textarea name="message" required placeholder="Un mot tendre, un v\u0153u de bonheur\u2026"></textarea>' +
-      '<button type="submit">Déposer dans le livre d\u2019or</button>' +
+      '<label for="livre-or-nom">Votre nom</label>' +
+      '<input id="livre-or-nom" type="text" name="nom" required autocomplete="name" maxlength="60" placeholder="Ex. Marie Koumba">' +
+      '<label for="livre-or-message">Votre mot pour les mariés</label>' +
+      '<textarea id="livre-or-message" name="message" required maxlength="240" placeholder="Un vœu de bonheur, un souvenir, une pensée tendre…"></textarea>' +
+      '<button type="submit">Confier mon mot aux mariés</button>' +
       '<p class="reponse" aria-live="polite"></p>';
     var rep = f.querySelector('.reponse');
+    var bouton = f.querySelector('button[type="submit"]');
     f.addEventListener('submit', function (e) {
       e.preventDefault();
-      var fs = window.REGLAGES.formspree || '';
-      if (!fs || fs.indexOf('VOTRE-ID') !== -1) {
-        rep.style.color = '#8A3A56';
-        rep.textContent = 'Le livre d\u2019or n\u2019est pas encore relié — configurez Formspree dans l\u2019administration.';
-        return;
-      }
+      if (!f.reportValidity()) return;
+      bouton.disabled = true;
       rep.style.color = '';
       rep.textContent = 'Envoi en cours\u2026';
-      fetch(fs, {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: new FormData(f)
+      var donnees = new FormData();
+      donnees.append('auteur', f.elements.nom.value.trim());
+      donnees.append('legende', f.elements.message.value.trim());
+      donnees.append('moment', 'Livre d’or');
+      fetch('https://br-falling-lab-b9lsl3j6-souvenirs.compute.c-7.eu-central-1.aws.neon.tech/souvenirs', {
+        method: 'POST', body: donnees
       }).then(function (r) {
-        rep.textContent = r.ok
-          ? 'Merci ! Votre message est déposé \u2764'
-          : 'Envoi impossible pour l\u2019instant — réessayez plus tard.';
-      }).catch(function () {
-        rep.textContent = 'Pas de connexion — réessayez plus tard.';
+        if (!r.ok) return r.json().then(function (x) { throw new Error(x.erreur || 'Envoi impossible.'); });
+        return r.json();
+      }).then(function () {
+        rep.textContent = 'Merci pour ces mots. Ils sont bien arrivés aux mariés et seront partagés après leur accord.';
+        f.reset();
+      }).catch(function (err) {
+        rep.style.color = '#8A3A56';
+        rep.textContent = err.message || 'Pas de connexion — réessayez plus tard.';
+      }).then(function () {
+        bouton.disabled = false;
       });
     });
     p.appendChild(f);
@@ -263,7 +267,7 @@
     '<span class="ornement">&#10086;</span>' +
     '<p class="sur-titre">' + (LIVRE.sousTitreCouverture || 'Le livre de nos souvenirs') + '</p>' +
     '<h2>Bosseno Josiane<br><span style="opacity:.75;font-size:.8em">&amp;</span><br>Olakiba Armand</h2>' +
-    '<p class="sous-ligne">Feuilletez notre album avec amour.</p>' +
+      '<p class="sous-ligne">Une promesse, une vie à écrire.</p>' +
     '<p class="fin-couv">' + (LIVRE.basCouverture || '') + '</p>';
   faire(couvertureEl);
 
@@ -387,9 +391,9 @@
         width: 520,
         height: 720,
         size: 'stretch',
-        minWidth: 260,
+        minWidth: 220,
         maxWidth: 1080,
-        minHeight: 380,
+        minHeight: 260,
         maxHeight: 840,
         usePortrait: true,          /* page simple sur téléphone, double sur ordinateur */
         drawShadow: true,

@@ -167,28 +167,10 @@ Musique libre de droits (utilisation légale) :
 
 ## ✍️ 7. Le livre d'or
 
-Un site fait uniquement de fichiers ne peut pas enregistrer des messages
-sur Internet : il a besoin d'un service de réception. Voici comment
-l'activer réellement (sans simulation) :
-
-1. Créez un compte sur **`formspree.io`** (gratuit pour 50 messages/mois).
-2. Créez un formulaire et copiez son adresse
-   (ex. `https://formspree.io/f/abcdwxyz`).
-3. Ouvrez **`galerie.js`**, ligne `formspree:`, et remplacez :
-
-```js
-formspree: 'VOTRE-ID-FORMSPREE',
-```
-par
-```js
-formspree: 'https://formspree.io/f/abcdwxyz',
-```
-
-4. Enregistrez. Les messages arriveront dans votre tableau de bord Formspree,
-et peuvent vous être envoyés par e-mail.
-
-Tant que cette étape n'est pas faite, le formulaire l'indique honnêtement
-à vos visiteurs : aucun message n'est enregistré silencieusement.
+Les messages du livre d’or sont enregistrés dans la base Neon du site et
+restent **en attente de votre accord**. Dans l’administration, ouvrez
+**« Souvenirs des invités »** pour lire un message, le publier ou le refuser.
+Un mot n’est jamais affiché publiquement avant votre validation.
 
 ---
 
@@ -208,7 +190,7 @@ Tant que cette étape n'est pas faite, le formulaire l'indique honnêtement
 | À changer | Où chercher |
 |---|---|
 | Date du compte à rebours | `galerie.js` → `dateMariage` |
-| Adresse e-mail / livre d'or | `galerie.js` → `formspree` |
+| Messages du livre d'or | Administration → « Souvenirs des invités » |
 | Fichier de musique | `galerie.js` → `musique` |
 | Vidéo d'accueil | `galerie.js` → `video` |
 | Couleurs, polices, formes | `style.css` → bloc `:root` |
@@ -221,7 +203,7 @@ Tant que cette étape n'est pas faite, le formulaire l'indique honnêtement
 - Noms corrects partout : **Bosseno Josiane** (la mariée, toujours en premier) et **Olakiba Armand**
   (aucune occurrence de l'ancienne orthographe)
 - Dates et lieux affichés : jeudi 10 décembre 2026 (Dot, Espace Dongou Zidane, Kintélé) ; samedi 12 décembre 2026 (civil 10h Mairie de Talangaï, bénédiction 12h à l'église)
-- Horaires conservés : Mairie 08h00 • Dot 12h00 • Mariage 16h00
+- Horaires confirmés : Dot jeudi 10 décembre à 10h • Civil samedi 12 décembre à 10h • Bénédiction à 12h
 - Compte à rebours fonctionnel
 - Filtres par catégorie, galerie, visionneuse (agrandissement, flèches,
   clavier, fermeture par Échap)
@@ -238,8 +220,8 @@ Une page entière `livre.html` propose **« Le livre des souvenirs »** : un vra
 numérique à feuilleter (couverture, sommaire cliquable, pages qui se tournent),
 ouvert depuis le menu du site (« Le livre »).
 
-**Chapitres** : I. Les mariés · II. Famille et proches · III. Tendresse ·
-IV. Élégance · V. Complicité · VI. Remerciements — puis le livre d'or intégré
+**Chapitres** : I. Deux cœurs, une promesse · II. Premiers regards · III. Tendresse ·
+IV. Élégance · V. Complicité · VI. À ceux que nous aimons — puis le livre d'or intégré
 et la page de crédit **« Photographies : Ferol'B Photography »**.
 
 ### Ce que le livre fait déjà
@@ -251,7 +233,8 @@ et la page de crédit **« Photographies : Ferol'B Photography »**.
 - Chargement différé : seules les pages proches de la page courante se chargent
 - Aucune déformation : les photos gardent leurs proportions, cadre doré fin
 - Pleines pages : photo 31 (ouverture du chapitre I) et photo 36 (chapitre V)
-- Livre d'or intégré relié à Formspree (même réglage que le site)
+- Livre d'or intégré, messages déposés en attente de modération dans l'administration
+- Mise en page pensée pour ordinateur, tablette et téléphone, avec commandes tactiles accessibles
 - Musique d'ambiance : **toujours coupée par défaut**, bouton ♪ à droite
 - Si l'appareil ne télécharge pas la bibliothèque de feuilletage :
   lecture simple honnête (pages en défilement) — rien n'est cassé
