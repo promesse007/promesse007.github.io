@@ -85,6 +85,7 @@ main { margin-left:236px; padding:30px 34px 60px; }
 /* ---------- formulaires ---------- */
 label { display:block; font-size:.76rem; letter-spacing:.06em; color:var(--texte-doux); margin:14px 0 5px; }
 input[type="text"], input[type="tel"], input[type="search"], input[type="url"], input[type="password"],
+input[type="date"],
 textarea, input[type="datetime-local"], select {
   width:100%; padding:11px 14px;
   border:1px solid rgba(200,169,107,.45); border-radius:12px;
@@ -309,9 +310,38 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
     </div>
     <div class="carte">
       <h2>Ajouter des photos</h2>
-      <p class="descr">Sélection multiple possible. Chaque image est réduite automatiquement puis rangée sur cet appareil dans « Les meilleurs moments » — vous changez sa catégorie et sa légende ci-dessous.</p>
+      <p class="descr">Sélection multiple possible. Chaque image est réduite automatiquement puis l'assistant souvenir vous demande le moment et la date — vous changez sa catégorie et sa légende ci-dessous.</p>
       <button class="btn principal" id="adm-ajouter">&plus; Ajouter des photos</button>
       <input type="file" id="adm-fichier" accept="image/*" multiple hidden>
+    </div>
+    <!-- ============ ASSISTANT SOUVENIR ============ -->
+    <div class="carte" id="carte-assistant" hidden>
+      <h2>✨ Assistant souvenir</h2>
+      <p class="descr" id="assistant-nb">0 photo prête.</p>
+      <div class="deux-cols">
+        <div>
+          <label>Quel moment du mariage ? (conseillé)</label>
+          <select id="sou-moment">
+            <option value="">— choisir un moment —</option>
+          </select>
+          <p class="descr" id="sou-moment-note" style="min-height:0"></p>
+        </div>
+        <div>
+          <label>Date de prise de vue</label>
+          <input type="date" id="sou-date">
+        </div>
+        <div>
+          <label>Catégorie de classement</label>
+          <select id="sou-cat"></select>
+        </div>
+      </div>
+      <label>Légende commune (facultatif — une seule pour tout le lot)</label>
+      <input type="text" id="sou-legende" placeholder="Ex. : Joie de la dot à Kintélé">
+      <div style="margin-top:14px">
+        <button class="btn principal" id="sou-valider">✨ Enregistrer comme souvenirs</button>
+        <button class="btn secondaire" id="sou-sauter" style="margin-left:8px">Ajouter sans souvenir</button>
+        <button class="btn dangereux" id="sou-annuler" style="margin-left:8px">Annuler</button>
+      </div>
     </div>
     <div class="carte">
       <h2>Photos publiées (galerie.js)</h2>
@@ -704,6 +734,21 @@ window.__demarrerAdmin = function () {
     var pied = document.createElement('div');
     pied.className = 'pied';
 
+    if (locale && (p.moment || p.datePrise)) {
+      var prise = document.createElement('p');
+      var morceaux = [];
+      if (p.datePrise) {
+        var dp = new Date(p.datePrise + 'T00:00:00');
+        if (!isNaN(dp)) {
+          morceaux.push('prise le ' + dp.toLocaleDateString('fr-FR'));
+        }
+      }
+      if (p.moment) morceaux.push(p.moment);
+      prise.style.cssText = 'font-size:.68rem;color:var(--texte-doux);margin:0;';
+      prise.textContent = morceaux.join(' · ');
+      pied.appendChild(prise);
+    }
+
     var champ = document.createElement('input');
     champ.type = 'text';
     champ.value = p.legende || '';
@@ -795,7 +840,8 @@ window.__demarrerAdmin = function () {
         return;
       }
       locals.forEach(function (r) {
-        var vue = { src: r.src, cat: r.cat || 'meilleurs', legende: r.legende || '' };
+        var vue = { src: r.src, cat: r.cat || 'meilleurs', legende: r.legende || '',
+                    datePrise: r.datePrise || '', moment: r.moment || '' };
         zone.appendChild(cartePhoto(vue, true, r.id));
       });
     });
@@ -823,9 +869,62 @@ window.__demarrerAdmin = function () {
   }
 
   $('#adm-ajouter').addEventListener('click', function () { $('#adm-fichier').click(); });
+
+  /* ---------- Assistant souvenir ----------
+     Demande le moment du mariage et la date de prise de vue
+     avant de ranger les photos comme souvenirs. */
+  var MOMENTS = [
+    { label: 'La dot — jeudi 10 décembre 2026 (Kintélé)',        date: '2026-12-10' },
+    { label: 'Le mariage civil — samedi 12 décembre 2026 (mairie)', date: '2026-12-12' },
+    { label: 'La bénédiction — samedi 12 décembre 2026',         date: '2026-12-12' },
+    { label: 'Les préparatifs',                                   date: '' },
+    { label: 'La fête / le repas',                                date: '2026-12-12' },
+    { label: 'Autre moment',                                      date: '' }
+  ];
+  var fichiersEnAttente = [];
+  var souMoment = $('#sou-moment');
+  MOMENTS.forEach(function (m) {
+    var o = document.createElement('option');
+    o.value = m.label; o.textContent = m.label;
+    souMoment.appendChild(o);
+  });
+  $('#sou-cat').innerHTML = CATS.map(function (c) {
+    return '<option value="' + c.id + '">' + c.nom + '</option>';
+  }).join('');
+
+  souMoment.addEventListener('change', function () {
+    var m = MOMENTS.filter(function (x) { return x.label === souMoment.value; })[0];
+    var note = $('#sou-moment-note');
+    if (m && m.date) {
+      var d = new Date(m.date + 'T00:00:00');
+      note.textContent = 'Date suggérée : ' + d.toLocaleDateString('fr-FR');
+      if (!$('#sou-date').value) $('#sou-date').value = m.date;
+    } else if (m) {
+      note.textContent = 'Écrivez la vraie date à la main (ou laissez vide).';
+    } else {
+      note.textContent = '';
+    }
+  });
+
   $('#adm-fichier').addEventListener('change', function () {
     var fichiers = Array.prototype.slice.call(this.files || []);
     this.value = '';
+    if (!fichiers.length) return;
+    fichiersEnAttente = fichiers;
+    $('#assistant-nb').textContent = fichiers.length + ' photo(s) prête(s) à devenir souvenirs.';
+    var carte = $('#carte-assistant');
+    carte.hidden = false;
+    carte.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  function fermerAssistant() {
+    fichiersEnAttente = [];
+    $('#carte-assistant').hidden = true;
+  }
+
+  function traiterLot(datePrise, moment, cat, legende) {
+    var fichiers = fichiersEnAttente;
+    fermerAssistant();
     if (!fichiers.length) return;
     var fait = 0, suite = Promise.resolve();
     fichiers.forEach(function (f) {
@@ -833,17 +932,36 @@ window.__demarrerAdmin = function () {
         return reduire(f).then(function (data) {
           return sauverRec('photos', {
             id: 'local-' + Date.now() + '-' + Math.round(Math.random() * 1e6),
-            src: data, cat: 'meilleurs', legende: f.name.replace(/\.[a-z0-9]+$/i, ''), nom: f.name
+            src: data,
+            cat: cat || 'meilleurs',
+            legende: legende || f.name.replace(/\.[a-z0-9]+$/i, ''),
+            nom: f.name,
+            datePrise: datePrise || '',
+            moment: moment || ''
           }).then(function () { fait++; });
         });
       }).catch(function () {});
     });
     suite.then(function () {
-      floater(fait + ' photo(s) ajoutée(s) sur cet appareil (catégorie : Les meilleurs moments — modifiable ci-dessous).');
+      floater(fait + ' souvenir(s) enregistré(s)' + (moment ? ' — ' + moment.toLowerCase() : '') + '.');
       initPhotos();
       rafraichirDashboard();
     });
+  }
+
+  $('#sou-valider').addEventListener('click', function () {
+    var moment = souMoment.value;
+    var date = $('#sou-date').value;
+    if (!moment && !date) {
+      floater('Dites au moins le moment ou la date — c\'est ce qui fera le souvenir (ou « Ajouter sans souvenir »).');
+      return;
+    }
+    traiterLot(date, moment, $('#sou-cat').value, $('#sou-legende').value.trim());
   });
+  $('#sou-sauter').addEventListener('click', function () {
+    traiterLot('', '', $('#sou-cat').value || 'meilleurs', '');
+  });
+  $('#sou-annuler').addEventListener('click', fermerAssistant);
 
   /* ========== EXPORT galerie.js ========== */
   function q(s) { return "'" + String(s == null ? '' : s).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'"; }
@@ -1578,6 +1696,7 @@ window.__demarrerAdmin = function () {
     try { sessionStorage.setItem('acces-session', '1'); } catch (e) {}
     derniereActivite = Date.now();
     idTelech.hidden = !idTelech.dataset.empreinte;
+    idMessage.textContent = ' ';
     if (message) dire(message);
     window.__demarrerAdmin();
     window.scrollTo(0, 0);

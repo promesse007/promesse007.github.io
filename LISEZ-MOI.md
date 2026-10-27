@@ -33,6 +33,12 @@ La vidéo d'accueil démarre alors et vous faites défiler les sections.
 
 ## 📷 2. Ajouter vos photos — deux méthodes
 
+> ✨ **Nouveau — l'assistant souvenir :** quand vous cliquez
+> « + Ajouter des photos », l'administration vous demande **le moment du
+> mariage** (dot, mairie, bénédiction, préparatifs, fête…) — il **suggère
+> automatiquement la bonne date** — et la catégorie. Le souvenir porte
+> alors sa date et son moment avec lui.
+
 ### Méthode A — l'atelier (la plus simple, sans coder)
 
 1. Ouvrez **`studio.html`** dans votre navigateur.
