@@ -149,7 +149,7 @@ h2.titre {
   color: var(--creme);
   background:
     radial-gradient(circle at 50% 28%, rgba(201, 162, 39, .20), transparent 62%),
-    linear-gradient(158deg, var(--bordeaux-f), var(--bordeaux) 58%, #7C2A36);
+    linear-gradient(158deg, var(--bordeaux-f), var(--bordeaux) 58%, var(--rose-profond));
   transition: opacity .9s ease, visibility .9s ease;
 }
 #ouverture.ferme { opacity: 0; visibility: hidden; }
@@ -1108,4 +1108,18 @@ button[type="submit"]:hover { filter: brightness(1.06); transform: translateY(-1
 @media (prefers-reduced-motion: reduce) {
   .petale, #musique.actif, #bouton-haut, .vignette img { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
+}
+
+/* ---------- Theme Noir & blanc chic : photos et hero en monochrome ---------- */
+html[data-theme="noiretblanc"] #accueil,
+html[data-theme="noiretblanc"] .grille-album img,
+html[data-theme="noiretblanc"] .vision-photo,
+html[data-theme="noiretblanc"] .vignette img,
+html[data-theme="noiretblanc"] .recit-photo img,
+html[data-theme="noiretblanc"] .carte-moment img {
+  filter: grayscale(1);
+}
+html[data-theme="bordeaux"] #accueil::before,
+html[data-theme="bordeaux"] #accueil::after {
+  border-color: rgba(201, 162, 39, .35);
 }

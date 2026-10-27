@@ -652,6 +652,7 @@ window.__demarrerAdmin = function () {
       try { theme = localStorage.getItem('theme-couleur'); } catch (e) {}
       var noms = { sakura: 'Sakura & or doux', champagne: 'Rose & champagne',
                    ivoire: 'Ivoire & or doux', profond: 'Rose profond & ivoire',
+                   bordeaux: 'Bordeaux passion', noiretblanc: 'Noir & blanc chic',
                    perso: 'Choix personnel' };
       $('#res-couleur').textContent = noms[theme] || 'Sakura (par défaut)';
       var ok = REG.formspree && REG.formspree.indexOf('VOTRE-ID') === -1;
@@ -1246,7 +1247,9 @@ window.__demarrerAdmin = function () {
     'Sakura & or doux':      { principale: '#B85C78', accent: '#C8A96B', fond: '#FFFCF8', surface: '#FFF1F5', texte: '#49343D', doux: '#8D747E' },
     'Rose & champagne':      { principale: '#B85C78', accent: '#C8A96B', fond: '#FFF6EC', surface: '#E8D7C3', texte: '#49343D', doux: '#8D747E' },
     'Ivoire & or doux':      { principale: '#A98B50', accent: '#C8A96B', fond: '#FFFCF8', surface: '#F6EFE4', texte: '#493B33', doux: '#8C7F70' },
-    'Rose profond & ivoire': { principale: '#9E4462', accent: '#C8A96B', fond: '#FFFCF8', surface: '#FFF1F5', texte: '#49343D', doux: '#8D747E' }
+    'Rose profond & ivoire': { principale: '#9E4462', accent: '#C8A96B', fond: '#FFFCF8', surface: '#FFF1F5', texte: '#49343D', doux: '#8D747E' },
+    'Bordeaux passion':      { principale: '#8A1B2C', accent: '#C9A227', fond: '#FFF9F6', surface: '#F9EDE9', texte: '#3A2328', doux: '#8A6E72' },
+    'Noir & blanc chic':     { principale: '#1C1C1E', accent: '#A8A29A', fond: '#FAFAF8', surface: '#F0EFED', texte: '#161618', doux: '#6E6E73' }
   };
   var zoneHarmonies = $('#harmonies-admin');
   Object.keys(PALETTES).forEach(function (nom) {

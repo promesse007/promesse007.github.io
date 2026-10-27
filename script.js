@@ -1251,8 +1251,33 @@
       '--dore': '#C8A96B', '--dore-clair': '#E4CFA8',
       '--creme': '#FFFCF8', '--beige': '#FFF1F5', '--beige-foncé': '#F8E3EA',
       '--encre': '#49343D', '--texte-doux': '#8D747E',
+      '--rose-sakura': '#F8E3EA', '--rose-poudre': '#E0B6C2',
+      '--rose-profond': '#9E4462', '--rose-ivoire': '#FFF6F0',
+      '--ivoire': '#FFFCF8', '--champagne': '#E8D7C3', '--or-doux': '#C8A96B',
       '--ombre': '0 14px 34px rgba(158, 68, 98, .12)',
-      '--ombre-forte': '0 20px 50px rgba(158, 68, 98, .18)' } }
+      '--ombre-forte': '0 20px 50px rgba(158, 68, 98, .18)' } },
+    /* Rouge bordeaux profond + filets dorés — la demande des mariés */
+    bordeaux: { vars: {
+      '--bordeaux': '#8A1B2C', '--bordeaux-f': '#5E1020',
+      '--dore': '#C9A227', '--dore-clair': '#E4CFA8',
+      '--creme': '#FFF9F6', '--beige': '#F9EDE9', '--beige-foncé': '#F3DCD6',
+      '--encre': '#3A2328', '--texte-doux': '#8A6E72',
+      '--rose-sakura': '#F3DCD6', '--rose-poudre': '#E8C4BE',
+      '--rose-profond': '#8A1B2C', '--rose-ivoire': '#FFF6F3',
+      '--ivoire': '#FFF9F6', '--champagne': '#F0E4D8', '--or-doux': '#C9A227',
+      '--ombre': '0 14px 34px rgba(138, 27, 44, .12)',
+      '--ombre-forte': '0 20px 50px rgba(138, 27, 44, .18)' } },
+    /* Noir & blanc chic — élégance monochrome, photos de mariage par monsieur et madame */
+    noiretblanc: { vars: {
+      '--bordeaux': '#1C1C1E', '--bordeaux-f': '#0A0A0B',
+      '--dore': '#A8A29A', '--dore-clair': '#CFCBC4',
+      '--creme': '#FAFAF8', '--beige': '#F0EFED', '--beige-foncé': '#E4E3E1',
+      '--encre': '#161618', '--texte-doux': '#6E6E73',
+      '--rose-sakura': '#ECE9E4', '--rose-poudre': '#DBDAD5',
+      '--rose-profond': '#1C1C1E', '--rose-ivoire': '#FAFAF8',
+      '--ivoire': '#FAFAF8', '--champagne': '#E8E6E2', '--or-doux': '#A8A29A',
+      '--ombre': '0 14px 34px rgba(0, 0, 0, .14)',
+      '--ombre-forte': '0 20px 50px rgba(0, 0, 0, .20)' } }
   };
 
   function appliquerTheme(cle) {
@@ -1261,6 +1286,7 @@
     Object.keys(t.vars).forEach(function (k) {
       document.documentElement.style.setProperty(k, t.vars[k]);
     });
+    document.documentElement.setAttribute('data-theme', cle);
     try { localStorage.setItem('theme-couleur', cle); } catch (e) {}
     var boutons = document.querySelectorAll('.reglage-theme');
     for (var i = 0; i < boutons.length; i++) {
@@ -1304,6 +1330,7 @@
     var ombreRg = assombrirRgb(principale, .34);
     var ombre   = '0 16px 44px rgba(' + ombreRg.r + ',' + ombreRg.g + ',' + ombreRg.b + ',.12)';
     var ombreF  = '0 22px 60px rgba(' + ombreRg.r + ',' + ombreRg.g + ',' + ombreRg.b + ',.20)';
+    document.documentElement.removeAttribute('data-theme');
     document.documentElement.style.setProperty('--bordeaux', principale);
     document.documentElement.style.setProperty('--bordeaux-f', foncen);
     document.documentElement.style.setProperty('--dore', accent);
