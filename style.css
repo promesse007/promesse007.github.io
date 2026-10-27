@@ -1069,7 +1069,7 @@ img {
 #accueil {
   background:
     linear-gradient(180deg, rgba(73, 52, 61, .55) 0%, rgba(73, 52, 61, .46) 45%, rgba(73, 52, 61, .68) 100%),
-    url('images/galerie/studio-42.jpg') center 30% / cover no-repeat fixed,
+    url('images/galerie/studio-42.webp') center 30% / cover no-repeat fixed,
     linear-gradient(165deg, var(--bordeaux-f), var(--rose-profond));
 }
 #accueil::before {

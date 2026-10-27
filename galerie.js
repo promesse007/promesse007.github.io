@@ -80,7 +80,7 @@ window.HISTOIRE = [
     date: 'À compléter'
   },
   {
-    image: 'images/galerie/studio-02.jpg',
+    image: 'images/galerie/studio-02.webp',
     titre: 'Les préparatifs',
     texte: "Les essayages, les préparatifs de la cérémonie, les derniers détails et l'impatience qui monte à mesure que la date approche. Cette séance photo de studio, prise en tenue, en est déjà un beau premier souvenir.",
     date: 'Octobre 2026 — séance studio'
@@ -92,7 +92,7 @@ window.HISTOIRE = [
     date: '10 & 12 décembre 2026'
   },
   {
-    image: 'images/galerie/studio-42.jpg',
+    image: 'images/galerie/studio-42.webp',
     titre: 'Les instants partagés',
     texte: "Les échanges avec nos proches, les prières, les conseils reçus et les promesses échangées. La famille déjà réunie pour la séance photo : un avant-goût du grand jour.",
     date: 'Octobre 2026 — avec nos proches'
@@ -130,67 +130,67 @@ window.FAMILLE = [
    • legende  : texte affiché sous la photo (facultatif, peut être '')  */
 window.PHOTOS = [
   /* ----- Portraits des mariés ----- */
-  { src: 'images/portraits/armand.jpg',  cat: 'portraits', legende: "Olakiba Armand — portrait des mariés" },
-  { src: 'images/portraits/josiane.jpg', cat: 'portraits', legende: "Bosseno Josiane — portrait des mariés" },
+  { src: 'images/portraits/armand.webp',  cat: 'portraits', legende: "Olakiba Armand — portrait des mariés" },
+  { src: 'images/portraits/josiane.webp', cat: 'portraits', legende: "Bosseno Josiane — portrait des mariés" },
 
   /* ----- Séance studio : tenue en chemises carreaux ----- */
-  { src: 'images/galerie/studio-01.jpg', cat: 'portraits', legende: "Complicité en chemises carreaux" },
-  { src: 'images/galerie/studio-02.jpg', cat: 'portraits', legende: "Le couple — séance en chemises carreaux" },
-  { src: 'images/galerie/studio-03.jpg', cat: 'portraits', legende: "Le duo en chemises carreaux" },
-  { src: 'images/galerie/studio-04.jpg', cat: 'portraits', legende: "Un regard partagé" },
-  { src: 'images/galerie/studio-05.jpg', cat: 'portraits', legende: "Pose complice — séance carreaux" },
-  { src: 'images/galerie/studio-06.jpg', cat: 'portraits', legende: "Un geste tendre" },
-  { src: 'images/galerie/studio-07.jpg', cat: 'portraits', legende: "Sourires de dos — séance carreaux" },
-  { src: 'images/galerie/studio-08.jpg', cat: 'portraits', legende: "Assis et debout — duo complice" },
-  { src: 'images/galerie/studio-09.jpg', cat: 'portraits', legende: "Serrement de mains — pose carreaux" },
-  { src: 'images/galerie/studio-10.jpg', cat: 'portraits', legende: "Tendresse — séance carreaux" },
-  { src: 'images/galerie/studio-11.jpg', cat: 'portraits', legende: "Sérénité à deux — tenue carreaux" },
+  { src: 'images/galerie/studio-01.webp', cat: 'portraits', legende: "Complicité en chemises carreaux" },
+  { src: 'images/galerie/studio-02.webp', cat: 'portraits', legende: "Le couple — séance en chemises carreaux" },
+  { src: 'images/galerie/studio-03.webp', cat: 'portraits', legende: "Le duo en chemises carreaux" },
+  { src: 'images/galerie/studio-04.webp', cat: 'portraits', legende: "Un regard partagé" },
+  { src: 'images/galerie/studio-05.webp', cat: 'portraits', legende: "Pose complice — séance carreaux" },
+  { src: 'images/galerie/studio-06.webp', cat: 'portraits', legende: "Un geste tendre" },
+  { src: 'images/galerie/studio-07.webp', cat: 'portraits', legende: "Sourires de dos — séance carreaux" },
+  { src: 'images/galerie/studio-08.webp', cat: 'portraits', legende: "Assis et debout — duo complice" },
+  { src: 'images/galerie/studio-09.webp', cat: 'portraits', legende: "Serrement de mains — pose carreaux" },
+  { src: 'images/galerie/studio-10.webp', cat: 'portraits', legende: "Tendresse — séance carreaux" },
+  { src: 'images/galerie/studio-11.webp', cat: 'portraits', legende: "Sérénité à deux — tenue carreaux" },
 
   /* ----- Séance studio : tenue bleue ----- */
-  { src: 'images/galerie/studio-12.jpg', cat: 'portraits', legende: "La mariée appuyée sur son époux — tenue bleue" },
-  { src: 'images/galerie/studio-13.jpg', cat: 'portraits', legende: "Enlacement tendre — tenue bleue" },
-  { src: 'images/galerie/studio-14.jpg', cat: 'portraits', legende: "Regard amoureux — tenue bleue" },
-  { src: 'images/galerie/studio-15.jpg', cat: 'portraits', legende: "Confiance et douceur — pose bleue" },
-  { src: 'images/galerie/studio-17.jpg', cat: 'portraits', legende: "Sourires complices — tenue bleue" },
-  { src: 'images/galerie/studio-18.jpg', cat: 'portraits', legende: "Le couple en tenue bleue" },
-  { src: 'images/galerie/studio-19.jpg', cat: 'portraits', legende: "Un bras protecteur — pose bleue" },
-  { src: 'images/galerie/studio-21.jpg', cat: 'portraits', legende: "Un baiser sur le front — tenue bleue" },
-  { src: 'images/galerie/studio-37.jpg', cat: 'portraits', legende: "Mains dans les mains — tenue bleue" },
+  { src: 'images/galerie/studio-12.webp', cat: 'portraits', legende: "La mariée appuyée sur son époux — tenue bleue" },
+  { src: 'images/galerie/studio-13.webp', cat: 'portraits', legende: "Enlacement tendre — tenue bleue" },
+  { src: 'images/galerie/studio-14.webp', cat: 'portraits', legende: "Regard amoureux — tenue bleue" },
+  { src: 'images/galerie/studio-15.webp', cat: 'portraits', legende: "Confiance et douceur — pose bleue" },
+  { src: 'images/galerie/studio-17.webp', cat: 'portraits', legende: "Sourires complices — tenue bleue" },
+  { src: 'images/galerie/studio-18.webp', cat: 'portraits', legende: "Le couple en tenue bleue" },
+  { src: 'images/galerie/studio-19.webp', cat: 'portraits', legende: "Un bras protecteur — pose bleue" },
+  { src: 'images/galerie/studio-21.webp', cat: 'portraits', legende: "Un baiser sur le front — tenue bleue" },
+  { src: 'images/galerie/studio-37.webp', cat: 'portraits', legende: "Mains dans les mains — tenue bleue" },
 
   /* ----- Séance studio : tenue marron & pois ----- */
-  { src: 'images/galerie/studio-22.jpg', cat: 'portraits', legende: "Duo assis — tenue marron & pois" },
-  { src: 'images/galerie/studio-23.jpg', cat: 'portraits', legende: "Tendresse — tenue marron & pois" },
-  { src: 'images/galerie/studio-24.jpg', cat: 'portraits', legende: "L'offrande du bouquet rouge" },
-  { src: 'images/galerie/studio-25.jpg', cat: 'portraits', legende: "Dos à dos — complicité marron & pois" },
-  { src: 'images/galerie/studio-26.jpg', cat: 'portraits', legende: "Le bouquet rouge — sourires du couple" },
-  { src: 'images/galerie/studio-27.jpg', cat: 'portraits', legende: "Le bouquet rouge — regards tendres" },
-  { src: 'images/galerie/studio-28.jpg', cat: 'portraits', legende: "Dos à dos — silhouette marron & pois" },
-  { src: 'images/galerie/studio-31.jpg', cat: 'portraits', legende: "Main sur l'épaule — tenue marron & pois" },
-  { src: 'images/galerie/studio-32.jpg', cat: 'portraits', legende: "Séance marron & pois — couple debout" },
-  { src: 'images/galerie/studio-33.jpg', cat: 'portraits', legende: "Portrait du couple — tenue marron & pois" },
+  { src: 'images/galerie/studio-22.webp', cat: 'portraits', legende: "Duo assis — tenue marron & pois" },
+  { src: 'images/galerie/studio-23.webp', cat: 'portraits', legende: "Tendresse — tenue marron & pois" },
+  { src: 'images/galerie/studio-24.webp', cat: 'portraits', legende: "L'offrande du bouquet rouge" },
+  { src: 'images/galerie/studio-25.webp', cat: 'portraits', legende: "Dos à dos — complicité marron & pois" },
+  { src: 'images/galerie/studio-26.webp', cat: 'portraits', legende: "Le bouquet rouge — sourires du couple" },
+  { src: 'images/galerie/studio-27.webp', cat: 'portraits', legende: "Le bouquet rouge — regards tendres" },
+  { src: 'images/galerie/studio-28.webp', cat: 'portraits', legende: "Dos à dos — silhouette marron & pois" },
+  { src: 'images/galerie/studio-31.webp', cat: 'portraits', legende: "Main sur l'épaule — tenue marron & pois" },
+  { src: 'images/galerie/studio-32.webp', cat: 'portraits', legende: "Séance marron & pois — couple debout" },
+  { src: 'images/galerie/studio-33.webp', cat: 'portraits', legende: "Portrait du couple — tenue marron & pois" },
 
   /* ----- Portraits de la mariée ----- */
-  { src: 'images/galerie/studio-16.jpg', cat: 'portraits', legende: "La mariée au bouquet — robe corail" },
-  { src: 'images/galerie/studio-34.jpg', cat: 'portraits', legende: "La mariée en dentelle corail" },
-  { src: 'images/galerie/studio-39.jpg', cat: 'portraits', legende: "Portrait de la mariée — robe corail" },
+  { src: 'images/galerie/studio-16.webp', cat: 'portraits', legende: "La mariée au bouquet — robe corail" },
+  { src: 'images/galerie/studio-34.webp', cat: 'portraits', legende: "La mariée en dentelle corail" },
+  { src: 'images/galerie/studio-39.webp', cat: 'portraits', legende: "Portrait de la mariée — robe corail" },
 
   /* ----- Moments de joie ----- */
-  { src: 'images/galerie/studio-20.jpg', cat: 'joie',      legende: "Rire de complicité — pose de dos" },
-  { src: 'images/galerie/studio-29.jpg', cat: 'joie',      legende: "Poings levés — la joie du couple" },
-  { src: 'images/galerie/studio-30.jpg', cat: 'joie',      legende: "Fierté et bonheur — poings levés" },
-  { src: 'images/galerie/studio-35.jpg', cat: 'joie',      legende: "Allégresse — robe corail" },
-  { src: 'images/galerie/studio-36.jpg', cat: 'joie',      legende: "Victoire — poings levés en corail" },
+  { src: 'images/galerie/studio-20.webp', cat: 'joie',      legende: "Rire de complicité — pose de dos" },
+  { src: 'images/galerie/studio-29.webp', cat: 'joie',      legende: "Poings levés — la joie du couple" },
+  { src: 'images/galerie/studio-30.webp', cat: 'joie',      legende: "Fierté et bonheur — poings levés" },
+  { src: 'images/galerie/studio-35.webp', cat: 'joie',      legende: "Allégresse — robe corail" },
+  { src: 'images/galerie/studio-36.webp', cat: 'joie',      legende: "Victoire — poings levés en corail" },
 
   /* ----- Les familles ----- */
-  { src: 'images/galerie/studio-40.jpg', cat: 'familles',  legende: "Une proche du couple — toute en sourire" },
-  { src: 'images/galerie/studio-41.jpg', cat: 'familles',  legende: "Une proche du couple — élégance fleurie" },
+  { src: 'images/galerie/studio-40.webp', cat: 'familles',  legende: "Une proche du couple — toute en sourire" },
+  { src: 'images/galerie/studio-41.webp', cat: 'familles',  legende: "Une proche du couple — élégance fleurie" },
 
   /* ----- Les photos de groupe ----- */
-  { src: 'images/galerie/studio-42.jpg', cat: 'groupe',    legende: "La famille réunie pour la séance photo" },
-  { src: 'images/galerie/studio-43.jpg', cat: 'groupe',    legende: "La famille réunie — séance de groupe" },
+  { src: 'images/galerie/studio-42.webp', cat: 'groupe',    legende: "La famille réunie pour la séance photo" },
+  { src: 'images/galerie/studio-43.webp', cat: 'groupe',    legende: "La famille réunie — séance de groupe" },
 
   /* ----- Invitation ----- */
-  { src: 'images/affiche.jpg',           cat: 'civil',     legende: "Notre invitation de mariage" }
+  { src: 'images/affiche.webp',           cat: 'civil',     legende: "Notre invitation de mariage" }
 ];
 
 /* Pour ajouter d'autres photos plus tard, copiez ce modèle dans la liste ci-dessus :
