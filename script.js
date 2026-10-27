@@ -205,7 +205,7 @@
       petale.style.animationDuration = (10 + Math.random() * 12) + 's';
       petale.style.animationDelay    = (-Math.random() * 20) + 's';
       if (Math.random() > 0.65) {
-        petale.style.background = 'radial-gradient(circle at 32% 32%, #E6C877, #C9A227)';
+        petale.style.background = 'radial-gradient(circle at 32% 32%, #E4CFA8, #C8A96B)';
       }
       boite.appendChild(petale);
     }
@@ -244,6 +244,13 @@
       h.textContent = deux(Math.floor((reste % 86400000) / 3600000));
       m.textContent = deux(Math.floor((reste % 3600000) / 60000));
       s.textContent = deux(Math.floor((reste % 60000) / 1000));
+      // si le grand jour est passé : message élégant, jamais de négatif
+      if (cible - Date.now() <= 0) {
+        var g = $('#griffe-horloge'), msg = $('#cb-message');
+        if (g) g.hidden = true;
+        if (msg) { msg.hidden = false; msg.textContent = 'Le grand jour est arrivé — que la fête commence ! \u2665'; }
+        return;
+      }
     }
     tic();
     setInterval(tic, 1000);
@@ -1218,31 +1225,34 @@
      Des palettes sobres et professionnelles uniquement.
      Le choix est conservé sur l'appareil (localStorage). */
   var THEMES = {
-    bordeaux: { vars: {
-      '--bordeaux': '#6B1F2A', '--bordeaux-f': '#4A121C',
-      '--dore': '#C9A227', '--dore-clair': '#E6C877',
-      '--ombre': '0 16px 44px rgba(74, 18, 28, .10)',
-      '--ombre-forte': '0 22px 60px rgba(74, 18, 28, .18)' } },
-    bleu: { vars: {
-      '--bordeaux': '#1F2A44', '--bordeaux-f': '#141F33',
-      '--dore': '#C9A227', '--dore-clair': '#E6C877',
-      '--ombre': '0 16px 44px rgba(20, 31, 51, .12)',
-      '--ombre-forte': '0 22px 60px rgba(20, 31, 51, .20)' } },
-    vert: { vars: {
-      '--bordeaux': '#1F4636', '--bordeaux-f': '#143024',
-      '--dore': '#C9A227', '--dore-clair': '#E6C877',
-      '--ombre': '0 16px 44px rgba(20, 48, 36, .12)',
-      '--ombre-forte': '0 22px 60px rgba(20, 48, 36, .20)' } },
-    prune: { vars: {
-      '--bordeaux': '#4A1F44', '--bordeaux-f': '#33122E',
-      '--dore': '#C9A227', '--dore-clair': '#E6C877',
-      '--ombre': '0 16px 44px rgba(51, 18, 46, .12)',
-      '--ombre-forte': '0 22px 60px rgba(51, 18, 46, .20)' } },
-    bronze: { vars: {
-      '--bordeaux': '#4A2E1C', '--bordeaux-f': '#2E1B10',
-      '--dore': '#C9A227', '--dore-clair': '#E6C877',
-      '--ombre': '0 16px 44px rgba(46, 27, 16, .12)',
-      '--ombre-forte': '0 22px 60px rgba(46, 27, 16, .20)' } }
+    sakura: { vars: {
+      '--bordeaux': '#B85C78', '--bordeaux-f': '#8A3A56',
+      '--dore': '#C8A96B', '--dore-clair': '#E4CFA8',
+      '--creme': '#FFFCF8', '--beige': '#FFF1F5', '--beige-foncé': '#F8E3EA',
+      '--encre': '#49343D', '--texte-doux': '#8D747E',
+      '--ombre': '0 14px 34px rgba(184, 92, 120, .10)',
+      '--ombre-forte': '0 20px 50px rgba(184, 92, 120, .16)' } },
+    champagne: { vars: {
+      '--bordeaux': '#B85C78', '--bordeaux-f': '#8A3A56',
+      '--dore': '#C8A96B', '--dore-clair': '#E4CFA8',
+      '--creme': '#FFF6EC', '--beige': '#E8D7C3', '--beige-foncé': '#EFD9C4',
+      '--encre': '#49343D', '--texte-doux': '#8D747E',
+      '--ombre': '0 14px 34px rgba(200, 169, 107, .14)',
+      '--ombre-forte': '0 20px 50px rgba(200, 169, 107, .20)' } },
+    ivoire: { vars: {
+      '--bordeaux': '#A98B50', '--bordeaux-f': '#876B33',
+      '--dore': '#C8A96B', '--dore-clair': '#E4CFA8',
+      '--creme': '#FFFCF8', '--beige': '#F6EFE4', '--beige-foncé': '#EDE3D2',
+      '--encre': '#493B33', '--texte-doux': '#8C7F70',
+      '--ombre': '0 14px 34px rgba(200, 169, 107, .14)',
+      '--ombre-forte': '0 20px 50px rgba(200, 169, 107, .20)' } },
+    profond: { vars: {
+      '--bordeaux': '#9E4462', '--bordeaux-f': '#7C2F4A',
+      '--dore': '#C8A96B', '--dore-clair': '#E4CFA8',
+      '--creme': '#FFFCF8', '--beige': '#FFF1F5', '--beige-foncé': '#F8E3EA',
+      '--encre': '#49343D', '--texte-doux': '#8D747E',
+      '--ombre': '0 14px 34px rgba(158, 68, 98, .12)',
+      '--ombre-forte': '0 20px 50px rgba(158, 68, 98, .18)' } }
   };
 
   function appliquerTheme(cle) {
@@ -1339,7 +1349,7 @@
         var ok = appliquerPersonalise(inpP.value, inpA.value);
         if (!ok) floater('Choix impossible : ces teintes ne sont pas reconnues. Prenez plutôt une couleur franche.');
       });
-      $('#couleur-reset').addEventListener('click', function () { appliquerTheme('bordeaux'); });
+      $('#couleur-reset').addEventListener('click', function () { appliquerTheme('sakura'); });
     }
 
     var sauve = null;
@@ -1347,10 +1357,26 @@
     if (sauve === 'perso') {
       try {
         var perso = JSON.parse(localStorage.getItem('theme-perso') || 'null');
-        if (perso && appliquerPersonalise(perso.p, perso.a)) return;
+        if (perso && appliquerPersonalise(perso.p, perso.a)) {
+          /* couleurs étendues éventuelles (admin) : fond, surface, textes */
+          try {
+            var ext = JSON.parse(localStorage.getItem('theme-etendu') || 'null');
+            if (ext) {
+              var r = document.documentElement.style;
+              if (ext.fond)    { r.setProperty('--creme', ext.fond); r.setProperty('--blanc', ext.fond); }
+              if (ext.surface) {
+                r.setProperty('--beige', ext.surface);
+                r.setProperty('--beige-foncé', eclaircir(ext.surface, .12));
+              }
+              if (ext.texte) r.setProperty('--encre', ext.texte);
+              if (ext.doux)  r.setProperty('--texte-doux', ext.doux);
+            }
+          } catch (e2) {}
+          return;
+        }
       } catch (e) {}
     }
-    appliquerTheme(THEMES[sauve] ? sauve : 'bordeaux');
+    appliquerTheme(THEMES[sauve] ? sauve : 'sakura');
   }
 
   function initBoutonHaut() {

@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administration — Bosseno Josiane &amp; Olakiba Armand</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Great+Vibes&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ================= ADMIN SAKURA ================= */
+:root {
+  --sakura:#F4C7D3; --poudre:#E8B4C2; --profond:#B85C78; --ivoire:#FFF1F5;
+  --creme:#FFFCF8; --blanc:#FFFCF8; --dore:#C8A96B; --dore-clair:#E4CFA8;
+  --beige:#FFF1F5; --beige-foncé:#F8E3EA;
+  --bordeaux:#B85C78; --bordeaux-f:#8A3A56;
+  --encre:#49343D; --texte-doux:#8D747E;
+  --ombre:0 14px 34px rgba(184,92,120,.10); --ombre-forte:0 20px 50px rgba(184,92,120,.16);
+  --titre:'Playfair Display', serif; --manuscrite:'Great Vibes', cursive; --texte:'Inter', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--creme); color:var(--encre); font-family:var(--texte); font-size:15px; line-height:1.55; }
+[hidden] { display:none !important; }
+
+/* ---------- barre latérale ---------- */
+aside {
+  position:fixed; top:0; left:0; bottom:0; width:236px; z-index:40;
+  background:linear-gradient(180deg,#FFF5F8,#FFF1F5);
+  border-right:1px solid rgba(200,169,107,.3);
+  overflow-y:auto; padding:22px 14px;
+}
+aside .marque { font-family:var(--manuscrite); font-size:1.5rem; color:var(--profond); text-align:center; margin-bottom:4px; }
+aside .sous { text-align:center; font-size:.62rem; letter-spacing:.24em; text-transform:uppercase; color:var(--texte-doux); margin-bottom:22px; }
+aside nav ul { list-style:none; display:flex; flex-direction:column; gap:5px; }
+aside nav button {
+  width:100%; display:flex; align-items:center; gap:10px;
+  border:none; background:transparent; cursor:pointer;
+  padding:10px 13px; border-radius:12px;
+  font-family:var(--texte); font-size:.88rem; color:var(--texte-doux); text-align:left;
+  transition:background .2s ease,color .2s ease;
+}
+aside nav button:hover { background:rgba(244,199,211,.4); color:var(--profond); }
+aside nav button.actif { background:linear-gradient(135deg,var(--profond),var(--bordeaux-f)); color:#fff; }
+.bloc-retour { margin-top:20px; text-align:center; }
+.bloc-retour a {
+  display:inline-block; padding:9px 16px; border-radius:40px;
+  border:1px solid var(--dore); color:var(--profond); text-decoration:none;
+  font-size:.78rem; transition:background .2s ease,color .2s ease;
+}
+.bloc-retour a:hover { background:var(--dore); color:#fff; }
+
+/* ---------- zone principale ---------- */
+main { margin-left:236px; padding:30px 34px 60px; }
+.en-tete-sec { border-bottom:1px solid rgba(200,169,107,.3); padding-bottom:16px; margin-bottom:24px; }
+.en-tete-sec h1 { font-family:var(--titre); color:var(--profond); font-size:1.8rem; font-weight:400; }
+.en-tete-sec p { color:var(--texte-doux); font-size:.86rem; }
+
+/* ---------- cartes & statistiques ---------- */
+.statistiques { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:26px; }
+.carte-stat { background:var(--beige); border:1px solid rgba(200,169,107,.3); border-radius:18px; padding:20px 18px; }
+.carte-stat .nb { font-family:var(--titre); font-size:2.2rem; color:var(--profond); line-height:1; }
+.carte-stat .lbl { font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--texte-doux); margin-top:8px; }
+.carte-stat .note { font-size:.75rem; color:var(--texte-doux); margin-top:6px; }
+.carte { background:var(--blanc); border:1px solid rgba(200,169,107,.3); border-radius:18px; padding:24px; margin-bottom:22px; box-shadow:var(--ombre); }
+.carte h2 { font-family:var(--titre); font-weight:400; color:var(--profond); font-size:1.25rem; margin-bottom:14px; }
+.carte > p.descr, .descr { font-size:.86rem; color:var(--texte-doux); margin-bottom:14px; line-height:1.6; }
+.descr code { background:var(--beige); padding:1px 6px; border-radius:6px; font-size:.8rem; }
+
+/* ---------- boutons ---------- */
+.btn {
+  display:inline-flex; align-items:center; gap:8px;
+  border:none; border-radius:40px; cursor:pointer;
+  font-family:var(--texte); font-size:.82rem; font-weight:600;
+  padding:10px 20px; transition:transform .2s ease,filter .2s ease,background .2s ease;
+}
+.btn:hover { transform:translateY(-1px); filter:brightness(1.06); }
+.btn.principal { background:linear-gradient(135deg,var(--profond),var(--bordeaux-f)); color:#fff; }
+.btn.secondaire { background:var(--beige); color:var(--profond); border:1px solid rgba(200,169,107,.4); }
+.btn.fonce { background:var(--dore); color:#fff; }
+.btn.dangereux { background:#fff; color:#C0392B; border:1px solid #E5B4AE; }
+.btn.dangereux:hover { background:#FDECEA; }
+.btn.mini { padding:6px 13px; font-size:.74rem; }
+
+/* ---------- formulaires ---------- */
+label { display:block; font-size:.76rem; letter-spacing:.06em; color:var(--texte-doux); margin:14px 0 5px; }
+input[type="text"], input[type="tel"], input[type="search"], input[type="url"],
+textarea, input[type="datetime-local"], select {
+  width:100%; padding:11px 14px;
+  border:1px solid rgba(200,169,107,.45); border-radius:12px;
+  background:var(--blanc); color:var(--encre);
+  font-family:var(--texte); font-size:.9rem;
+  transition:border-color .25s ease,box-shadow .25s ease;
+}
+textarea { min-height:110px; resize:vertical; }
+input:focus, textarea:focus, select:focus { outline:none; border-color:var(--profond); box-shadow:0 0 0 3px rgba(184,92,120,.14); }
+::placeholder { color:var(--texte-doux); opacity:.75; }
+.deux-cols { display:grid; grid-template-columns:1fr 1fr; gap:0 18px; }
+@media (max-width:700px){ .deux-cols{ grid-template-columns:1fr; } }
+
+/* ---------- tableaux ---------- */
+.table-enroule { overflow-x:auto; border:1px solid rgba(200,169,107,.28); border-radius:14px; }
+table { width:100%; border-collapse:collapse; min-width:560px; font-size:.85rem; }
+th, td { padding:10px 14px; text-align:left; border-bottom:1px solid rgba(200,169,107,.2); }
+th { background:var(--beige); font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--texte-doux); }
+tr:last-child td { border-bottom:none; }
+
+/* ---------- vignettes photos ---------- */
+.photos-admin { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px; }
+.photo-admin { background:var(--blanc); border:1px solid rgba(200,169,107,.3); border-radius:12px; overflow:hidden; }
+.photo-admin img { width:100%; height:110px; object-fit:cover; display:block; }
+.photo-admin .pied { padding:8px 10px; display:flex; flex-direction:column; gap:6px; }
+.photo-admin input { padding:6px 8px; font-size:.76rem; border-radius:8px; }
+.photo-admin .choices { display:flex; }
+
+/* ---------- couleurs ---------- */
+.couleurs-grille { display:grid; grid-template-columns:repeat(2,1fr); gap:10px 18px; }
+@media (max-width:700px){ .couleurs-grille{ grid-template-columns:1fr; } }
+.couleur-ligne { display:flex; align-items:center; gap:10px; }
+.couleur-ligne input[type="color"] { width:52px; height:36px; padding:2px; border-radius:9px; cursor:pointer; flex:0 0 auto; }
+.couleur-ligne input[type="text"] { flex:1; font-size:.8rem; }
+.btn-restore { border:1px solid transparent; background:none; cursor:pointer; font-size:1rem; color:var(--texte-doux); padding:2px 6px; border-radius:6px; }
+.btn-restore:hover { color:var(--profond); border-color:rgba(200,169,107,.45); }
+label.couleur-label {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-top:12px; font-size:.78rem;
+}
+
+/* ---------- message temporaire + pétales ---------- */
+#annonce {
+  position:fixed; top:16px; left:50%; transform:translateX(-50%);
+  background:var(--profond); color:#fff; border-radius:40px;
+  padding:11px 22px; font-size:.85rem; z-index:120;
+  box-shadow:var(--ombre-forte); opacity:0; pointer-events:none;
+  transition:opacity .35s ease; max-width:min(560px, 92vw); text-align:center;
+}
+#annonce.visible { opacity:1; }
+.petal-admin { position:fixed; top:-12vh; width:9px; height:7px; border-radius:60% 0 60% 0; background:radial-gradient(circle at 32% 32%, var(--sakura), var(--poudre)); opacity:.5; pointer-events:none; z-index:1; animation:tombe-admin linear infinite; }
+@keyframes tombe-admin { 0%{transform:translateY(-10vh) rotate(0);} 100%{transform:translateY(112vh) translateX(10vw) rotate(420deg);} }
+
+.honnete {
+  background:var(--ivoire); border:1px dashed rgba(184,92,120,.4);
+  border-radius:14px; padding:14px 16px; font-size:.84rem; color:var(--texte-doux); line-height:1.6;
+}
+ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
+
+@media (max-width:860px) {
+  aside { width:64px; padding:16px 8px; }
+  aside .marque { font-size:1rem; }
+  aside .sous, aside nav button .tx, .bloc-retour { display:none; }
+  aside nav button { justify-content:center; font-size:1.05rem; }
+  main { margin-left:64px; padding:22px 16px 60px; }
+}
+@media print { aside, #annonce, .petal-admin { display:none !important; } main { margin:0; } }
+@media (prefers-reduced-motion: reduce) { .petal-admin { display:none; } * { transition:none !important; } }
+</style>
+</head>
+<body>
+
+<aside id="retro">
+  <p class="marque">Josiane &amp; Armand</p>
+  <p class="sous">Espace du propriétaire</p>
+  <nav aria-label="Rubriques de l'administration">
+    <ul>
+      <li><button class="actif" data-sec="dashboard"><span>&#127760;</span><span class="tx">Tableau de bord</span></button></li>
+      <li><button data-sec="photos"><span>&#128247;</span><span class="tx">Photos</span></button></li>
+      <li><button data-sec="histoire"><span>&#128214;</span><span class="tx">Notre histoire</span></button></li>
+      <li><button data-sec="maries"><span>&#128141;</span><span class="tx">Les mariés</span></button></li>
+      <li><button data-sec="invites"><span>&#128100;</span><span class="tx">Invités</span></button></li>
+      <li><button data-sec="livre"><span>&#9997;</span><span class="tx">Livre d'or</span></button></li>
+      <li><button data-sec="reglages"><span>&#9881;</span><span class="tx">Réglages &amp; couleurs</span></button></li>
+    </ul>
+  </nav>
+  <div class="bloc-retour"><a href="index.html">&#8592; Voir le site</a></div>
+</aside>
+
+<main>
+
+  <!-- ============ DASHBOARD ============ -->
+  <section id="sec-dashboard">
+    <div class="en-tete-sec">
+      <h1>Tableau de bord</h1>
+      <p>Vue d'ensemble de votre album — tout ce qui est conservé sur cet appareil.</p>
+    </div>
+    <div class="statistiques">
+      <div class="carte-stat"><p class="nb" id="nb-photos">–</p><p class="lbl">Photos publiées</p><p class="note">dans galerie.js (voyagent avec le site)</p></div>
+      <div class="carte-stat"><p class="nb" id="nb-locals">–</p><p class="lbl">Photos locales</p><p class="note">ajoutées depuis cet appareil</p></div>
+      <div class="carte-stat"><p class="nb" id="nb-invites">–</p><p class="lbl">Invités enregistrés</p><p class="note">liste tenue sur cet appareil</p></div>
+      <div class="carte-stat"><p class="nb" id="nb-date">–</p><p class="lbl">Mariage civil</p><p class="note">Mairie de Talangaï — 10h00</p></div>
+    </div>
+    <div class="carte">
+      <h2>Actions rapides</h2>
+      <ul class="actions-rapides">
+        <li><button class="btn principal" data-allera="photos">+ Ajouter des photos</button></li>
+        <li><button class="btn secondaire" data-allera="histoire">Écrire notre histoire</button></li>
+        <li><button class="btn secondaire" data-allera="invites">Gérer les invités</button></li>
+        <li><button class="btn secondaire" data-allera="reglages">Changer les couleurs</button></li>
+      </ul>
+    </div>
+    <div class="carte">
+      <h2>Résumé de la configuration</h2>
+      <p class="descr">Ce que le site affiche actuellement, tiré de <code>galerie.js</code> et des réglages enregistrés.</p>
+      <div class="table-enroule">
+        <table>
+          <tbody>
+            <tr><th>Noms affichés</th><td id="res-noms">–</td></tr>
+            <tr><th>Date du mariage</th><td id="res-date">–</td></tr>
+            <tr><th>Événements dans « Notre histoire »</th><td id="res-histoire">–</td></tr>
+            <tr><th>Catégories de photos</th><td id="res-categories">–</td></tr>
+            <tr><th>Harmonie de couleurs</th><td id="res-couleur">–</td></tr>
+            <tr><th>Livre d'or</th><td id="res-livre">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PHOTOS ============ -->
+  <section id="sec-photos" hidden>
+    <div class="en-tete-sec">
+      <h1>Gestion des photos</h1>
+      <p>Publiées dans <code>galerie.js</code> (visibles par tous), ou stockées sur cet appareil.</p>
+    </div>
+    <div class="carte">
+      <h2>Ajouter des photos</h2>
+      <p class="descr">Sélection multiple possible. Chaque image est réduite automatiquement puis rangée sur cet appareil dans « Les meilleurs moments » — vous changez sa catégorie et sa légende ci-dessous.</p>
+      <button class="btn principal" id="adm-ajouter">&plus; Ajouter des photos</button>
+      <input type="file" id="adm-fichier" accept="image/*" multiple hidden>
+    </div>
+    <div class="carte">
+      <h2>Photos publiées (galerie.js)</h2>
+      <p class="descr">Modifiez la légende ou la catégorie, supprimez avec confirmation, puis téléchargez le fichier mis à jour tout en bas.</p>
+      <div class="deux-cols">
+        <div>
+          <label>Filtrer par catégorie</label>
+          <select id="adm-filtre-cat"></select>
+        </div>
+        <div>
+          <label>Rechercher (légende, nom de fichier)</label>
+          <input type="search" id="adm-cherche-photo" placeholder="ex. studio-22, mairie…">
+        </div>
+      </div>
+      <div class="photos-admin" id="liste-publiees" style="margin-top:16px"></div>
+    </div>
+    <div class="carte">
+      <h2>Photos de cet appareil</h2>
+      <p class="descr">Elles ne sont visibles que sur cet appareil. Pour les publier, il faut les mettre dans le dossier <code>images/galerie/</code> du site — demandez-moi la marche à suivre.</p>
+      <div class="photos-admin" id="liste-locales"></div>
+    </div>
+    <div class="carte">
+      <h2>Télécharger la version mise à jour</h2>
+      <p class="descr">Après vos modifications, téléchargez le nouveau <code>galerie.js</code>, remplacez l'ancien dans le dossier du site, puis repoussez sur GitHub (le site en ligne se met à jour tout seul).</p>
+      <button class="btn fonce" id="adm-exporter">&#8679; Télécharger galerie.js mis à jour</button>
+    </div>
+  </section>
+
+  <!-- ============ HISTOIRE ============ -->
+  <section id="sec-histoire" hidden>
+    <div class="en-tete-sec">
+      <h1>Notre histoire</h1>
+      <p>Chronologie affichée dans le site : titres, textes, dates, photos.</p>
+    </div>
+    <div class="carte"><p class="descr">Modifiez les blocs ci-dessous. <b>Ajouter un événement</b> crée un bloc vide à compléter (photo « à venir » tant qu'aucun chemin n'est indiqué). Les flèches réorganisent les événements.</p></div>
+    <div id="blocs-histoire"></div>
+    <div class="carte">
+      <button class="btn secondaire" id="histoire-ajouter">&plus; Ajouter un événement</button>
+      <button class="btn fonce" id="histoire-exporter" style="margin-left:10px">&#8679; Télécharger galerie.js mis à jour</button>
+      <p class="descr" style="margin-top:10px">La photographie se désigne par son chemin, ex. <code>images/galerie/studio-02.jpg</code>. Vide = le site affiche un joli cadre « photo à venir ».</p>
+    </div>
+  </section>
+
+  <!-- ============ MARIÉS ============ -->
+  <section id="sec-maries" hidden>
+    <div class="en-tete-sec">
+      <h1>Les mariés</h1>
+      <p>Noms affichés et textes de présentation.</p>
+    </div>
+    <div class="carte">
+      <h2>Noms affichés</h2>
+      <label>Noms du couple (utilisés notamment dans le livre d'or)</label>
+      <input type="text" id="marie-noms">
+      <p class="descr" style="margin-top:10px">La couverture et les portraits restent gérés dans <code>index.html</code> pour garder le design intact.</p>
+    </div>
+    <div class="carte">
+      <h2>Portraits &amp; biographies</h2>
+      <p class="descr">Les portraits s'échangent en remplaçant les fichiers <code>images/portraits/josiane.jpg</code> et <code>images/portraits/armand.jpg</code> (mêmes noms) puis git push.</p>
+      <button class="btn fonce" id="maries-exporter">&#8679; Télécharger galerie.js mis à jour</button>
+    </div>
+  </section>
+
+  <!-- ============ INVITÉS ============ -->
+  <section id="sec-invites" hidden>
+    <div class="en-tete-sec">
+      <h1>Gestion des invités</h1>
+      <p>Liste tenue sur cet appareil (stockage local du navigateur).</p>
+    </div>
+    <div class="carte">
+      <h2>Nouvel invité</h2>
+      <div class="deux-cols">
+        <div><label>Nom complet</label><input type="text" id="invite-nom" placeholder="Ex. Marie Koumba"></div>
+        <div><label>Téléphone (facultatif)</label><input type="tel" id="invite-tel" placeholder="Ex. +242 …"></div>
+      </div>
+      <div class="deux-cols">
+        <div>
+          <label>Confirmation de présence</label>
+          <select id="invite-presence">
+            <option value="en attente">En attente de réponse</option>
+            <option value="oui">Présent(e) — oui</option>
+            <option value="non">Absent(e) — non</option>
+          </select>
+        </div>
+        <div><label>Note (facultatif)</label><input type="text" id="invite-note" placeholder="Ex. côté famille de la mariée"></div>
+      </div>
+      <div style="margin-top:16px">
+        <button class="btn principal" id="invite-ajouter">&plus; Ajouter l'invité</button>
+        <button class="btn secondaire" id="invites-csv" style="margin-left:8px">Exporter en CSV</button>
+      </div>
+      <p class="honnete" style="margin-top:14px"><b>À savoir</b> : cette liste reste dans le navigateur de cet appareil (comme les photos ajoutées ici). Pour que les invités confirment eux-mêmes leur présence en ligne, il faut un service externe (ex. Google Form) — dites-le-moi et je l'intégrerai.</p>
+    </div>
+    <div class="carte">
+      <h2>Liste des invités</h2>
+      <label>Rechercher</label>
+      <input type="search" id="invite-cherche" placeholder="Nom, téléphone, note…">
+      <div class="table-enroule" style="margin-top:14px">
+        <table>
+          <thead><tr><th>Nom</th><th>Téléphone</th><th>Présence</th><th>Note</th><th>Actions</th></tr></thead>
+          <tbody id="ligne-invites"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LIVRE D'OR ============ -->
+  <section id="sec-livre" hidden>
+    <div class="en-tete-sec">
+      <h1>Livre d'or</h1>
+      <p>Consultation et modération des messages de vos invités.</p>
+    </div>
+    <div class="carte">
+      <h2>Adresse de réception (Formspree)</h2>
+      <label>Adresse du formulaire Formspree</label>
+      <input type="url" id="livre-adresse" placeholder="https://formspree.io/f/abcdwxyz">
+      <div style="margin-top:14px">
+        <button class="btn principal" id="livre-enregistrer">Enregistrer l'adresse</button>
+        <a class="btn secondaire" style="text-decoration:none" href="https://formspree.io" target="_blank" rel="noopener">Ouvrir formspree.io &rarr;</a>
+      </div>
+      <p class="descr" style="margin-top:12px">Une fois l'adresse enregistrée (puis exportée dans galerie.js et publiée), les messages des invités arrivent <b>dans votre tableau de bord Formspree</b> : vous y lisez, répondez et masquez ce que vous voulez. Le site ne conserve pas les messages localement — c'est le service externe qui les reçoit.</p>
+    </div>
+    <div class="carte">
+      <h2>État actuel</h2>
+      <p id="livre-etat" class="descr" style="margin-bottom:0">–</p>
+    </div>
+  </section>
+
+  <!-- ============ RÉGLAGES & COULEURS ============ -->
+  <section id="sec-reglages" hidden>
+    <div class="en-tete-sec">
+      <h1>Réglages du site</h1>
+      <p>Date du mariage, couleurs, musique — avec aperçu en direct sur cette page.</p>
+    </div>
+    <div class="carte">
+      <h2>Date du mariage (compte à rebours)</h2>
+      <label>Date et heure de la cérémonie civile</label>
+      <input type="datetime-local" id="rgl-date">
+      <p class="descr" style="margin-top:10px">Programme complet&nbsp;: Dot jeudi 10 décembre 2026 10h (Espace Dongou Zidane, Kintélé) • Civil samedi 12 décembre 2026 10h (Mairie de Talangaï) • Bénédiction nuptiale 12h à l'église (voir « Les moments du mariage »).</p>
+    </div>
+    <div class="carte">
+      <h2>Harmonies prêtes (aperçu en direct)</h2>
+      <div id="harmonies-admin" style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:22px"></div>
+      <h2>Personnalisation fine</h2>
+      <p class="descr">Chaque changement est visible immédiatement. Les nuances dérivées (dégradés, ombres) se calculent automatiquement pour garder la tenue de l'ensemble.</p>
+      <div class="couleurs-grille">
+        <div><label class="couleur-label">Couleur principale <button type="button" class="btn-restore" data-restore="principale" title="Restaurer">&#8634;</button></label><div class="couleur-ligne"><input type="color" id="c-principale"><input type="text" id="t-principale" spellcheck="false"></div></div>
+        <div><label class="couleur-label">Couleur du filet <button type="button" class="btn-restore" data-restore="accent" title="Restaurer">&#8634;</button></label><div class="couleur-ligne"><input type="color" id="c-accent"><input type="text" id="t-accent" spellcheck="false"></div></div>
+        <div><label class="couleur-label">Arrière-plan <button type="button" class="btn-restore" data-restore="fond" title="Restaurer">&#8634;</button></label><div class="couleur-ligne"><input type="color" id="c-fond"><input type="text" id="t-fond" spellcheck="false"></div></div>
+        <div><label class="couleur-label">Surface des cartes <button type="button" class="btn-restore" data-restore="surface" title="Restaurer">&#8634;</button></label><div class="couleur-ligne"><input type="color" id="c-surface"><input type="text" id="t-surface" spellcheck="false"></div></div>
+        <div><label class="couleur-label">Texte principal <button type="button" class="btn-restore" data-restore="texte" title="Restaurer">&#8634;</button></label><div class="couleur-ligne"><input type="color" id="c-texte"><input type="text" id="t-texte" spellcheck="false"></div></div>
+        <div><label class="couleur-label">Texte secondaire <button type="button" class="btn-restore" data-restore="doux" title="Restaurer">&#8634;</button></label><div class="couleur-ligne"><input type="color" id="c-doux"><input type="text" id="t-doux" spellcheck="false"></div></div>
+      </div>
+      <div style="margin-top:18px">
+        <button class="btn principal" id="couleurs-enregistrer">&#128190; Enregistrer les modifications</button>
+        <button class="btn dangereux" id="couleurs-restaurer" style="margin-left:8px">Restaurer le thème par défaut</button>
+      </div>
+      <p class="descr" style="margin-top:10px">« Enregistrer » garde les couleurs sur cet appareil — le site les applique dès la prochaine visite. « Restaurer » remet « Sakura &amp; or doux ».</p>
+    </div>
+    <div class="carte">
+      <h2>Musique</h2>
+      <p class="descr">Le fichier par défaut se place dans <code>audio/musique.mp3</code> (puis export). Les invités peuvent toujours choisir leur propre musique avec le bouton ♪ du site — et la lecture ne démarre jamais toute seule.</p>
+    </div>
+    <div class="carte">
+      <h2>Exporter tous les réglages</h2>
+      <button class="btn fonce" id="rgl-exporter">&#8679; Télécharger galerie.js mis à jour</button>
+    </div>
+  </section>
+
+</main>
+
+<div id="annonce" role="status" aria-live="polite"></div>
+
+<script src="galerie.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+
+  /* ---------- message temporaire ---------- */
+  var annonceT = null;
+  function floater(txt) {
+    var a = $('#annonce');
+    a.textContent = txt;
+    a.classList.add('visible');
+    clearTimeout(annonceT);
+    annonceT = setTimeout(function () { a.classList.remove('visible'); }, 3600);
+  }
+
+  /* ---------- pétales discrets ---------- */
+  (function () {
+    var ok = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (ok) return;
+    for (var i = 0; i < 7; i++) {
+      var p = document.createElement('span');
+      p.className = 'petal-admin';
+      var s = 7 + Math.random() * 8;
+      p.style.width = s + 'px';
+      p.style.height = (s * 0.82) + 'px';
+      p.style.left = (Math.random() * 100) + 'vw';
+      p.style.animationDuration = (12 + Math.random() * 10) + 's';
+      p.style.animationDelay = (-Math.random() * 18) + 's';
+      document.body.appendChild(p);
+    }
+  })();
+
+  /* ---------- navigation latérale ---------- */
+  $$('#retro nav button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      $$('#retro nav button').forEach(function (x) { x.classList.remove('actif'); });
+      b.classList.add('actif');
+      $$('main > section').forEach(function (s) { s.hidden = true; });
+      $('#sec-' + b.getAttribute('data-sec')).hidden = false;
+      window.scrollTo(0, 0);
+    });
+  });
+  $$('[data-allera]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      $('#retro button[data-sec="' + b.getAttribute('data-allera') + '"]').click();
+    });
+  });
+
+  /* ---------- IndexedDB (mêmes règles que le site : version 2) ---------- */
+  function ouvrirBase() {
+    return new Promise(function (resoudre, rejeter) {
+      var rq = indexedDB.open('album-mariage', 2);
+      rq.onupgradeneeded = function (e) {
+        var db = e.target.result;
+        if (!db.objectStoreNames.contains('photos')) db.createObjectStore('photos', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains('musique')) db.createObjectStore('musique', { keyPath: 'id' });
+      };
+      rq.onsuccess = function () { resoudre(rq.result); };
+      rq.onerror   = function () { rejeter(rq.error); };
+    });
+  }
+  function lireTout(store) {
+    return ouvrirBase().then(function (db) {
+      return new Promise(function (resoudre) {
+        var tx = db.transaction(store, 'readonly'), out = [];
+        tx.objectStore(store).openCursor().onsuccess = function (e) {
+          var c = e.target.result;
+          if (c) { out.push(c.value); c.continue(); }
+        };
+        tx.oncomplete = function () { resoudre(out); };
+        tx.onerror    = function () { resoudre([]); };
+      });
+    });
+  }
+  function sauverRec(store, rec) {
+    return ouvrirBase().then(function (db) {
+      return new Promise(function (resoudre) {
+        var tx = db.transaction(store, 'readwrite');
+        tx.objectStore(store).put(rec);
+        tx.oncomplete = function () { resoudre(true); };
+        tx.onerror    = function () { resoudre(false); };
+      });
+    });
+  }
+
+  /* ---------- état de travail (copies) ---------- */
+  var CATS   = window.CATEGORIES.map(function (c) { return JSON.parse(JSON.stringify(c)); });
+  var PHOTOS = window.PHOTOS.map(function (p) { return { src: p.src, cat: p.cat, legende: p.legende || '' }; });
+  var REG    = JSON.parse(JSON.stringify(window.REGLAGES));
+  var HIST   = window.HISTOIRE.map(function (h) { return JSON.parse(JSON.stringify(h)); });
+
+  function lireInvites() {
+    try { return JSON.parse(localStorage.getItem('invites-liste') || '[]'); }
+    catch (e) { return []; }
+  }
+  function ecrireInvites(liste) {
+    try { localStorage.setItem('invites-liste', JSON.stringify(liste)); } catch (e) {}
+  }
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    var d = new Date(iso);
+    return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) +
+           ' — ' + ('0' + d.getHours()).slice(-2) + 'h' + ('0' + d.getMinutes()).slice(-2);
+  }
+
+  /* ========== TABLEAU DE BORD ========== */
+  function rafraichirDashboard() {
+    var dash = function () {
+      $('#nb-photos').textContent = PHOTOS.length;
+      $('#nb-invites').textContent = lireInvites().length;
+      var d = new Date(REG.dateMariage);
+      $('#nb-date').textContent =
+        ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear();
+      $('#res-noms').textContent = REG.mariage || '—';
+      $('#res-date').textContent = fmtDate(REG.dateMariage);
+      $('#res-histoire').textContent = HIST.length + ' événement(s)';
+      $('#res-categories').textContent = CATS.length + ' catégories';
+      var theme = null;
+      try { theme = localStorage.getItem('theme-couleur'); } catch (e) {}
+      var noms = { sakura: 'Sakura & or doux', champagne: 'Rose & champagne',
+                   ivoire: 'Ivoire & or doux', profond: 'Rose profond & ivoire',
+                   perso: 'Choix personnel' };
+      $('#res-couleur').textContent = noms[theme] || 'Sakura (par défaut)';
+      var ok = REG.formspree && REG.formspree.indexOf('VOTRE-ID') === -1;
+      $('#res-livre').textContent = ok ? 'Configuré via Formspree' : 'Pas encore configuré (service externe requis)';
+      $('#livre-etat').textContent = ok
+        ? 'Adresse configurée (' + REG.formspree + '). Les messages arrivent dans votre compte Formspree après publication du site.'
+        : 'Pas encore configuré. Créez un compte gratuit sur formspree.io, créez un formulaire, collez son adresse ci-dessous, puis exportez galerie.js et publiez.';
+      if (ok && $('#livre-adresse').value === '') $('#livre-adresse').value = REG.formspree;
+    };
+    lireTout('photos').then(function (locals) {
+      $('#nb-locals').textContent = locals.length;
+      dash();
+    }).catch(function () {
+      $('#nb-locals').textContent = '0';
+      dash();
+    });
+  }
+
+  /* ========== PHOTOS ========== */
+  function nomFichier(src) { return (src.split('/').pop() || '').replace(/\.[a-z0-9]+$/i, ''); }
+  function sansAccent(t) {
+    return (t || '').toLowerCase()
+      .replace(/[àáâãä]/g, 'a').replace(/[èéêë]/g, 'e').replace(/[îï]/g, 'i')
+      .replace(/[ôö]/g, 'o').replace(/[ùûü]/g, 'u').replace(/ç/g, 'c');
+  }
+  var catAffichee = 'tout', cherchePhoto = '';
+
+  function nomCategorie(id) {
+    var c = CATS.filter(function (x) { return x.id === id; })[0];
+    return c ? c.nom : id;
+  }
+  function listeFiltree() {
+    var q = sansAccent(cherchePhoto).replace(/[-_]+/g, ' ').trim();
+    return PHOTOS.filter(function (p) {
+      if (catAffichee !== 'tout' && p.cat !== catAffichee) return false;
+      if (!q) return true;
+      var hay = sansAccent([p.legende, nomFichier(p.src), nomCategorie(p.cat)].join(' '));
+      return hay.indexOf(q) !== -1;
+    });
+  }
+
+  function cartePhoto(p, locale, idbId) {
+    var div = document.createElement('div');
+    div.className = 'photo-admin';
+    var img = document.createElement('img');
+    img.src = p.src; img.alt = '';
+    img.loading = 'lazy';
+    div.appendChild(img);
+    var pied = document.createElement('div');
+    pied.className = 'pied';
+
+    var champ = document.createElement('input');
+    champ.type = 'text';
+    champ.value = p.legende || '';
+    champ.placeholder = 'Légende…';
+    champ.addEventListener('change', function () {
+      p.legende = champ.value;
+      if (locale && idbId) majLocale(idbId, { legende: champ.value });
+    });
+    pied.appendChild(champ);
+
+    var sel = document.createElement('select');
+    CATS.forEach(function (c) {
+      var o = document.createElement('option');
+      o.value = c.id; o.textContent = c.nom;
+      sel.appendChild(o);
+    });
+    sel.value = p.cat;
+    sel.addEventListener('change', function () {
+      p.cat = sel.value;
+      if (locale && idbId) majLocale(idbId, { cat: sel.value });
+    });
+    pied.appendChild(sel);
+
+    var sup = document.createElement('button');
+    sup.className = 'btn dangereux mini';
+    sup.textContent = 'Supprimer';
+    sup.addEventListener('click', function () {
+      if (!confirm('Supprimer définitivement cette photo ?')) return;
+      if (locale && idbId) {
+        ouvrirBase().then(function (db) {
+          var tx = db.transaction('photos', 'readwrite');
+          tx.objectStore('photos').delete(idbId);
+          tx.oncomplete = function () {
+            floater('Photo supprimée de cet appareil.');
+            initPhotos();
+            rafraichirDashboard();
+          };
+        });
+      } else {
+        PHOTOS = PHOTOS.filter(function (x) { return x !== p; });
+        floater('Retirée de la liste — pensez à télécharger le galerie.js mis à jour.');
+        rendPhotosPubliees();
+        rafraichirDashboard();
+      }
+    });
+    pied.appendChild(sup);
+    div.appendChild(pied);
+    return div;
+  }
+
+  function majLocale(id, changements) {
+    lireTout('photos').then(function (arr) {
+      var rec = arr.filter(function (r) { return r.id === id; })[0];
+      if (!rec) return;
+      Object.keys(changements).forEach(function (k) { rec[k] = changements[k]; });
+      sauverRec('photos', rec);
+    });
+  }
+
+  function rendPhotosPubliees() {
+    var liste = $('#liste-publiees');
+    liste.innerHTML = '';
+    var arr = listeFiltree();
+    if (!arr.length) {
+      liste.innerHTML = '<p class="descr">Aucune photo dans ce filtre.</p>';
+      return;
+    }
+    arr.forEach(function (p) { liste.appendChild(cartePhoto(p, false)); });
+  }
+
+  function initPhotos() {
+    var sel = $('#adm-filtre-cat');
+    sel.innerHTML = '';
+    var t = document.createElement('option');
+    t.value = 'tout';
+    t.textContent = 'Toutes les catégories';
+    sel.appendChild(t);
+    CATS.forEach(function (c) {
+      var o = document.createElement('option');
+      o.value = c.id; o.textContent = c.nom;
+      sel.appendChild(o);
+    });
+    rendPhotosPubliees();
+    lireTout('photos').then(function (locals) {
+      var zone = $('#liste-locales');
+      zone.innerHTML = '';
+      if (!locals.length) {
+        zone.innerHTML = '<p class="descr">Aucune photo locale pour l\u2019instant — utilisez « + Ajouter des photos ».</p>';
+        return;
+      }
+      locals.forEach(function (r) {
+        var vue = { src: r.src, cat: r.cat || 'meilleurs', legende: r.legende || '' };
+        zone.appendChild(cartePhoto(vue, true, r.id));
+      });
+    });
+  }
+
+  $('#adm-filtre-cat').addEventListener('change', function () { catAffichee = this.value; rendPhotosPubliees(); });
+  $('#adm-cherche-photo').addEventListener('input', function () { cherchePhoto = this.value; rendPhotosPubliees(); });
+
+  function reduire(fichier) {
+    return new Promise(function (resoudre, rejeter) {
+      var url = URL.createObjectURL(fichier);
+      var img = new Image();
+      img.onload = function () {
+        var w = img.width, h = img.height, MAX = 1400;
+        if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+        var c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        resoudre(c.toDataURL('image/jpeg', 0.85));
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); rejeter(new Error('image illisible')); };
+      img.src = url;
+    });
+  }
+
+  $('#adm-ajouter').addEventListener('click', function () { $('#adm-fichier').click(); });
+  $('#adm-fichier').addEventListener('change', function () {
+    var fichiers = Array.prototype.slice.call(this.files || []);
+    this.value = '';
+    if (!fichiers.length) return;
+    var fait = 0, suite = Promise.resolve();
+    fichiers.forEach(function (f) {
+      suite = suite.then(function () {
+        return reduire(f).then(function (data) {
+          return sauverRec('photos', {
+            id: 'local-' + Date.now() + '-' + Math.round(Math.random() * 1e6),
+            src: data, cat: 'meilleurs', legende: f.name.replace(/\.[a-z0-9]+$/i, ''), nom: f.name
+          }).then(function () { fait++; });
+        });
+      }).catch(function () {});
+    });
+    suite.then(function () {
+      floater(fait + ' photo(s) ajoutée(s) sur cet appareil (catégorie : Les meilleurs moments — modifiable ci-dessous).');
+      initPhotos();
+      rafraichirDashboard();
+    });
+  });
+
+  /* ========== EXPORT galerie.js ========== */
+  function q(s) { return "'" + String(s == null ? '' : s).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'"; }
+  function objetJSON(obj) { return JSON.stringify(obj, null, 2); }
+
+  function serialiser() {
+    var L = [];
+    L.push('/* ==========================================================');
+    L.push('   ALBUM NUMÉRIQUE — Bosseno Josiane & Olakiba Armand');
+    L.push('   Fichier généré par administration.html le ' + new Date().toLocaleString('fr-FR'));
+    L.push('   ========================================================== */');
+    L.push('');
+    L.push('window.CATEGORIES = ' + objetJSON(CATS) + ';');
+    L.push('');
+    L.push('window.REGLAGES = ' + objetJSON(REG) + ';');
+    L.push('');
+    L.push('window.HISTOIRE = [');
+    HIST.forEach(function (h, i) {
+      L.push('  {');
+      L.push('    image: ' + (h.image ? q(h.image) : 'null') + ',');
+      L.push('    titre: ' + q(h.titre) + ',');
+      L.push('    texte: ' + q(h.texte) + ',');
+      L.push('    date: ' + q(h.date));
+      L.push('  }' + (i < HIST.length - 1 ? ',' : ''));
+    });
+    L.push('];');
+    L.push('');
+    L.push('window.FAMILLE = ' + objetJSON(window.FAMILLE) + ';');
+    L.push('');
+    L.push('/* ---- Les souvenirs ---- */');
+    L.push('window.PHOTOS = [');
+    PHOTOS.forEach(function (p, i) {
+      L.push('  { src: ' + q(p.src) + ', cat: ' + q(p.cat) + ', legende: ' + q(p.legende) + ' }' + (i < PHOTOS.length - 1 ? ',' : ''));
+    });
+    L.push('];');
+    return L.join('\n');
+  }
+
+  function telecharger(nom, texte, mime) {
+    var blob = new Blob([texte], { type: mime || 'text/javascript;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = nom;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+  }
+
+  ['adm-exporter', 'histoire-exporter', 'maries-exporter', 'rgl-exporter'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('click', function () {
+      telecharger('galerie.js', serialiser());
+      floater('galerie.js téléchargé — remplacez l\u2019ancien dans le dossier puis git push.');
+    });
+  });
+
+  /* ========== HISTOIRE ========== */
+  function rendHistoire() {
+    var zone = $('#blocs-histoire');
+    zone.innerHTML = '';
+    HIST.forEach(function (h, i) {
+      var c = document.createElement('div');
+      c.className = 'carte';
+      var h2 = document.createElement('h2');
+      h2.textContent = 'Événement ' + (i + 1);
+      h2.style.marginBottom = '6px';
+      c.appendChild(h2);
+
+      var c1 = document.createElement('div');
+      c1.className = 'deux-cols';
+
+      var l1 = document.createElement('label');
+      l1.textContent = 'Titre';
+      var in1 = document.createElement('input');
+      in1.type = 'text';
+      in1.value = h.titre || '';
+      in1.addEventListener('change', function () { h.titre = in1.value; });
+      l1.appendChild(in1);
+      c1.appendChild(l1);
+
+      var l2 = document.createElement('label');
+      l2.textContent = 'Date (ex. Octobre 2026)';
+      var in2 = document.createElement('input');
+      in2.type = 'text';
+      in2.value = h.date || '';
+      in2.addEventListener('change', function () { h.date = in2.value; });
+      l2.appendChild(in2);
+      c1.appendChild(l2);
+      c.appendChild(c1);
+
+      var l3 = document.createElement('label');
+      l3.textContent = 'Description (texte du site)';
+      var in3 = document.createElement('textarea');
+      in3.value = h.texte || '';
+      in3.addEventListener('change', function () { h.texte = in3.value; });
+      l3.appendChild(in3);
+      c.appendChild(l3);
+
+      var l4 = document.createElement('label');
+      l4.textContent = 'Photographie (chemin ou nouveau nom de fichier ; vide = photo à venir)';
+      var in4 = document.createElement('input');
+      in4.type = 'text';
+      in4.value = h.image || '';
+      in4.placeholder = 'ex. images/galerie/notre-rencontre.jpg';
+      in4.addEventListener('change', function () { h.image = in4.value || null; });
+      l4.appendChild(in4);
+      c.appendChild(l4);
+
+      var rang = document.createElement('div');
+      rang.style.marginTop = '12px';
+      if (i > 0) {
+        var up = document.createElement('button');
+        up.className = 'btn mini secondaire';
+        up.textContent = '↑ Remonter';
+        up.addEventListener('click', function () {
+          var t = HIST[i - 1]; HIST[i - 1] = HIST[i]; HIST[i] = t;
+          rendHistoire();
+        });
+        rang.appendChild(up);
+      }
+      if (i < HIST.length - 1) {
+        var down = document.createElement('button');
+        down.className = 'btn mini secondaire';
+        down.textContent = '↓ Descendre';
+        down.style.marginLeft = '6px';
+        down.addEventListener('click', function () {
+          var t = HIST[i + 1]; HIST[i + 1] = HIST[i]; HIST[i] = t;
+          rendHistoire();
+        });
+        rang.appendChild(down);
+      }
+      c.appendChild(rang);
+      zone.appendChild(c);
+    });
+  }
+  $('#histoire-ajouter').addEventListener('click', function () {
+    HIST.push({ image: null, titre: 'Nouvel événement', texte: 'À compléter…', date: '' });
+    rendHistoire();
+    floater('Événement ajouté — complétez-le puis téléchargez galerie.js.');
+  });
+
+  /* ========== MARIÉS ========== */
+  $('#marie-noms').value = window.REGLAGES.mariage || '';
+  $('#marie-noms').addEventListener('change', function () { REG.mariage = this.value; });
+
+  /* ========== INVITÉS ========== */
+  function rendInvites() {
+    var cherche = sansAccent($('#invite-cherche').value).trim();
+    var liste = lireInvites();
+    var corps = $('#ligne-invites');
+    corps.innerHTML = '';
+    var vue = liste.filter(function (g) {
+      return !cherche || sansAccent([g.nom, g.tel, g.note].join(' ')).indexOf(cherche) !== -1;
+    });
+    if (!vue.length) {
+      corps.innerHTML = '<tr><td colspan="5" style="color:var(--texte-doux)">Aucun invité' + (cherche ? ' trouvé.' : ' — ajoutez le premier ci-dessus.') + '</td></tr>';
+      return;
+    }
+    vue.forEach(function (g) {
+      var tr = document.createElement('tr');
+      [g.nom || '—', g.tel || '—', g.presence || 'en attente', g.note || '—'].forEach(function (v) {
+        var td = document.createElement('td');
+        td.textContent = v;
+        tr.appendChild(td);
+      });
+      var td = document.createElement('td');
+      var edt = document.createElement('button');
+      edt.className = 'btn mini secondaire';
+      edt.textContent = 'Modifier';
+      edt.addEventListener('click', function () {
+        var nn = prompt('Modifiez (nom ; téléphone ; présent/attente/non ; note) :',
+          [g.nom, g.tel, g.presence, g.note].join(' ; '));
+        if (nn === null) return;
+        var p = nn.split(';').map(function (x) { return x.trim(); });
+        g.nom = p[0] || g.nom;
+        g.tel = p[1] || '';
+        g.presence = p[2] || g.presence;
+        g.note = p[3] || '';
+        ecrireInvites(liste);
+        rendInvites();
+        rafraichirDashboard();
+        floater('Invité mis à jour.');
+      });
+      var sup = document.createElement('button');
+      sup.className = 'btn mini dangereux';
+      sup.textContent = 'Supprimer';
+      sup.style.marginLeft = '6px';
+      sup.addEventListener('click', function () {
+        if (!confirm('Retirer ' + (g.nom || 'cet invité') + ' de la liste ?')) return;
+        ecrireInvites(liste.filter(function (x) { return x !== g; }));
+        rendInvites();
+        rafraichirDashboard();
+        floater('Invité retiré.');
+      });
+      td.appendChild(edt);
+      td.appendChild(sup);
+      tr.appendChild(td);
+      corps.appendChild(tr);
+    });
+  }
+  $('#invite-ajouter').addEventListener('click', function () {
+    var nom = $('#invite-nom').value.trim();
+    if (!nom) { floater('Écrivez au moins le nom de l\u2019invité.'); return; }
+    var liste = lireInvites();
+    liste.push({
+      nom: nom,
+      tel: $('#invite-tel').value.trim(),
+      presence: $('#invite-presence').value,
+      note: $('#invite-note').value.trim()
+    });
+    ecrireInvites(liste);
+    $('#invite-nom').value = '';
+    $('#invite-tel').value = '';
+    $('#invite-note').value = '';
+    rendInvites();
+    rafraichirDashboard();
+    floater('Invité enregistré.');
+  });
+  $('#invite-cherche').addEventListener('input', rendInvites);
+  $('#invites-csv').addEventListener('click', function () {
+    var lignes = ['Nom;Téléphone;Présence;Note'];
+    lireInvites().forEach(function (g) {
+      lignes.push([g.nom, g.tel, g.presence, g.note].join(';'));
+    });
+    telecharger('invites-mariage.csv', '\uFEFF' + lignes.join('\n'), 'text/csv;charset=utf-8');
+  });
+
+  /* ========== LIVRE D'OR ========== */
+  $('#livre-enregistrer').addEventListener('click', function () {
+    var v = $('#livre-adresse').value.trim();
+    if (v && v.indexOf('https://formspree.io') !== 0) {
+      floater('L\u2019adresse doit ressembler à https://formspree.io/f/abcdwxyz');
+      return;
+    }
+    REG.formspree = v;
+    rafraichirDashboard();
+    floater('Adresse enregistrée — exportez galerie.js puis publiez pour la rendre active.');
+  });
+
+  /* ========== RÉGLAGES ========== */
+  $('#rgl-date').value = (function (dt) {
+    var d = new Date(dt);
+    return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2) +
+           'T' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+  })(REG.dateMariage);
+  $('#rgl-date').addEventListener('change', function () {
+    if (!this.value) return;
+    REG.dateMariage = this.value + ':00';
+    rafraichirDashboard();
+    floater('Date enregistrée localement — exportez galerie.js puis publiez.');
+  });
+
+  /* ========== COULEURS (aperçu en direct) ========== */
+  var DEFAUTS = { principale: '#B85C78', accent: '#C8A96B', fond: '#FFFCF8', surface: '#FFF1F5', texte: '#49343D', doux: '#8D747E' };
+  var cVars = {};
+
+  function hexValide(v) { return /^#[0-9a-f]{6}$/i.test(v || ''); }
+  function assombrirHex(hex, f) {
+    var n = parseInt(hex.replace('#', ''), 16);
+    var p = function (v) { return Math.max(0, Math.round(v * (1 - f))); };
+    return '#' + [p((n >> 16) & 255), p((n >> 8) & 255), p(n & 255)]
+      .map(function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
+  }
+  function eclaircirHex(hex, part) {
+    var n = parseInt(hex.replace('#', ''), 16);
+    var p = function (v) { return Math.min(255, Math.round(v + (255 - v) * part)); };
+    return '#' + [p((n >> 16) & 255), p((n >> 8) & 255), p(n & 255)]
+      .map(function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
+  }
+
+  function appliquerAdmin() {
+    var r = document.documentElement.style;
+    if (cVars.principale) {
+      r.setProperty('--bordeaux', cVars.principale);
+      r.setProperty('--bordeaux-f', assombrirHex(cVars.principale, .3));
+      r.setProperty('--profond', cVars.principale);
+    }
+    if (cVars.accent) {
+      r.setProperty('--dore', cVars.accent);
+      r.setProperty('--or', cVars.accent);
+      r.setProperty('--dore-clair', eclaircirHex(cVars.accent, .35));
+    }
+    if (cVars.fond) { r.setProperty('--creme', cVars.fond); r.setProperty('--blanc', cVars.fond); }
+    if (cVars.surface) {
+      r.setProperty('--beige', cVars.surface);
+      r.setProperty('--beige-foncé', eclaircirHex(cVars.surface, .12));
+      r.setProperty('--ivoire', eclaircirHex(cVars.surface, .5));
+    }
+    if (cVars.texte) r.setProperty('--encre', cVars.texte);
+    if (cVars.doux) r.setProperty('--texte-doux', cVars.doux);
+  }
+
+  [[ 'principale', '--bordeaux' ],
+   [ 'accent',     '--dore' ],
+   [ 'fond',       '--creme' ],
+   [ 'surface',    '--beige' ],
+   [ 'texte',      '--encre' ],
+   [ 'doux',       '--texte-doux' ]].forEach(function (paire) {
+    var cle = paire[0];
+    var ci = $('#c-' + cle), ti = $('#t-' + cle);
+    var courant = getComputedStyle(document.documentElement).getPropertyValue(paire[1]).trim();
+    ci.value = hexValide(courant) ? courant : DEFAUTS[cle];
+    ti.value = ci.value;
+    function maj(val) {
+      if (!hexValide(val)) return;
+      cVars[cle] = val;
+      appliquerAdmin();
+    }
+    ci.addEventListener('input', function () {
+      ti.value = ci.value;
+      maj(ci.value);
+    });
+    ti.addEventListener('change', function () {
+      ti.value = ti.value.trim();
+      if (hexValide(ti.value)) { ci.value = ti.value; maj(ti.value); }
+      else floater('La couleur doit être au format #RRVVBB (ex. #B85C78).');
+    });
+  });
+
+  $$('.btn-restore').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var cle = b.getAttribute('data-restore');
+      $('#c-' + cle).value = DEFAUTS[cle];
+      $('#t-' + cle).value = DEFAUTS[cle];
+      cVars[cle] = DEFAUTS[cle];
+      appliquerAdmin();
+    });
+  });
+
+  var PALETTES = {
+    'Sakura & or doux':      { principale: '#B85C78', accent: '#C8A96B', fond: '#FFFCF8', surface: '#FFF1F5', texte: '#49343D', doux: '#8D747E' },
+    'Rose & champagne':      { principale: '#B85C78', accent: '#C8A96B', fond: '#FFF6EC', surface: '#E8D7C3', texte: '#49343D', doux: '#8D747E' },
+    'Ivoire & or doux':      { principale: '#A98B50', accent: '#C8A96B', fond: '#FFFCF8', surface: '#F6EFE4', texte: '#493B33', doux: '#8C7F70' },
+    'Rose profond & ivoire': { principale: '#9E4462', accent: '#C8A96B', fond: '#FFFCF8', surface: '#FFF1F5', texte: '#49343D', doux: '#8D747E' }
+  };
+  var zoneHarmonies = $('#harmonies-admin');
+  Object.keys(PALETTES).forEach(function (nom) {
+    var p = PALETTES[nom];
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'btn secondaire';
+    b.innerHTML =
+      '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:' + p.principale +
+      ';border:1px solid rgba(0,0,0,.2);margin-right:6px;vertical-align:-2px"></span>' +
+      '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:' + p.accent +
+      ';border:1px solid rgba(0,0,0,.2);margin-right:8px;vertical-align:-2px"></span>' + nom;
+    b.addEventListener('click', function () { appliquerPalette(nom, p); });
+    zoneHarmonies.appendChild(b);
+  });
+  function appliquerPalette(nom, p) {
+    ['principale', 'accent', 'fond', 'surface', 'texte', 'doux'].forEach(function (k) {
+      $('#c-' + k).value = p[k];
+      $('#t-' + k).value = p[k];
+    });
+    cVars = JSON.parse(JSON.stringify(p));
+    appliquerAdmin();
+    floater('Palette « ' + nom + ' » en aperçu — n\u2019oubliez pas « Enregistrer les modifications ».');
+  }
+
+  function ecrireTheme(store) {
+    try {
+      localStorage.setItem('theme-couleur', 'perso');
+      localStorage.setItem('theme-perso', JSON.stringify({ p: store.principale, a: store.accent }));
+      localStorage.setItem('theme-etendu', JSON.stringify({
+        principale: store.principale, accent: store.accent,
+        fond: store.fond, surface: store.surface, texte: store.texte, doux: store.doux
+      }));
+    } catch (e) {}
+  }
+
+  $('#couleurs-enregistrer').addEventListener('click', function () {
+    var final = {};
+    ['principale', 'accent', 'fond', 'surface', 'texte', 'doux'].forEach(function (k) {
+      var v = $('#c-' + k).value;
+      if (!hexValide(v)) { floater('Une couleur n\u2019est pas valide. Re-vérifiez les champs #RRVVBB.'); return; }
+      final[k] = v;
+    });
+    if (Object.keys(final).length === 6) {
+      ecrireTheme(final);
+      floater('Couleurs enregistrées ✓ — le site les appliquera à la prochaine visite.');
+    }
+  });
+  $('#couleurs-restaurer').addEventListener('click', function () {
+    ['principale', 'accent', 'fond', 'surface', 'texte', 'doux'].forEach(function (k) {
+      $('#c-' + k).value = DEFAUTS[k];
+      $('#t-' + k).value = DEFAUTS[k];
+    });
+    cVars = JSON.parse(JSON.stringify(DEFAUTS));
+    appliquerAdmin();
+    try {
+      localStorage.removeItem('theme-couleur');
+      localStorage.removeItem('theme-perso');
+      localStorage.removeItem('theme-etendu');
+    } catch (e) {}
+    floater('Thème par défaut restauré (Sakura & or doux).');
+  });
+
+  /* si des couleurs étendues avaient été enregistrées : les recharger ici */
+  try {
+    var ext = JSON.parse(localStorage.getItem('theme-etendu') || 'null');
+    if (ext) {
+      ['principale', 'accent', 'fond', 'surface', 'texte', 'doux'].forEach(function (k) {
+        if (ext[k]) { $('#c-' + k).value = ext[k]; $('#t-' + k).value = ext[k]; }
+      });
+      cVars = {
+        principale: ext.principale, accent: ext.accent,
+        fond: ext.fond, surface: ext.surface, texte: ext.texte, doux: ext.doux
+      };
+      appliquerAdmin();
+    }
+  } catch (e) {}
+
+  /* ---------- démarrage ---------- */
+  initPhotos();
+  rendHistoire();
+  rendInvites();
+  rafraichirDashboard();
+})();
+</script>
+</body>
+</html>

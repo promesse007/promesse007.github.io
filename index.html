@@ -7,7 +7,7 @@
 <meta name="description" content="Album numérique du mariage de Bosseno Josiane et Olakiba Armand — les 10 et 12 décembre 2026 à Brazzaville (Kintélé, Talangaï), Congo.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=Inter:wght@300;400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -48,6 +48,7 @@
     <li><a href="#galerie">Galerie</a></li>
     <li><a href="#famille">Famille &amp; invités</a></li>
     <li><a href="#livre-or">Livre d'or</a></li>
+    <li class="lien-pro"><a href="administration.html" title="Espace du propriétaire">Administration</a></li>
   </ul>
 </nav>
 
@@ -70,7 +71,8 @@
       <span class="puce"><span class="icone">&#128141;</span><span>Dot 10h &nbsp;&bull;&nbsp; Civil 10h &nbsp;&bull;&nbsp; Bénédiction 12h</span></span>
     </div>
 
-    <a id="bouton-decouvrir" href="#histoire">Découvrir nos souvenirs</a>
+    <a id="bouton-decouvrir" href="#histoire">Découvrir notre histoire</a>
+    <a id="bouton-infos" href="#infos-mariage">Informations du mariage</a>
   </div>
 </header>
 
@@ -83,11 +85,46 @@
     <div class="contour">
       <p class="surtitre">Le grand jour approche</p>
       <h2>Compte à rebours</h2>
-      <div class="griffe-horloge">
+      <div class="griffe-horloge" id="griffe-horloge">
         <div class="case-horloge"><span class="nombre" id="cb-jours">00</span><span class="mot">Jours</span></div>
         <div class="case-horloge"><span class="nombre" id="cb-heures">00</span><span class="mot">Heures</span></div>
         <div class="case-horloge"><span class="nombre" id="cb-minutes">00</span><span class="mot">Minutes</span></div>
         <div class="case-horloge"><span class="nombre" id="cb-secondes">00</span><span class="mot">Secondes</span></div>
+      </div>
+      <p id="cb-message" hidden></p>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       LES MOMENTS DU MARIAGE (informations pratiques)
+       ========================================================== -->
+  <section id="infos-mariage" class="zone">
+    <div class="contour">
+      <div class="centre">
+        <p class="surtitre">Informations pratiques</p>
+        <h2 class="titre">Les moments du mariage</h2>
+        <p class="sous-titre">Trois temps forts pour célébrer notre union. Venez nombreux&nbsp;!</p>
+        <div class="separateur">&#9829;</div>
+      </div>
+      <div class="cartes-moments">
+        <article class="carte-moment apparait">
+          <span class="icone-moment">&#128334;</span>
+          <p class="date-moment">Jeudi 10 décembre 2026 — 10h00</p>
+          <h3>La dot</h3>
+          <p class="texte-moment">Espace Dongou Zidane, arrêt Deuxième Terre Jaune, Kintélé.</p>
+        </article>
+        <article class="carte-moment apparait retard-1">
+          <span class="icone-moment">&#128188;</span>
+          <p class="date-moment">Samedi 12 décembre 2026 — 10h00</p>
+          <h3>Le mariage civil</h3>
+          <p class="texte-moment">Mairie de Talangaï, Brazzaville.</p>
+        </article>
+        <article class="carte-moment apparait retard-2">
+          <span class="icone-moment">&#9650;&#65038;</span>
+          <p class="date-moment">Samedi 12 décembre 2026 — 12h00</p>
+          <h3>La bénédiction nuptiale</h3>
+          <p class="texte-moment">À l'église — les détails suivront ici.</p>
+        </article>
       </div>
     </div>
   </section>
@@ -291,25 +328,21 @@
     <h3>&#127912; Harmonie des couleurs</h3>
     <p class="reglages-info">Choisissez une harmonie élégante : elle s'applique tout de suite, partout sur le site, et reste en mémoire sur cet appareil.</p>
     <div class="reglages-liste">
-      <button type="button" class="reglage-theme" data-theme="bordeaux">
-        <span class="reglage-dot" style="background:#6B1F2A"></span><span class="reglage-dot" style="background:#C9A227"></span>
-        Bordeaux &amp; Or
+      <button type="button" class="reglage-theme" data-theme="sakura">
+        <span class="reglage-dot" style="background:#F4C7D3"></span><span class="reglage-dot" style="background:#C8A96B"></span>
+        Sakura &amp; or doux
       </button>
-      <button type="button" class="reglage-theme" data-theme="bleu">
-        <span class="reglage-dot" style="background:#1F2A44"></span><span class="reglage-dot" style="background:#C9A227"></span>
-        Bleu nuit &amp; Or
+      <button type="button" class="reglage-theme" data-theme="champagne">
+        <span class="reglage-dot" style="background:#B85C78"></span><span class="reglage-dot" style="background:#E8D7C3"></span>
+        Rose &amp; champagne
       </button>
-      <button type="button" class="reglage-theme" data-theme="vert">
-        <span class="reglage-dot" style="background:#1F4636"></span><span class="reglage-dot" style="background:#C9A227"></span>
-        Vert forêt &amp; Or
+      <button type="button" class="reglage-theme" data-theme="ivoire">
+        <span class="reglage-dot" style="background:#FFFCF8"></span><span class="reglage-dot" style="background:#C8A96B"></span>
+        Ivoire &amp; or doux
       </button>
-      <button type="button" class="reglage-theme" data-theme="prune">
-        <span class="reglage-dot" style="background:#4A1F44"></span><span class="reglage-dot" style="background:#C9A227"></span>
-        Prune &amp; Or
-      </button>
-      <button type="button" class="reglage-theme" data-theme="bronze">
-        <span class="reglage-dot" style="background:#4A2E1C"></span><span class="reglage-dot" style="background:#C9A227"></span>
-        Bronze &amp; Or
+      <button type="button" class="reglage-theme" data-theme="profond">
+        <span class="reglage-dot" style="background:#9E4462"></span><span class="reglage-dot" style="background:#FFF1F5"></span>
+        Rose profond &amp; ivoire
       </button>
     </div>
     <div class="reglages-perso">
@@ -323,8 +356,8 @@
         </label>
       </div>
       <button type="button" id="couleur-appliquer" class="reglage-appli">Appliquer mon choix</button>
-      <button type="button" id="couleur-reset" class="reglage-appli secondaire">Revenir à Bordeaux &amp; Or</button>
-      <p class="reglages-note">Conseil : un seul ton principal + le filet doré = toujours élégant et professionnel.</p>
+      <button type="button" id="couleur-reset" class="reglage-appli secondaire">Revenir à Sakura</button>
+      <p class="reglages-note">Conseil : un seul ton principal + le filet doré reste toujours élégant. Pour plus de réglages (fond, surfaces, textes), ouvrez la page Administration.</p>
     </div>
     <p class="reglages-note">Seules des harmonies sobres et professionnelles sont proposées.</p>
   </div>

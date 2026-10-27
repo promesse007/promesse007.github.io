@@ -11,22 +11,38 @@
 [hidden] { display: none !important; }
 
 :root {
-  --creme:      #FBF5EC;
-  --blanc:      #FFFDFA;
-  --dore:       #C9A227;
-  --dore-clair: #E6C877;
-  --beige:      #EFE2D2;
-  --beige-foncé:#DCC7AE;
-  --bordeaux:   #6B1F2A;
-  --bordeaux-f: #4A121C;
-  --encre:      #3D302A;
-  --texte-doux: #6E5C51;
-  --ombre:      0 16px 44px rgba(74, 18, 28, .10);
-  --ombre-forte:0 22px 60px rgba(74, 18, 28, .18);
+  /* ===== Palette Sakura romantique premium ===== */
+  --rose-sakura:      #F4C7D3;
+  --rose-poudre:      #E8B4C2;
+  --rose-profond:     #B85C78;
+  --rose-ivoire:      #FFF1F5;
+  --ivoire:           #FFFCF8;
+  --champagne:        #E8D7C3;
+  --or-doux:          #C8A96B;
+  --creme:            #FFFCF8;   /* fond de page : ivoire */
+  --blanc:            #FFFCF8;
+  --dore:             #C8A96B;
+  --dore-clair:       #E4CFA8;
+  --beige:            #FFF1F5;   /* surfaces rose très clair */
+  --beige-foncé:      #F8E3EA;
+  --bordeaux:         #B85C78;   /* couleur principale (rose profond) */
+  --bordeaux-f:       #8A3A56;   /* sa nuance foncée */
+  --encre:            #49343D;
+  --texte-doux:       #8D747E;
+  --ombre:      0 14px 34px rgba(184, 92, 120, .10);
+  --ombre-forte:0 20px 50px rgba(184, 92, 120, .16);
   --rayon:      16px;
-  --titre:      'Cormorant Garamond', Georgia, serif;
+  --titre:      'Playfair Display', 'Cormorant Garamond', Georgia, serif;
   --manuscrite: 'Great Vibes', cursive;
-  --texte:      'Lato', 'Segoe UI', sans-serif;
+  --texte:      'Inter', 'Lato', 'Segoe UI', sans-serif;
+
+  /* aliases sémantiques pour la personnalisation */
+  --color-primary:   var(--bordeaux);
+  --color-secondary: var(--rose-poudre);
+  --color-background:var(--creme);
+  --color-surface:   var(--beige);
+  --color-text:      var(--encre);
+  --color-accent:    var(--dore);
 }
 
 html { scroll-behavior: smooth; }
@@ -111,7 +127,7 @@ h2.titre {
 .petale {
   position: absolute; top: -12vh;
   border-radius: 60% 0 60% 0;
-  background: radial-gradient(circle at 32% 32%, var(--beige-foncé), #C9A48C);
+  background: radial-gradient(circle at 32% 32%, var(--rose-sakura), var(--rose-poudre));
   animation: tombe linear infinite;
 }
 @keyframes tombe {
@@ -926,4 +942,170 @@ img {
   .filtres, #bouton-decouvrir, #visionneuse { display: none !important; }
   body { background: #fff; color: #000; }
   section.zone { padding: 20px 0; }
+}
+
+
+/* ==========================================================
+   REFONTE SAKURA — vague de refonte (couche finale)
+   Hero romantique photo + voile, navigation aeree, compte a
+   rebours translucide, moments du mariage, formulaires,
+   galerie edutoriale, petites touches Sakura partout.
+   ========================================================== */
+
+/* ---------- Navigation premium ---------- */
+#navigation {
+  background: rgba(255, 252, 248, .88);
+  border-bottom: 1px solid rgba(200, 169, 107, .25);
+}
+#navigation ul { padding: 8px 16px; gap: 2px 4px; }
+#navigation a {
+  position: relative;
+  padding: 9px 15px;
+  font-size: .74rem;
+  color: var(--texte-doux);
+  border-radius: 40px;
+}
+#navigation a:hover { color: var(--bordeaux); background: var(--beige); }
+#navigation a.actif {
+  color: #fff;
+  background: linear-gradient(135deg, var(--rose-profond), var(--bordeaux-f));
+}
+#navigation .lien-pro a { opacity: .62; font-size: .68rem; }
+#navigation .lien-pro a:hover { opacity: 1; background: var(--rose-ivoire); color: var(--rose-profond); }
+
+/* ---------- Accueil : photo romantique + voile tendre ---------- */
+#accueil {
+  background:
+    linear-gradient(180deg, rgba(73, 52, 61, .55) 0%, rgba(73, 52, 61, .46) 45%, rgba(73, 52, 61, .68) 100%),
+    url('images/galerie/studio-42.jpg') center 30% / cover no-repeat fixed,
+    linear-gradient(165deg, var(--bordeaux-f), var(--rose-profond));
+}
+#accueil::before {
+  border-color: rgba(244, 199, 211, .35);
+  box-shadow: inset 0 0 0 26px rgba(244, 199, 211, .06);
+}
+#accueil::after { border-color: rgba(244, 199, 211, .28); }
+.accueil-interne .petit { color: var(--rose-sakura); }
+.accueil-interne h1 { text-shadow: 0 6px 30px rgba(73, 52, 61, .55); }
+.accueil-interne h1 .et { color: var(--rose-sakura); }
+.accueil-phrase { color: var(--rose-ivoire); text-shadow: 0 2px 14px rgba(73,52,61,.55); }
+.puce, .puce b { color: var(--rose-ivoire); }
+.puce .icone { color: var(--rose-sakura); }
+#bouton-decouvrir {
+  background: rgba(255, 252, 248, .96);
+  border-color: var(--or-doux);
+  color: var(--rose-profond);
+}
+#bouton-decouvrir:hover {
+  background: linear-gradient(135deg, var(--rose-profond), var(--bordeaux-f));
+  color: #fff;
+}
+#bouton-infos {
+  display: inline-block; margin: 34px 0 0 12px;
+  padding: 16px 42px;
+  border: 1px solid rgba(244, 199, 211, .8);
+  border-radius: 60px;
+  background: transparent;
+  color: var(--rose-ivoire);
+  font-size: .78rem; letter-spacing: .2em;
+  text-transform: uppercase; text-decoration: none;
+  transition: transform .3s ease, background .3s ease, color .3s ease;
+}
+#bouton-infos:hover {
+  background: rgba(255, 252, 248, .95);
+  color: var(--rose-profond);
+  transform: translateY(-3px);
+}
+
+/* ---------- Compte a rebours translucide ---------- */
+#compte-a-rebours {
+  background: linear-gradient(150deg, var(--rose-profond) 0%, var(--bordeaux-f) 100%);
+}
+#compte-a-rebours .surtitre, #compte-a-rebours h2 { color: var(--rose-sakura); }
+.case-horloge {
+  background: rgba(255, 241, 245, .16);
+  border: 1px solid rgba(244, 199, 211, .42);
+  border-radius: 18px;
+  padding: 22px 6px;
+}
+.case-horloge .nombre { color: var(--rose-sakura); }
+.case-horloge .mot { color: rgba(255, 241, 245, .85); }
+#cb-message {
+  font-family: var(--titre); font-style: italic;
+  font-size: clamp(1.2rem, 3.4vw, 1.8rem);
+  color: var(--rose-sakura); margin-top: 26px;
+}
+
+/* ---------- Les moments du mariage ---------- */
+.cartes-moments {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 22px; max-width: 980px; margin: 8px auto 0;
+}
+.carte-moment {
+  background: var(--beige);
+  border: 1px solid rgba(200, 169, 107, .3);
+  border-radius: 22px;
+  padding: 34px 26px; text-align: center;
+  box-shadow: var(--ombre);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.carte-moment:hover { transform: translateY(-6px); box-shadow: var(--ombre-forte); }
+.icone-moment { font-size: 1.9rem; color: var(--rose-profond); }
+.date-moment {
+  font-size: .7rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--or-doux); margin: 14px 0 10px;
+}
+.carte-moment h3 { font-family: var(--titre); color: var(--rose-profond); font-size: 1.35rem; }
+.texte-moment { font-size: .92rem; color: var(--texte-doux); line-height: 1.6; margin-top: 8px; }
+@media (max-width: 760px) {
+  .cartes-moments { grid-template-columns: 1fr; gap: 14px; }
+  #bouton-infos { margin: 18px 0 0; }
+}
+
+/* ---------- Galerie : cadres raffines + zoom doux ---------- */
+.vignette {
+  padding: 6px;
+  background: var(--blanc);
+  border: 1px solid rgba(200, 169, 107, .35);
+  border-radius: 10px;
+}
+.vignette:hover { box-shadow: var(--ombre-forte); }
+.vignette img { border-radius: 6px; transition: transform .55s ease; }
+.vignette:hover img { transform: scale(1.035); }
+
+/* ---------- Formulaires elegants ---------- */
+input[type="text"], input[type="tel"], input[type="search"], textarea, input[type="datetime-local"] {
+  border: 1px solid rgba(200, 169, 107, .4);
+  border-radius: 12px;
+  background: var(--blanc);
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+input[type="text"]:focus, input[type="tel"]:focus, input[type="search"]:focus,
+textarea:focus, input[type="datetime-local"]:focus {
+  outline: none;
+  border-color: var(--rose-profond);
+  box-shadow: 0 0 0 3px rgba(184, 92, 120, .14);
+}
+::placeholder { color: var(--texte-doux); opacity: .8; }
+button[type="submit"] { border-radius: 40px; }
+button[type="submit"]:hover { filter: brightness(1.06); transform: translateY(-1px); }
+
+/* ---------- Petites touches Sakura ---------- */
+.separateur { color: var(--rose-profond); }
+#musique, #reglages { color: var(--rose-profond); }
+#musique:hover, #reglages:hover { color: #fff; }
+#bouton-haut { color: var(--rose-profond); }
+.surtitre { letter-spacing: .3em; }
+
+/* ---------- Mobilite : hero fixe devient normal sur petit ecran ---------- */
+@media (max-width: 680px) {
+  #accueil { background-attachment: scroll; }
+  #navigation ul { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  #navigation::-webkit-scrollbar { height: 0; }
+}
+
+/* ---------- Respect de la reduction d'animations ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .petale, #musique.actif, #bouton-haut, .vignette img { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
 }
