@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "@neondatabase/serverless": "^1.2.0"
+    "@neon/config": "^1.9.5",
+    "@neon/functions": "^0.11.0",
+    "@neondatabase/serverless": "^1.2.0",
+    "hono": "^4.13.14",
+    "pg": "^8.23.1"
   }
 }
