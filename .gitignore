@@ -5,3 +5,4 @@ correspondance-photos-studio.txt
 *.crea
 Thumbs.db
 desktop.ini
+.env
