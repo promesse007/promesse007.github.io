@@ -246,3 +246,59 @@ et la page de crédit **« Photographies : Ferol'B Photography »**.
 - Depuis l'administration : rubrique **« Livre des souvenirs »** → modifiez
   titres, introductions, légendes, couverture et crédit → bouton
   « Télécharger livre-data.js mis à jour » → remplacez l'ancien fichier → git push
+
+---
+
+## 🔒 12. Le cadenas de l'administration (nouveau)
+
+La page `administration.html` est désormais **protégée par un mot de passe
+personnel** : à l'ouverture, un écran de connexion (cadenas) masque tout le
+reste de la page.
+
+### Les grands principes
+- **Un seul compte : le vôtre.** À la première ouverture, la page vous
+  propose de **créer votre mot de passe** (10 caractères ou plus —
+  plus c'est long, plus c'est sûr).
+- **Le mot de passe n'est jamais enregistré.** Nulle part, ni en clair ni
+  « décodable ». La page ne conserve que son **empreinte** : le résultat
+  d'un calcul à sens unique (PBKDF2, 120 000 tours). Qui lit les fichiers
+  du site ne peut pas retrouver le mot de passe.
+- **~2 secondes de calcul à chaque essai.** C'est voulu : quelqu'un qui
+  essaierait des milliers de mots de passe perdrait des années.
+- **5 essais faux bloquent la porte** sur l'appareil (1 minute, puis 2,
+  4… jusqu'à 30 minutes). Oublier trop de fois = attendre ; c'est normal.
+- **Fermeture automatique après 20 minutes sans activité** (bouton
+  « 🔒 Verrouiller » aussi, dans le bandeau latéral).
+- **Rien ne circule sur internet :** la vérification se fait dans votre
+  propre navigateur.
+
+### La première fois
+1. Ouvrez `administration.html` → l'écran demande de **créer l'accès**.
+2. Choisissez le mot de passe, confirmez, entrez.
+3. La page télécharge un nouveau **`acces-config.js`** — remplacez l'ancien
+   fichier dans le dossier du site puis repoussez sur GitHub
+   (méthode identique aux autres exports de l'administration).
+
+### Changer le mot de passe
+Dans l'administration → rubrique **Réglages** → carte **« Cadenas de
+l'administration »** : mot de passe actuel, nouveau, confirmation → le
+nouveau `acces-config.js` est téléchargé (même remplacement à faire).
+
+### En cas d'oubli
+Si vous oubliez le mot de passe : effacez dans le fichier
+`acces-config.js` la valeur de `empreinte` (laissez `empreinte: ''`),
+remettez le fichier en ligne, et l'écran de création revient. 
+C'est le « passe-partout » de secours — gardez-le pour vous seul.
+
+### Les limites honnêtes d'un site statique
+Le site est hébergé comme des fichiers simples (GitHub Pages) :
+- Nous avons rendu l'intrusion **très difficile** (empreinte,
+  blocage, délais) mais il faut savoir qu'un attaquant déterminé qui
+  télécharge les fichiers peut tenter de deviner le mot de passe
+  **hors ligne**. La vraie forteresse : un mot de passe **long et
+  unique** (une phrase de 4–5 mots inattendues est idéale).
+- Le rempart complémentaire : **activez la double authentification
+  (2FA) sur votre compte GitHub** — même si quelqu'un trouve le mot de
+  passe de la page, il ne pourra pas remplacer vos fichiers.
+- Pour une protection « d'entreprise » (encore plus forte), un service
+  comme Cloudflare Access peut être ajouté plus tard — à discuter.

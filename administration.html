@@ -84,7 +84,7 @@ main { margin-left:236px; padding:30px 34px 60px; }
 
 /* ---------- formulaires ---------- */
 label { display:block; font-size:.76rem; letter-spacing:.06em; color:var(--texte-doux); margin:14px 0 5px; }
-input[type="text"], input[type="tel"], input[type="search"], input[type="url"],
+input[type="text"], input[type="tel"], input[type="search"], input[type="url"], input[type="password"],
 textarea, input[type="datetime-local"], select {
   width:100%; padding:11px 14px;
   border:1px solid rgba(200,169,107,.45); border-radius:12px;
@@ -153,11 +153,95 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
 }
 @media print { aside, #annonce, .petal-admin { display:none !important; } main { margin:0; } }
 @media (prefers-reduced-motion: reduce) { .petal-admin { display:none; } * { transition:none !important; } }
+
+/* ---------- écran d'accès (cadenas) ---------- */
+#ecran-acces {
+  position:fixed; inset:0; z-index:1000;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(160deg,#FFF5F8 0%,#FFF1F5 45%,#F8E3EA 100%);
+  padding:24px; overflow:auto;
+}
+.acces-boite {
+  width:min(440px, 100%); background:var(--blanc);
+  border:1px solid rgba(200,169,107,.45); border-radius:22px;
+  box-shadow:var(--ombre-forte); padding:32px 28px 24px; text-align:center;
+}
+.acces-ornement { font-size:1.6rem; color:var(--dore); }
+.acces-boite h1 { font-family:var(--titre); color:var(--profond); font-size:1.5rem; font-weight:400; margin:6px 0 4px; }
+#acces-sous-titre { font-size:.85rem; color:var(--texte-doux); }
+
+#acces-form { margin-top:10px; text-align:left; }
+#acces-form input[type="password"] {
+  width:100%; padding:11px 14px;
+  border:1px solid rgba(200,169,107,.45); border-radius:12px;
+  background:var(--blanc); color:var(--encre);
+  font-family:var(--texte); font-size:.9rem;
+  letter-spacing:.08em;
+  transition:border-color .25s ease,box-shadow .25s ease;
+}
+#acces-form input[type="password"]:focus { outline:none; border-color:var(--profond); box-shadow:0 0 0 3px rgba(184,92,120,.14); }
+.acces-bouton {
+  width:100%; margin-top:16px; border:none; cursor:pointer;
+  border-radius:40px; padding:12px 22px;
+  background:linear-gradient(135deg,var(--profond),var(--bordeaux-f));
+  color:#fff; font-family:var(--texte); font-size:.9rem; font-weight:600;
+  transition:transform .2s ease,filter .2s ease,opacity .2s ease;
+}
+.acces-bouton:hover { transform:translateY(-1px); filter:brightness(1.06); }
+.acces-bouton.doux {
+  margin-top:8px; background:var(--beige); color:var(--profond);
+  border:1px solid rgba(200,169,107,.45); font-weight:600;
+}
+.acces-bouton:disabled { opacity:.55; cursor:wait; transform:none; }
+
+#acces-message { min-height:1.5em; margin-top:12px; color:var(--texte-doux); font-size:.84rem; line-height:1.5; }
+#acces-message.erreur { color:#C0392B; font-weight:600; }
+.acces-succes { color:var(--profond); font-weight:600; }
+
+.acces-note {
+  margin-top:14px; padding-top:12px;
+  border-top:1px dashed rgba(200,169,107,.45);
+  font-size:.72rem; color:var(--texte-doux); line-height:1.6;
+}
+.bloc-verrou { margin-top:12px; text-align:center; }
+.bloc-verrou button {
+  border:1px solid rgba(200,169,107,.45); background:var(--beige); color:var(--profond);
+  border-radius:40px; padding:8px 16px; cursor:pointer;
+  font-family:var(--texte); font-size:.78rem; font-weight:600;
+}
+.bloc-verrou button:hover { background:var(--dore); color:#fff; }
 </style>
 </head>
 <body>
 
-<aside id="retro">
+<!-- ============ CADENAS : écran d'accès personnel ============ -->
+<div id="ecran-acces">
+  <div class="acces-boite">
+    <p class="acces-ornement">&#10047;</p>
+    <h1>Espace du propriétaire</h1>
+    <p id="acces-sous-titre">Cet espace est protégé par votre mot de passe personnel.</p>
+    <form id="acces-form" autocomplete="off">
+      <div id="acces-champ-mdp" class="acces-champ">
+        <label for="acces-mdp">Votre mot de passe</label>
+        <input type="password" id="acces-mdp" autocomplete="new-password" spellcheck="false">
+      </div>
+      <div id="acces-champ-mdp2" class="acces-champ" hidden>
+        <label for="acces-mdp2">Confirmez le même mot de passe</label>
+        <input type="password" id="acces-mdp2" autocomplete="new-password" spellcheck="false">
+      </div>
+      <button type="submit" id="acces-entrer" class="acces-bouton">Entrer</button>
+    </form>
+    <button type="button" id="acces-telecharger" class="acces-bouton doux" hidden>&#8679; Télécharger acces-config.js mis à jour</button>
+    <p id="acces-message" role="status" aria-live="polite"></p>
+    <p class="acces-note">
+      Vos éléments restent dans <b>cet appareil</b> : rien n'est enregistré en ligne.<br>
+      Le mot de passe n'est jamais conservé nulle part — seule une « empreinte »
+      (un calcul à sens unique, impossible à déchiffrer) voyage pour le vérifier.
+    </p>
+  </div>
+</div>
+
+<aside id="retro" hidden>
   <p class="marque">Josiane &amp; Armand</p>
   <p class="sous">Espace du propriétaire</p>
   <nav aria-label="Rubriques de l'administration">
@@ -173,9 +257,10 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
     </ul>
   </nav>
   <div class="bloc-retour"><a href="index.html">&#8592; Voir le site</a></div>
+  <div class="bloc-verrou"><button type="button" id="btn-verrouiller">&#128274; Verrouiller</button></div>
 </aside>
 
-<main>
+<main hidden>
 
   <!-- ============ DASHBOARD ============ -->
   <section id="sec-dashboard">
@@ -418,6 +503,16 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
       <p class="descr">Le fichier par défaut se place dans <code>audio/musique.mp3</code> (puis export). Les invités peuvent toujours choisir leur propre musique avec le bouton ♪ du site — et la lecture ne démarre jamais toute seule.</p>
     </div>
     <div class="carte">
+      <h2>Cadenas de l'administration</h2>
+      <p class="descr">Change ici le mot de passe qui protège cette page. Il te faudra d'abord votre mot de passe <b>actuel</b>, puis télécharger le nouveau <code>acces-config.js</code> et remplacer l'ancien fichier dans le dossier du site (et le repousser sur GitHub). Rien n'est envoyé sur internet.</p>
+      <div class="deux-cols">
+        <div><label>Mot de passe actuel</label><input type="password" id="cac-actuel" autocomplete="off"></div>
+        <div><label>Nouveau mot de passe (10 caractères ou plus)</label><input type="password" id="cac-nouveau" autocomplete="off"></div>
+        <div><label>Confirmer le nouveau mot de passe</label><input type="password" id="cac-confirmer" autocomplete="off"></div>
+      </div>
+      <button class="btn principal" id="cac-valider" style="margin-top:16px">&#128274; Changer le mot de passe</button>
+    </div>
+    <div class="carte">
       <h2>Exporter tous les réglages</h2>
       <button class="btn fonce" id="rgl-exporter">&#8679; Télécharger galerie.js mis à jour</button>
     </div>
@@ -429,9 +524,15 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
 
 <script src="galerie.js"></script>
 <script src="livre-data.js"></script>
+<script src="acces-admin.js"></script>
+<script src="acces-config.js"></script>
 <script>
-(function () {
+/* Toute la logique de l'administration est enfermée dans __demarrerAdmin :
+   elle ne démarre QUE quand le cadenas a déverrouillé l'accès. */
+window.__demarrerAdmin = function () {
   'use strict';
+  if (window.__demarrerAdmin.__fait) return;
+  window.__demarrerAdmin.__fait = true;
   var $ = function (s) { return document.querySelector(s); };
   var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
 
@@ -1230,6 +1331,315 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
   rendInvites();
   rendLivreSouvenirs();
   rafraichirDashboard();
+};
+</script>
+
+<script>
+/* ==========================================================
+   CADENAS — contrôle d'accès personnel de l'administration
+   • Première ouverture : création du mot de passe (10+ caractères),
+     puis téléchargement de acces-config.js mis à jour.
+   • Ouvertures suivantes : vérification par empreinte PBKDF2
+     (~2 s de calcul volontaire à chaque essai).
+   • 5 essais faux = blocage croissant sur cet appareil.
+   • Verrouillage auto après 20 min sans activité.
+   ========================================================== */
+(function () {
+  'use strict';
+
+  var $ = function (s) { return document.querySelector(s); };
+  var ecran = document.getElementById('ecran-acces');
+  var idMdp = document.getElementById('acces-mdp');
+  var idMdp2 = document.getElementById('acces-mdp2');
+  var idEntrer = document.getElementById('acces-entrer');
+  var idMessage = document.getElementById('acces-message');
+  var idTelech = document.getElementById('acces-telecharger');
+  var FICHIER = 'acces-config.js';
+
+  /* petit message d'info dans le bandeau (utilisé par la carte des Réglages) */
+  var annonceT = null;
+  window.__annonceAdmin = function (txt) {
+    var a = document.getElementById('annonce');
+    a.textContent = txt;
+    a.classList.add('visible');
+    clearTimeout(annonceT);
+    annonceT = window.setTimeout(function () { a.classList.remove('visible'); }, 4200);
+  };
+
+  /* ---------- réglages courants (fichier + miroir local) ---------- */
+  function lireMiroir() {
+    try { return JSON.parse(localStorage.getItem('acces-miroir') || 'null'); }
+    catch (e) { return null; }
+  }
+  function reglagesCourants() {
+    var cfg = window.ACCES_ADMIN || {};
+    var m = lireMiroir();
+    return {
+      sel:        (m && m.sel)        || cfg.sel        || '',
+      empreinte:  (m && m.empreinte)  || cfg.empreinte  || '',
+      iterations: (m && m.iterations) || cfg.iterations || 120000
+    };
+  }
+  function enregistrerMiroir(r) {
+    try { localStorage.setItem('acces-miroir', JSON.stringify(r)); } catch (e) {}
+  }
+
+  /* ---------- calcul (dans un setTimeout : l'écran se dessine d'abord) ---------- */
+  function calculerEmpreinte(mdp) {
+    var r = reglagesCourants();
+    return new Promise(function (resoudre) {
+      window.setTimeout(function () {
+        resoudre(window.EMPREINTE(mdp, r.sel, r.iterations));
+      }, 50);
+    });
+  }
+
+  /* comparaison sans fuite de temps */
+  function memeHeure(a, b) {
+    var d = (a.length === b.length ? 0 : 1);
+    for (var i = 0; i < Math.max(a.length, b.length); i++) {
+      d |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0);
+    }
+    return d === 0;
+  }
+
+  function contenuConfig(sel, empreinte, iterations) {
+    return '/* ==========================================================\n' +
+           '   Configuration du cadenas de l\'administration\n' +
+           '   Fichier mis à jour automatiquement (mot de passe jamais inscrit).\n' +
+           '   ========================================================== */\n' +
+           'window.ACCES_ADMIN = {\n' +
+           '  sel: "' + sel + '",\n' +
+           '  empreinte: "' + empreinte + '",\n' +
+           '  iterations: ' + iterations + '\n' +
+           '};\n';
+  }
+
+  function telechargerConfig(sel, empreinte, iterations) {
+    var blob = new Blob([contenuConfig(sel, empreinte, iterations)], { type: 'text/javascript;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = FICHIER;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+  }
+
+  function dire(txt, erreur) {
+    idMessage.textContent = txt;
+    idMessage.className = erreur ? 'erreur' : '';
+  }
+
+  /* ---------- mode = création ou vérification ---------- */
+  var reglages = reglagesCourants();
+  var enCreation = !reglages.empreinte;
+
+  function montrerChamps() {
+    document.getElementById('acces-champ-mdp2').hidden = !enCreation;
+    idEntrer.textContent = enCreation ? 'Créer mon accès' : 'Entrer';
+    let passe = document.querySelector('#acces-sous-titre');
+    passe.textContent = enCreation
+      ? 'Première visite : choisissez le mot de passe qui protègera cet espace.'
+      : 'Tapez votre mot de passe personnel. (Attention : 5 essais faux bloquent la porte.)';
+  }
+  montrerChamps();
+
+  document.getElementById('acces-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (idEntrer.disabled) return;
+    var mdp = idMdp.value;
+    var mdp2 = idMdp2.value;
+
+    if (!mdp) { dire('Écrivez votre mot de passe.', true); return; }
+
+    if (enCreation) {
+      if (mdp.length < 10) { dire('Choisissez au moins 10 caractères — c\'est ce qui rend votre accès difficile à deviner.', true); return; }
+      if (mdp !== mdp2) { dire('Les deux lignes ne sont pas identiques — corrigez la confirmation.', true); return; }
+      dire('Création de votre empreinte… (~2 secondes de calcul de protection)');
+      idEntrer.disabled = true;
+      calculerEmpreinte(mdp).then(function (empreinte) {
+        var n = reglagesCourants();
+        n.empreinte = empreinte;
+        enregistrerMiroir(n);
+        essaisLiees = 0;
+        try { localStorage.removeItem('acces-blocage'); localStorage.removeItem('acces-essais'); } catch (e3) {}
+        dire('Accès créé ✓ Téléchargez maintenant le fichier mis à jour (il remplace l\'ancien dans le dossier du site).');
+        idTelech.hidden = false;
+        idTelech.dataset.sel = n.sel;
+        idTelech.dataset.empreinte = empreinte;
+        idTelech.dataset.iterations = n.iterations;
+        enCreation = false;
+        montrerChamps();
+        idEntrer.disabled = false;
+        idMdp.value = ''; idMdp2.value = '';
+        idEntrer.focus();
+      });
+      return;
+    }
+
+    /* ---- mode vérification ---- */
+    dire('Vérification… (~2 secondes)');
+    idEntrer.disabled = true;
+    calculerEmpreinte(mdp).then(function (empreinte) {
+      idEntrer.disabled = false;
+      if (memeHeure(empreinte, reglagesCourants().empreinte)) {
+        essaisLiees = 0;
+        try { localStorage.removeItem('acces-blocage'); localStorage.removeItem('acces-essais'); } catch (e2) {}
+        deverrouiller('');
+      } else {
+        echoue();
+      }
+    });
+  });
+
+  idTelech.addEventListener('click', function () {
+    telechargerConfig(idTelech.dataset.sel, idTelech.dataset.empreinte, Number(idTelech.dataset.iterations));
+    dire('Fichier téléchargé ✓ Remplacez l\'ancien acces-config.js dans le dossier du site, puis repoussez sur GitHub.');
+  });
+
+  /* ---------- blocage après essais ---------- */
+  var essaisLiees = 0; /* nombre d'essais faux enregistrés (liés au blocage) */
+  function essaisEnregistres() {
+    try { return Math.max(0, parseInt(localStorage.getItem('acces-essais') || '0', 10) || 0); }
+    catch (e) { return 0; }
+  }
+  function enregistrerEssais(n) {
+    try { localStorage.setItem('acces-essais', String(n)); } catch (e) {}
+  }
+  function blocageActif() {
+    try {
+      var b = JSON.parse(localStorage.getItem('acces-blocage') || 'null');
+      return (b && Date.now() < b.jusqua) ? b : null;
+    } catch (e) { return null; }
+  }
+  function dureeBlocage(nEssais) {
+    var minutes = Math.min(30, 1 * Math.pow(2, Math.max(0, nEssais - 5)));
+    return minutes;
+  }
+  function echoue() {
+    essaisLiees = essaisEnregistres() + 1;
+    enregistrerEssais(essaisLiees);
+    idMdp.value = '';
+    if (essaisLiees >= 5) {
+      var minutes = dureeBlocage(essaisLiees);
+      var jusqua = Date.now() + minutes * 60000;
+      try { localStorage.setItem('acces-blocage', JSON.stringify({ jusqua: jusqua })); } catch (e) {}
+      dire('Porte bloquée pendant ' + minutes + ' minute(s) : 5 essais faux. Réessayez après ce délai.', true);
+      decompte(minutes * 60000);
+    } else {
+      dire('Mot de passe incorrect — essai ' + essaisLiees + ' sur 5. La 5ᵉ erreur bloque la porte.', true);
+    }
+  }
+  function decompte(msRestant) {
+    var fin = Date.now() + msRestant;
+    idEntrer.disabled = true;
+    idMdp.disabled = true; idMdp2.disabled = true;
+    clearInterval(compteT);
+    compteT = setInterval(function () {
+      var restant = fin - Date.now();
+      if (restant <= 0) {
+        clearInterval(compteT);
+        idEntrer.disabled = false; idMdp.disabled = false; idMdp2.disabled = false;
+        dire('Porte débloquée — reprenez, en vérifiant lentement votre mot de passe.');
+        return;
+      }
+      var min = Math.floor(restant / 60000);
+      var sec = Math.floor((restant % 60000) / 1000);
+      dire('Porte bloquée — réessayez dans ' + min + ' min ' + sec + ' s.', true);
+    }, 1000);
+  }
+  var compteT = null;
+
+  /* au chargement : si un blocage est actif, montre le décompte immédiatement */
+  var blocExistant = blocageActif();
+  if (blocExistant) {
+    essaisLiees = Math.max(5, essaisEnregistres());
+    decompte(Math.max(0, blocExistant.jusqua - Date.now()));
+  } else if (reglagesCourants().empreinte) {
+    /* session déjà ouverte dans cet onglet → entrée directe */
+    try {
+      if (sessionStorage.getItem('acces-session') === '1') {
+        deverrouiller('Bon retour !');
+      }
+    } catch (e) {}
+  }
+
+  /* ---------- verrouiller / déverrouiller ---------- */
+  var derniereActivite = Date.now();
+
+  function deverrouiller(message) {
+    ecran.hidden = true;
+    document.getElementById('retro').hidden = false;
+    document.querySelector('main').hidden = false;
+    try { sessionStorage.setItem('acces-session', '1'); } catch (e) {}
+    derniereActivite = Date.now();
+    idTelech.hidden = !idTelech.dataset.empreinte;
+    if (message) dire(message);
+    window.__demarrerAdmin();
+    window.scrollTo(0, 0);
+  }
+  function verrouiller() {
+    try { sessionStorage.removeItem('acces-session'); } catch (e) {}
+    ecran.hidden = false;
+    document.getElementById('retro').hidden = true;
+    document.querySelector('main').hidden = true;
+    idTelech.hidden = !idTelech.dataset.empreinte;
+    idMdp.value = '';
+    dire('Espace verrouillé ✓');
+    idMdp.focus();
+  }
+
+  document.getElementById('btn-verrouiller').addEventListener('click', verrouiller);
+
+  /* ---------- inactivité : 20 min → verrouillage ---------- */
+  ['mousemove', 'keydown', 'click', 'touchstart'].forEach(function (ev) {
+    document.addEventListener(ev, function () { derniereActivite = Date.now(); }, { passive: true });
+  });
+  setInterval(function () {
+    var sessionOuverte = false;
+    try { sessionOuverte = sessionStorage.getItem('acces-session') === '1'; } catch (e) {}
+    if (sessionOuverte && Date.now() - derniereActivite > 20 * 60000) {
+      verrouiller();
+      dire('Session fermée après 20 minutes d\'inactivité.');
+    }
+    /* miroir de session : gérer aussi un onglet fermé puis rouvert */
+  }, 20000);
+
+  /* ---------- changement de mot de passe (carte des Réglages) ---------- */
+  var cacActuel = document.getElementById('cac-actuel'),
+      cacNouveau = document.getElementById('cac-nouveau'),
+      cacConfirmer = document.getElementById('cac-confirmer'),
+      cacValider = document.getElementById('cac-valider');
+  if (cacValider) {
+    cacValider.addEventListener('click', function () {
+      var ancien = cacActuel.value, nouveau = cacNouveau.value, confirme = cacConfirmer.value;
+      if (!ancien || !nouveau) { window.__annonceAdmin && window.__annonceAdmin('Remplissez les mots de passe demandés.'); return; }
+      if (nouveau.length < 10) { window.__annonceAdmin && window.__annonceAdmin('Le nouveau mot de passe doit faire au moins 10 caractères.'); return; }
+      if (nouveau !== confirme) { window.__annonceAdmin && window.__annonceAdmin('La confirmation ne correspond pas au nouveau mot de passe.'); return; }
+      cacValider.disabled = true;
+      cacValider.textContent = 'Changement en cours (~2 s)…';
+      calculerEmpreinte(ancien).then(function (empA) {
+        if (!memeHeure(empA, reglagesCourants().empreinte)) {
+          cacValider.disabled = false;
+          cacValider.textContent = '🔒 Changer le mot de passe';
+          window.__annonceAdmin && window.__annonceAdmin('Mot de passe actuel incorrect — rien n\'a changé.');
+          cacActuel.value = '';
+          return;
+        }
+        calculerEmpreinte(nouveau).then(function (empN) {
+          var n = reglagesCourants();
+          n.empreinte = empN;
+          enregistrerMiroir(n);
+          telechargerConfig(n.sel, empN, n.iterations);
+          cacValider.disabled = false;
+          cacValider.textContent = '🔒 Changer le mot de passe';
+          cacActuel.value = ''; cacNouveau.value = ''; cacConfirmer.value = '';
+          window.__annonceAdmin && window.__annonceAdmin('Nouvel accès actif ✓ acces-config.js téléchargé — remplacez-le dans le dossier, puis push.');
+        });
+      });
+    });
+  }
 })();
 </script>
 </body>
