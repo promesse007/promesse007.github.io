@@ -202,7 +202,7 @@ Un mot n’est jamais affiché publiquement avant votre validation.
 
 - Noms corrects partout : **Bosseno Josiane** (la mariée, toujours en premier) et **Olakiba Armand**
   (aucune occurrence de l'ancienne orthographe)
-- Dates et lieux affichés : jeudi 10 décembre 2026 (Dot, Espace Dongou Zidane, Kintélé) ; samedi 12 décembre 2026 (civil 10h Mairie de Talangaï, bénédiction 12h à l'église)
+- Dates et lieux affichés : jeudi 10 décembre 2026 (Dot, Espace Dongou Zidane, Kintélé) ; samedi 12 décembre 2026 (civil 10h Mairie de Talangaï, bénédiction 12h à l’Église Seigneur Jésus-Christ)
 - Horaires confirmés : Dot jeudi 10 décembre à 10h • Civil samedi 12 décembre à 10h • Bénédiction à 12h
 - Compte à rebours fonctionnel
 - Filtres par catégorie, galerie, visionneuse (agrandissement, flèches,

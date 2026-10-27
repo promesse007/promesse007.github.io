@@ -83,7 +83,7 @@ window.HISTOIRE = [
   {
     image: null,
     titre: 'La promesse célébrée en famille',
-    texte: "Le jeudi 10 décembre 2026 à 10 h, la dot réunira nos familles à l’Espace Dongou Zidane, arrêt Deuxième Terre Jaune, à Kintélé. Le samedi 12 décembre à 10 h, nous célébrerons notre mariage civil à la mairie de Talangaï, puis la bénédiction nuptiale à l’église à 12 h. Deux journées de joie, de gratitude et de promesses, que nous avons hâte de partager avec vous.",
+    texte: "Le jeudi 10 décembre 2026 à 10 h, la dot réunira nos familles à l’Espace Dongou Zidane, arrêt Deuxième Terre Jaune, à Kintélé. Le samedi 12 décembre à 10 h, nous célébrerons notre mariage civil à la mairie de Talangaï, puis la bénédiction nuptiale à 12 h à l’Église Seigneur Jésus-Christ. Deux journées de joie, de gratitude et de promesses, que nous avons hâte de partager avec vous.",
     date: '10 & 12 décembre 2026'
   },
   {
