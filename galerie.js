@@ -49,7 +49,22 @@ window.REGLAGES = {
   formspree: 'VOTRE-ID-FORMSPREE',
 
   /* Nom affiché dans les messages du livre d'or */
-  mariage: 'Bosseno Josiane et Olakiba Armand'
+  mariage: 'Bosseno Josiane et Olakiba Armand',
+
+  /* LIVRE DES SOUVIENS — photos chargées automatiquement.
+     Le livre utilise images/photo-01.jpg … photo-44.jpg (sauf la 14) ;
+     si un fichier photo-XX.jpg manque, il reprend images/galerie/studio-XX.jpg. */
+  livre: {
+    dossier:  'images/',
+    prefixe:  'photo-',
+    extension: '.jpg',
+    de:       1,
+    a:        44,
+    sans:     [14],
+    pleines:  [31, 36],        /* photos en pleine page */
+    musique:  'audio/musique.mp3',
+    credit:   'Photographies : Ferol\u2019B Photography'
+  }
 };
 
 /* ---------- Notre histoire ----------

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le livre des souvenirs — Bosseno Josiane &amp; Olakiba Armand</title>
+<meta name="description" content="Le livre des souvenirs du mariage de Bosseno Josiane et Olakiba Armand — pages qui se tournent, chapitres, photos et livre d'or.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="livre.css">
+</head>
+<body>
+
+<!-- ==========================================================
+     EN-TÊTE DU LECTEUR
+     ========================================================== -->
+<header class="entete-livre">
+  <p class="marque">Josiane &amp; Armand</p>
+  <p class="flux">Le livre des souvenirs</p>
+  <div class="retien">
+    <a class="lien-retour" href="index.html">&#8592; Retour au site</a>
+  </div>
+</header>
+
+<p id="chargeur" style="text-align:center;color:#FFE9C8;letter-spacing:.18em;font-size:.9rem;position:relative;z-index:2;">Le livre s'ouvre&#8230;</p>
+
+<!-- ==========================================================
+     LE LECTEUR (les pages sont construites par livre.js)
+     ========================================================== -->
+<div class="livre-lecteur" id="corps-livre" role="region" aria-label="Livrable à feuilleter — utilisez les flèches du clavier"></div>
+
+<!-- ==========================================================
+     BARRE DE NAVIGATION
+     ========================================================== -->
+<nav class="barre-navigation" aria-label="Navigation du livre">
+  <button type="button" id="page-precedente" title="Page précédente (flèche gauche)">&#8249; Précédente</button>
+  <button type="button" id="aller-sommaire" title="Retourner au sommaire">Sommaire</button>
+  <span class="indicateur" id="indicateur">–</span>
+  <button type="button" id="page-suivante" title="Page suivante (flèche droite)">Suivante &#8250;</button>
+</nav>
+
+<!-- ==========================================================
+     MUSIQUE (coupée par défaut) + ZOOM + MESSAGES
+     ========================================================== -->
+<audio id="piste-livre" loop preload="none"></audio>
+<button type="button" class="bouton-flottant" id="musique-livre" title="Musique d'ambiance — coupée par défaut" aria-pressed="false">&#9834;</button>
+
+<div id="zoom-photo" hidden>
+  <button type="button" class="fermer" id="zoom-fermer" title="Fermer (Escape)">&#215;</button>
+  <img id="zoom-image" alt="">
+  <p class="legende" id="zoom-legende"></p>
+</div>
+
+<div id="annonce-livre" role="status" aria-live="polite"></div>
+
+<noscript>
+  <p style="color:#FFE9C8; text-align:center;">Le livre a besoin de JavaScript pour tourner ses pages.</p>
+</noscript>
+
+<!-- Ordre obligatoire : réglages → textes → bibliothèque → moteur -->
+<script src="galerie.js"></script>
+<script src="livre-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+<script src="livre.js"></script>
+</body>
+</html>

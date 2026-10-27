@@ -208,3 +208,41 @@ Tant que cette étape n'est pas faite, le formulaire l'indique honnêtement
 - Affichage sur téléphone, tablette et ordinateur
 - Aucune erreur dans la console du navigateur
 - Musique jamais lancée sans action du visiteur
+
+---
+
+## 📚 11. Le livre des souvenirs (nouveau)
+
+Une page entière `livre.html` propose **« Le livre des souvenirs »** : un vrai livre
+numérique à feuilleter (couverture, sommaire cliquable, pages qui se tournent),
+ouvert depuis le menu du site (« Le livre »).
+
+**Chapitres** : I. Les mariés · II. Famille et proches · III. Tendresse ·
+IV. Élégance · V. Complicité · VI. Remerciements — puis le livre d'or intégré
+et la page de crédit **« Photographies : Ferol'B Photography »**.
+
+### Ce que le livre fait déjà
+- Double page sur ordinateur, page simple sur téléphone (adaptation automatique)
+- Navigation : au doigt (glisser), au clavier (flèches ← →, Accueil, Échap),
+  et par les boutons « Précédente / Suivante / Sommaire »
+- Sommaire cliquable : amène exactement à la 1re page de chaque chapitre
+- Zoom sur chaque photo au clic (fermeture par Échap ou ✕)
+- Chargement différé : seules les pages proches de la page courante se chargent
+- Aucune déformation : les photos gardent leurs proportions, cadre doré fin
+- Pleines pages : photo 31 (ouverture du chapitre I) et photo 36 (chapitre V)
+- Livre d'or intégré relié à Formspree (même réglage que le site)
+- Musique d'ambiance : **toujours coupée par défaut**, bouton ♪ à droite
+- Si l'appareil ne télécharge pas la bibliothèque de feuilletage :
+  lecture simple honnête (pages en défilement) — rien n'est cassé
+
+### Les photos du livre
+- Noms finaux : `images/photo-01.jpg` → `photo-44.jpg` (sans la 14)
+- Tant qu'un fichier `photo-XX.jpg` n'existe pas, le livre utilise
+  automatiquement `images/galerie/studio-XX.jpg` — aucune page vide
+- Textes et légendes **en un seul fichier** : `livre-data.js`
+
+### Modifier les textes du livre
+- À la main : ouvrez `livre-data.js` (introductions de chapitres, légendes)
+- Depuis l'administration : rubrique **« Livre des souvenirs »** → modifiez
+  titres, introductions, légendes, couverture et crédit → bouton
+  « Télécharger livre-data.js mis à jour » → remplacez l'ancien fichier → git push

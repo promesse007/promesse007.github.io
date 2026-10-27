@@ -168,6 +168,7 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
       <li><button data-sec="maries"><span>&#128141;</span><span class="tx">Les mariés</span></button></li>
       <li><button data-sec="invites"><span>&#128100;</span><span class="tx">Invités</span></button></li>
       <li><button data-sec="livre"><span>&#9997;</span><span class="tx">Livre d'or</span></button></li>
+      <li><button data-sec="livresouvenirs"><span>&#128214;</span><span class="tx">Livre des souvenirs</span></button></li>
       <li><button data-sec="reglages"><span>&#9881;</span><span class="tx">Réglages &amp; couleurs</span></button></li>
     </ul>
   </nav>
@@ -352,6 +353,35 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
     </div>
   </section>
 
+  <!-- ============ LIVRE DES SOUVENIRS ============ -->
+  <section id="sec-livresouvenirs" hidden>
+    <div class="en-tete-sec">
+      <h1>Livre des souvenirs</h1>
+      <p>Les textes du livre numérique — titres, introductions, légendes des photos.</p>
+    </div>
+    <div class="carte">
+      <h2>Couverture &amp; crédit</h2>
+      <div class="deux-cols">
+        <div><label>Sous-titre de couverture</label><input type="text" id="lb-soustitre"></div>
+        <div><label>Ligne du bas de couverture</label><input type="text" id="lb-bascouv"></div>
+      </div>
+      <label>Crédit photographique (dernière page)</label>
+      <input type="text" id="lb-credit">
+    </div>
+    <div id="blocs-livre"></div>
+    <div class="carte">
+      <h2>Livre d'or intégré au livre</h2>
+      <label>Titre</label><input type="text" id="lb-dor-titre">
+      <label>Introduction</label>
+      <textarea id="lb-dor-intro"></textarea>
+    </div>
+    <div class="carte">
+      <h2>Télécharger la version mise à jour</h2>
+      <p class="descr">Téléchargez le nouveau <code>livre-data.js</code>, remplacez l'ancien dans le dossier du site, puis repoussez sur GitHub.</p>
+      <button class="btn fonce" id="livre-exporter">&#8679; Télécharger livre-data.js mis à jour</button>
+    </div>
+  </section>
+
   <!-- ============ RÉGLAGES & COULEURS ============ -->
   <section id="sec-reglages" hidden>
     <div class="en-tete-sec">
@@ -398,6 +428,7 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
 <div id="annonce" role="status" aria-live="polite"></div>
 
 <script src="galerie.js"></script>
+<script src="livre-data.js"></script>
 <script>
 (function () {
   'use strict';
@@ -951,6 +982,75 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
     floater('Adresse enregistrée — exportez galerie.js puis publiez pour la rendre active.');
   });
 
+  /* ========== LIVRE DES SOUVENIRS ========== */
+  var LIV = JSON.parse(JSON.stringify(window.LIVRE || null));
+
+  function rendLivreSouvenirs() {
+    if (!LIV) return;
+    $('#lb-soustitre').value = LIV.sousTitreCouverture || '';
+    $('#lb-bascouv').value   = LIV.basCouverture || '';
+    $('#lb-credit').value    = LIV.credit || '';
+    $('#lb-dor-titre').value = (LIV.livreDor || {}).titre || '';
+    $('#lb-dor-intro').value = (LIV.livreDor || {}).intro || '';
+
+    var zone = $('#blocs-livre');
+    zone.innerHTML = '';
+    LIV.chapitres.forEach(function (ch, ci) {
+      var c = document.createElement('div');
+      c.className = 'carte';
+      var h2 = document.createElement('h2');
+      h2.textContent = 'Chapitre ' + ch.num + ' — ' + ch.titre;
+      c.appendChild(h2);
+
+      var lt = document.createElement('label');
+      lt.textContent = 'Titre du chapitre';
+      var it_ = document.createElement('input');
+      it_.type = 'text';
+      it_.value = ch.titre || '';
+      it_.addEventListener('change', function () { ch.titre = it_.value; });
+      lt.appendChild(it_);
+      c.appendChild(lt);
+
+      var li_ = document.createElement('label');
+      li_.textContent = 'Introduction (texte du livre)';
+      var ia = document.createElement('textarea');
+      ia.value = ch.intro || '';
+      ia.addEventListener('change', function () { ch.intro = ia.value; });
+      li_.appendChild(ia);
+      c.appendChild(li_);
+
+      (ch.photos || []).forEach(function (ph) {
+        var lp = document.createElement('label');
+        lp.textContent = 'Légende — photo ' + ('0' + ph.n).slice(-2) + '.jpg' + (ph.pleine ? ' (page pleine)' : '');
+        var ip = document.createElement('input');
+        ip.type = 'text';
+        ip.value = ph.legende || '';
+        ip.addEventListener('change', function () { ph.legende = ip.value; });
+        lp.appendChild(ip);
+        c.appendChild(lp);
+      });
+      if (ch.photoOuverture) {
+        var note = document.createElement('p');
+        note.className = 'descr';
+        note.style.marginTop = '10px';
+        note.textContent = 'Photo d\u2019ouverture du chapitre : photo-' + ('0' + ch.photoOuverture).slice(-2) + '.jpg (pleine page).';
+        c.appendChild(note);
+      }
+      zone.appendChild(c);
+    });
+  }
+
+  $('#lb-soustitre').addEventListener('change', function () { LIV.sousTitreCouverture = this.value; });
+  $('#lb-bascouv').addEventListener('change',   function () { LIV.basCouverture = this.value; });
+  $('#lb-credit').addEventListener('change',    function () { LIV.credit = this.value; });
+  $('#lb-dor-titre').addEventListener('change', function () { LIV.livreDor.titre = this.value; });
+  $('#lb-dor-intro').addEventListener('change', function () { LIV.livreDor.intro = this.value; });
+
+  $('#livre-exporter').addEventListener('click', function () {
+    telecharger('livre-data.js', 'window.LIVRE = ' + JSON.stringify(LIV, null, 2) + ';\n');
+    floater('livre-data.js téléchargé — remplacez l\u2019ancien puis git push.');
+  });
+
   /* ========== RÉGLAGES ========== */
   $('#rgl-date').value = (function (dt) {
     var d = new Date(dt);
@@ -1128,6 +1228,7 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
   initPhotos();
   rendHistoire();
   rendInvites();
+  rendLivreSouvenirs();
   rafraichirDashboard();
 })();
 </script>

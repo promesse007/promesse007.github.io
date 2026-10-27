@@ -1,0 +1,343 @@
+/* ==========================================================
+   LE LIVRE DES SOUVENIRS — styles
+   Thème bordeaux & or (identité du site), pages ivoire,
+   cadres dorés fins, zéro déformation des photos.
+   ========================================================== */
+:root {
+  --bordeaux:   #6B1F2A;
+  --bordeaux-f: #4A121C;
+  --dore:       #C8A227;
+  --dore-clair: #E6C877;
+  --ivoire:     #FFF5F2;   /* page */
+  --blanc:      #FFFDFA;
+  --encre:      #2E2226;
+  --doux:       #7A6468;
+  --ombre-page: 0 24px 60px rgba(30, 10, 14, .35);
+  --titre:      'Playfair Display', Georgia, serif;
+  --manuscrite: 'Great Vibes', cursive;
+  --texte:      'Inter', 'Lato', 'Segoe UI', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  min-height: 100vh;
+  font-family: var(--texte);
+  color: var(--encre);
+  background:
+    radial-gradient(circle at 12% 8%, rgba(200, 162, 39, .14), transparent 42%),
+    radial-gradient(circle at 88% 92%, rgba(200, 162, 39, .10), transparent 40%),
+    linear-gradient(160deg, var(--bordeaux-f) 0%, var(--bordeaux) 58%, #57161f 100%);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 26px 14px 60px;
+}
+
+/* ---------- en-tête du lecteur ---------- */
+.entete-livre { text-align: center; color: #FFF3E6; margin-bottom: 18px; position: relative; z-index: 3; }
+.entete-livre .retien {
+  display: inline-flex; gap: 12px; align-items: center;
+  margin-top: 10px;
+}
+.entete-livre a.lien-retour {
+  color: var(--dore-clair); text-decoration: none;
+  font-size: .8rem; letter-spacing: .18em; text-transform: uppercase;
+  border: 1px solid rgba(230, 200, 119, .5);
+  border-radius: 40px; padding: 8px 18px;
+  transition: background .25s ease, color .25s ease;
+}
+.entete-livre a.lien-retour:hover { background: var(--dore); color: #fff; }
+.entete-livre .marque { font-family: var(--manuscrite); font-size: 1.9rem; color: #fff; }
+.entete-livre .flux { font-size: .72rem; letter-spacing: .32em; text-transform: uppercase; color: var(--dore-clair); margin-top: 2px; }
+
+/* ---------- scène du livre ---------- */
+.livre-lecteur {
+  width: min(1120px, 100%);
+  height: min(76vh, 720px);
+  min-height: 380px;
+  position: relative; z-index: 2;
+  margin: 0 auto;
+}
+
+/* ---------- pages ---------- */
+.page-du-livre {
+  background: var(--ivoire);
+  border-radius: 4px;
+  padding: 30px 24px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  text-align: center;
+}
+.page-du-livre::after {
+  content: ''; position: absolute; inset: 9px;
+  border: 1px solid rgba(200, 162, 39, .45);
+  border-radius: 2px; pointer-events: none;
+}
+
+/* numéros de page */
+.numero-page {
+  position: absolute; bottom: 16px; left: 0; right: 0;
+  font-size: .68rem; letter-spacing: .2em; color: var(--doux);
+}
+
+/* couverture */
+.page-couverture {
+  background:
+    radial-gradient(circle at 50% 30%, rgba(200, 162, 39, .22), transparent 55%),
+    linear-gradient(165deg, var(--bordeaux-f), var(--bordeaux) 70%, #57161f);
+  color: #FFF3E6;
+  justify-content: center; align-items: center;
+  gap: 6px;
+}
+.page-couverture::after { border-color: rgba(230, 200, 119, .65); }
+.page-couverture .ornement { font-size: 1.2rem; color: var(--dore-clair); letter-spacing: .5em; }
+.page-couverture .sur-titre { font-size: .66rem; letter-spacing: .34em; text-transform: uppercase; color: var(--dore-clair); }
+.page-couverture h2 {
+  font-family: var(--manuscrite); font-weight: 400;
+  font-size: clamp(1.7rem, 7vw, 3rem); line-height: 1.15;
+  color: #fff; margin: 10px 0;
+}
+.page-couverture .sous-ligne { font-family: var(--titre); font-style: italic; font-size: .95rem; color: #FFE9C8; }
+.page-couverture .fin-couv { font-size: .68rem; letter-spacing: .24em; text-transform: uppercase; color: var(--dore-clair); margin-top: 14px; }
+
+/* sommaire */
+.page-sommaire h3, .page-texte h3 {
+  font-family: var(--titre); color: var(--bordeaux);
+  font-size: 1.35rem; margin-bottom: 16px;
+}
+.sommaire-lister { list-style: none; display: flex; flex-direction: column; gap: 9px; flex: 1; justify-content: center; }
+.sommaire-lister button {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; border: none; cursor: pointer;
+  background: transparent; text-align: left;
+  padding: 8px 12px; border-radius: 10px;
+  font-family: var(--texte); font-size: .86rem; color: var(--encre);
+  transition: background .2s ease;
+}
+.sommaire-lister button:hover { background: rgba(200, 162, 39, .12); }
+.sommaire-lister .rn { font-family: var(--titre); color: var(--bordeaux); min-width: 34px; font-style: italic; }
+.sommaire-lister .puce-dore { color: var(--dore); }
+
+/* ouverture de chapitre */
+.page-chapitre { justify-content: center; }
+.page-chapitre .num-chapitre {
+  font-family: var(--titre); font-style: italic;
+  color: var(--dore); font-size: 1.05rem; letter-spacing: .1em;
+}
+.page-chapitre h3 {
+  font-family: var(--manuscrite); font-weight: 400;
+  color: var(--bordeaux); font-size: clamp(1.6rem, 6vw, 2.6rem);
+  margin: 10px 0 18px;
+}
+.page-chapitre .ornement { color: var(--dore); letter-spacing: .5em; margin-bottom: 18px; }
+.page-chapitre p.intro {
+  font-size: .88rem; line-height: 1.85; color: var(--encre);
+  text-align: justify; hyphens: auto;
+}
+
+/* page photo */
+.page-photo { padding: 24px 20px 44px; }
+.page-photo .cadre-dor {
+  flex: 1; min-height: 0;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--dore); border-radius: 3px;
+  background: var(--blanc);
+  padding: 8px;
+  cursor: zoom-in;
+}
+.page-photo img {
+  max-width: 100%; max-height: 100%;
+  width: auto; height: auto;
+  object-fit: contain;
+  border-radius: 2px;
+  cursor: zoom-in;
+}
+.page-photo img.chargement-differe { loading: lazy; }
+.page-photo .legende {
+  font-family: var(--titre); font-style: italic;
+  font-size: .82rem; color: var(--doux);
+  margin-top: 10px; line-height: 1.5;
+}
+.page-photo .consigne-zoom {
+  position: absolute; bottom: 16px; right: 20px;
+  font-size: .62rem; letter-spacing: .12em; color: var(--doux); opacity: .75;
+}
+
+/* photo pleine page (ouverture chapitre I et 36) */
+.page-pleine {
+  padding: 10px;
+  background: var(--bordeaux-f);
+}
+.page-pleine .cadre-dor {
+  flex: 1; border: none; background: none; padding: 0;
+}
+.page-pleine .cadre-dor:focus-visible { outline: 1px solid var(--dore); }
+.page-pleine img {
+  width: 100%; height: 100%;
+  object-fit: cover;   /* pleine page : la photo remplit, sans jamais s'étirer */
+  border: 1px solid var(--dore);
+  border-radius: 2px;
+}
+.page-pleine .legende-doree {
+  position: absolute; left: 18px; bottom: 18px;
+  color: #FFF3E6; font-family: var(--titre); font-style: italic;
+  font-size: .8rem; text-shadow: 0 2px 10px rgba(0,0,0,.6);
+}
+
+/* photo à venir (fichier manquant) */
+.attente-photo {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 10px;
+  border: 1px dashed rgba(200, 162, 39, .7);
+  border-radius: 3px; color: var(--doux);
+  background: repeating-linear-gradient(45deg, transparent 0 14px, rgba(200,162,39,.05) 14px 28px);
+  font-size: .8rem;
+}
+.attente-photo .ic { font-size: 1.6rem; color: var(--dore); }
+
+/* page remerciements */
+.page-texte p.intro { font-size: .88rem; line-height: 1.9; color: var(--encre); text-align: justify; margin-bottom: 14px; }
+
+/* livre d'or du livre */
+.page-livredor { justify-content: center; }
+.page-livredor form { display: flex; flex-direction: column; gap: 10px; text-align: left; flex: 1; justify-content: center; }
+.page-livredor label { font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--doux); }
+.page-livredor input, .page-livredor textarea {
+  border: 1px solid rgba(200, 162, 39, .5); border-radius: 10px;
+  padding: 10px 12px; font-family: var(--texte); font-size: .86rem;
+  color: var(--encre); background: var(--blanc);
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+.page-livredor input:focus, .page-livredor textarea:focus {
+  outline: none; border-color: var(--bordeaux);
+  box-shadow: 0 0 0 3px rgba(107, 31, 42, .12);
+}
+.page-livredor textarea { min-height: 96px; resize: vertical; }
+.page-livredor button {
+  align-self: center; margin-top: 4px;
+  border: none; cursor: pointer; border-radius: 40px;
+  padding: 11px 26px;
+  background: linear-gradient(135deg, var(--bordeaux), var(--bordeaux-f));
+  color: #fff; font-family: var(--texte); font-size: .82rem; font-weight: 600;
+  letter-spacing: .06em;
+  transition: filter .2s ease, transform .2s ease;
+}
+.page-livredor button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.page-livredor .reponse { font-size: .78rem; color: var(--doux); text-align: center; min-height: 1.4em; margin-top: 6px; }
+
+/* page crédit final */
+.page-credit {
+  justify-content: center; align-items: center; gap: 12px;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(200, 162, 39, .18), transparent 55%),
+    var(--bordeaux);
+  color: #FFF3E6;
+}
+.page-credit::after { border-color: rgba(230, 200, 119, .55); }
+.page-credit .orneme { font-size: 1.1rem; color: var(--dore-clair); letter-spacing: .5em; }
+.page-credit p.credit {
+  font-family: var(--titre); font-size: 1.05rem; color: #fff;
+}
+.page-credit .gratitude { font-size: .74rem; letter-spacing: .2em; text-transform: uppercase; color: var(--dore-clair); }
+
+/* ---------- barre de navigation ---------- */
+.barre-navigation {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 18px; flex-wrap: wrap; justify-content: center;
+  position: relative; z-index: 3;
+}
+.barre-navigation button {
+  border: 1px solid var(--dore); background: rgba(255, 253, 250, .94);
+  color: #FFF3E6; color: var(--bordeaux);
+  border-radius: 40px; padding: 10px 20px;
+  font-family: var(--texte); font-size: .8rem; letter-spacing: .08em;
+  cursor: pointer; transition: transform .25s ease, background .25s ease, color .25s ease;
+}
+.barre-navigation button:hover { background: var(--dore); color: #fff; transform: translateY(-2px); }
+.barre-navigation .indicateur {
+  color: #FFE9C8; font-size: .74rem; letter-spacing: .14em; min-width: 84px; text-align: center;
+}
+
+/* ---------- lecteur musique + zoom ---------- */
+.bouton-flottant {
+  position: fixed; bottom: 18px; z-index: 50;
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 1px solid var(--dore);
+  background: rgba(255, 253, 250, .94);
+  color: var(--bordeaux); font-size: 1.1rem; cursor: pointer;
+  display: grid; place-items: center;
+  box-shadow: 0 10px 26px rgba(30, 10, 14, .3);
+  transition: transform .25s ease, background .25s ease, color .25s ease;
+}
+.bouton-flottant:hover { transform: scale(1.08); background: var(--dore); color: #fff; }
+#musique-livre { right: 18px; }
+#zoom-photo {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(30, 10, 14, .92);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px 60px 70px;
+}
+#zoom-photo img {
+  max-width: 100%; max-height: calc(100% - 60px);
+  width: auto; height: auto; object-fit: contain;
+  border: 1px solid var(--dore);
+  border-radius: 4px;
+}
+#zoom-photo .fermer {
+  position: absolute; top: 16px; right: 22px;
+  border: none; background: transparent;
+  color: #fff; font-size: 1.6rem; cursor: pointer;
+}
+#zoom-photo .legende, #annonce-livre {
+  color: #FFE9C8; font-size: .84rem; font-style: italic;
+  font-family: var(--titre); margin-top: 12px; text-align: center;
+}
+#annonce-livre {
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+  background: var(--bordeaux-f); border: 1px solid rgba(230,200,119,.4);
+  padding: 9px 20px; border-radius: 40px; font-size: .8rem;
+  z-index: 130; opacity: 0; pointer-events: none;
+  transition: opacity .35s ease; max-width: min(520px, 92vw); text-align: center;
+}
+#annonce-livre.visible { opacity: 1; }
+
+/* ---------- chargeur ---------- */
+.chargeur-livre {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: #FFE9C8; font-size: .9rem; letter-spacing: .18em;
+  z-index: 1;
+}
+
+/* ---------- chute douce des pétales ---------- */
+.petal-livre { position: fixed; top: -10vh; border-radius: 60% 0 60% 0; background: radial-gradient(circle at 32% 32%, #F4C7D3, #E8B4C2); opacity: .35; pointer-events: none; z-index: 1; animation: chute-livre linear infinite; }
+@keyframes chute-livre { to { transform: translateY(115vh) translateX(12vw) rotate(460deg); } }
+
+/* ---------- dégradation honnête (CDN indisponible) ---------- */
+.repli-livre {
+  background: var(--ivoire); border-radius: 4px;
+  box-shadow: var(--ombre-page);
+  max-width: 560px; margin: 0 auto; padding: 34px 28px;
+  text-align: center;
+}
+.repli-livre h3 { font-family: var(--titre); color: var(--bordeaux); margin-bottom: 10px; }
+.repli-livre p { font-size: .86rem; color: var(--doux); line-height: 1.6; margin-bottom: 14px; }
+.repli-livre .btn {
+  border: 1px solid var(--dore); background: var(--blanc); color: var(--bordeaux);
+  border-radius: 40px; padding: 8px 16px; cursor: pointer;
+  font-family: var(--texte); font-size: .78rem;
+  transition: background .2s ease, color .2s ease;
+}
+.repli-livre .btn:hover { background: var(--dore); color: #fff; }
+
+@media (max-width: 640px) {
+  body { padding: 18px 8px 90px; }
+  .livre-lecteur { height: min(70vh, 620px); }
+  .page-du-livre { padding: 20px 14px; }
+  .page-photo { padding: 14px 10px 40px; }
+  .page-pleine .legende-doree { font-size: .7rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .petal-livre { display: none; }
+  * { transition: none !important; }
+}
