@@ -3,8 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#6B1F2A">
 <title>Bosseno Josiane &amp; Olakiba Armand — Souvenirs de notre mariage</title>
 <meta name="description" content="Album numérique du mariage de Bosseno Josiane et Olakiba Armand — les 10 et 12 décembre 2026 à Brazzaville (Kintélé, Talangaï), Congo.">
+<link rel="icon" href="icons/app-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/app-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=Inter:wght@300;400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -75,6 +78,8 @@
 
     <a id="bouton-decouvrir" href="#histoire">Découvrir notre histoire</a>
     <a id="bouton-infos" href="#infos-mariage">Informations du mariage</a>
+    <button id="installer-application" class="bouton-installation" type="button" hidden>&#8595; Installer l’album sur Android</button>
+    <p id="installation-message" class="installation-message" role="status" aria-live="polite" hidden></p>
   </div>
 </header>
 
@@ -425,6 +430,14 @@
 </div>
 
 <script src="galerie.js"></script>
+<script>
+  if (window.REGLAGES && window.REGLAGES.installationApp === true) {
+    var manifestLien = document.createElement('link');
+    manifestLien.rel = 'manifest';
+    manifestLien.href = 'manifest.webmanifest';
+    document.head.appendChild(manifestLien);
+  }
+</script>
 <script src="intelligence.js"></script>
 <script src="souvenirs.js"></script>
 <script src="script.js"></script>

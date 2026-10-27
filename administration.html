@@ -580,6 +580,14 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
       <p class="descr">Le fichier par défaut se place dans <code>audio/musique.mp3</code> (puis export). Les invités peuvent toujours choisir leur propre musique avec le bouton ♪ du site — et la lecture ne démarre jamais toute seule.</p>
     </div>
     <div class="carte">
+      <h2>Application Android</h2>
+      <label style="display:flex;align-items:center;gap:10px;font-weight:600">
+        <input type="checkbox" id="app-installation-active" style="width:20px;height:20px">
+        Afficher le bouton « Installer l’album » aux visiteurs Android
+      </label>
+      <p class="descr" style="margin-top:10px">L’album s’installe depuis Chrome comme une application web (PWA), sans Play Store ni APK. Ce réglage est désactivé par défaut. Après l’avoir modifié, téléchargez <code>galerie.js</code> dans « Exporter tous les réglages », remplacez le fichier du site et publiez la mise à jour. Le bouton n’apparaîtra que si le navigateur Android propose l’installation.</p>
+    </div>
+    <div class="carte">
       <h2>Cadenas de l'administration</h2>
       <p class="descr">Change ici le mot de passe qui protège cette page. Il te faudra d'abord votre mot de passe <b>actuel</b>, puis télécharger le nouveau <code>acces-config.js</code> et remplacer l'ancien fichier dans le dossier du site (et le repousser sur GitHub). Rien n'est envoyé sur internet.</p>
       <div class="deux-cols">
@@ -1467,6 +1475,12 @@ window.__demarrerAdmin = function () {
     REG.dateMariage = this.value + ':00';
     rafraichirDashboard();
     floater('Date enregistrée localement — exportez galerie.js puis publiez.');
+  });
+
+  $('#app-installation-active').checked = REG.installationApp === true;
+  $('#app-installation-active').addEventListener('change', function () {
+    REG.installationApp = this.checked;
+    floater((this.checked ? 'Bouton d’installation activé' : 'Bouton d’installation masqué') + ' — exportez galerie.js puis publiez pour appliquer le réglage aux visiteurs.');
   });
 
   /* ========== COULEURS (aperçu en direct) ========== */

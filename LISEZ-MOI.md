@@ -12,6 +12,7 @@ Album numérique du mariage de **Bosseno Josiane** & **Olakiba Armand** — cél
 | `style.css` | Toute la mise en forme (couleurs, formes, animations) |
 | `script.js` | Les fonctionnalités (galerie, visionneuse, filtres, compte à rebours) |
 | `galerie.js` | **La liste de vos photos** — le seul fichier à modifier pour ajouter des images |
+| `manifest.webmanifest`, `service-worker.js`, `icons/` | Installation Android comme application web (PWA) |
 | `studio.html` | Atelier local : ajouter des photos depuis cet ordinateur, sans coder |
 | `images/portraits/` | Les portraits des mariés (Armand, Josiane) |
 | `images/galerie/` | **Vos photos de souvenirs** (dossier à remplir) |
@@ -28,6 +29,17 @@ sur ordinateur comme sur téléphone.
 
 L'écran d'accueil apparaît : cliquez sur **« Découvrir nos souvenirs »**.
 La vidéo d'accueil démarre alors et vous faites défiler les sections.
+
+### Installer l’album sur Android
+
+Dans Chrome sur Android, le bouton d’installation peut être activé dans
+**Administration → Réglages & couleurs → Application Android**. Cochez
+l’option, téléchargez ensuite `galerie.js` via **« Télécharger galerie.js mis
+à jour »**, remplacez le fichier du site et publiez cette mise à jour. Le
+bouton n’est proposé que lorsque Chrome autorise l’installation. Il s’agit
+d’une application web installable (PWA), pas d’un APK ni d’une application
+publiée sur le Play Store. Pour masquer le bouton, décochez l’option et
+publiez de nouveau `galerie.js`.
 
 ---
 

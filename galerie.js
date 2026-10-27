@@ -46,6 +46,9 @@ window.REGLAGES = {
   /* Nom affiché dans les messages du livre d'or */
   mariage: 'Bosseno Josiane et Olakiba Armand',
 
+  /* Bouton d'installation Android (activer dans l'administration puis exporter ce fichier) */
+  installationApp: false,
+
   /* LIVRE DES SOUVIENS — photos chargées automatiquement.
      Le livre utilise images/photo-01.jpg … photo-44.jpg (sauf la 14) ;
      si un fichier photo-XX.jpg manque, il reprend images/galerie/studio-XX.jpg. */

@@ -1,0 +1,27 @@
+{
+  "id": "./",
+  "name": "Souvenirs de mariage — Josiane & Armand",
+  "short_name": "Josiane & Armand",
+  "description": "L’album souvenir du mariage de Bosseno Josiane et Olakiba Armand.",
+  "lang": "fr",
+  "start_url": "./index.html?source=application",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#6B1F2A",
+  "theme_color": "#6B1F2A",
+  "icons": [
+    {
+      "src": "./icons/app-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/app-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

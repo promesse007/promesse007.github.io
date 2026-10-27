@@ -1049,6 +1049,20 @@ img {
   background: rgba(255, 252, 248, .88);
   border-bottom: 1px solid rgba(200, 169, 107, .25);
 }
+.bouton-installation {
+  margin: 12px auto 0;
+  padding: 12px 20px;
+  min-height: 46px;
+  border: 1px solid rgba(230, 200, 119, .8);
+  border-radius: 999px;
+  background: rgba(255, 253, 250, .12);
+  color: #FFF8EC;
+  font: 600 .9rem var(--texte);
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease;
+}
+.bouton-installation:hover { background: rgba(255, 253, 250, .22); transform: translateY(-1px); }
+.installation-message { margin: 8px auto 0; max-width: 36rem; color: #FFF8EC; font-size: .82rem; line-height: 1.5; }
 #navigation ul { padding: 8px 16px; gap: 2px 4px; }
 #navigation a {
   position: relative;

@@ -20,6 +20,61 @@
     return 'Souvenirs';
   }
 
+  /* ---------- Installation Android (PWA), désactivée par défaut ---------- */
+  (function installationApplication() {
+    var bouton = $('#installer-application');
+    var message = $('#installation-message');
+    if (!bouton) return;
+
+    var autorisee = REG.installationApp === true;
+    var inviteInstallation = null;
+    var dejaInstallee = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+    var android = /Android/i.test(navigator.userAgent || '');
+    if (window.navigator.standalone) dejaInstallee = true;
+    if (!autorisee || dejaInstallee || !android) return;
+
+    bouton.hidden = false;
+
+    if ('serviceWorker' in navigator && window.isSecureContext) {
+      navigator.serviceWorker.register('./service-worker.js').catch(function () {});
+    }
+
+    window.addEventListener('beforeinstallprompt', function (evenement) {
+      evenement.preventDefault();
+      inviteInstallation = evenement;
+      bouton.hidden = false;
+    });
+
+    bouton.addEventListener('click', function () {
+      if (!inviteInstallation) {
+        if (message) {
+          message.textContent = 'Ouvrez ce site dans Chrome sur Android, puis choisissez « Installer l’application » dans le menu du navigateur.';
+          message.hidden = false;
+        }
+        return;
+      }
+      inviteInstallation.prompt().then(function () {
+        return inviteInstallation.userChoice;
+      }).then(function (choix) {
+        inviteInstallation = null;
+        if (choix && choix.outcome === 'accepted') {
+          bouton.hidden = true;
+          if (message) {
+            message.textContent = 'Installation lancée. Retrouvez l’album sur votre écran d’accueil.';
+            message.hidden = false;
+          }
+        }
+      }).catch(function () {
+        inviteInstallation = null;
+      });
+    });
+
+    window.addEventListener('appinstalled', function () {
+      bouton.hidden = true;
+      if (message) message.hidden = true;
+    });
+  })();
+
   /* ==========================================================
      1. ÉCRAN D'OUVERTURE + LANCEMENT DE LA VIDÉO
      ========================================================== */
