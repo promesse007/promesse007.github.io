@@ -1256,6 +1256,11 @@ html[data-theme="bordeaux"] #accueil::after {
   .accueil-phrase { max-width: 44rem; margin-right: auto; margin-left: auto; }
 }
 
+@media (min-width: 681px) and (max-width: 900px) {
+  #navigation ul { justify-content: center; overflow-x: hidden; }
+  #navigation a { padding: 8px 6px; font-size: .62rem; letter-spacing: .035em; }
+}
+
 @media (max-width: 680px) {
   #navigation ul { padding: 7px 8px; gap: 2px; }
   #navigation a { padding: 9px 10px; font-size: .66rem; letter-spacing: .06em; }
