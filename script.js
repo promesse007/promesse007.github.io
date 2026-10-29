@@ -577,15 +577,6 @@
       zoneFiltres.appendChild(b);
     });
 
-    /* --- bouton ajouter des photos --- */
-    var ajouter = document.createElement('button');
-    ajouter.className = 'filtre-ajout';
-    ajouter.type = 'button';
-    ajouter.title = 'Choisir des photo(s) depuis cet appareil : l\'assistant intelligent les range automatiquement dans une catégorie.';
-    ajouter.textContent = '+ Ajouter des photos';
-    ajouter.addEventListener('click', choisirDesPhotos);
-    zoneFiltres.appendChild(ajouter);
-
     zoneFiltres.addEventListener('click', function (e) {
       var b = e.target.closest('.filtre');
       if (!b) return;
