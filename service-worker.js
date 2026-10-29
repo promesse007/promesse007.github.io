@@ -5,7 +5,7 @@ var CACHE_NAME = 'album-josiane-armand-v3';
 var APP_FILES = [
   './',
   './index.html',
-  './style.css',
+  './style.css?v=responsive-2026-10',
   './galerie.js',
   './site-content.js',
   './intelligence.js',
