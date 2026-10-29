@@ -1076,8 +1076,6 @@ img {
   color: #fff;
   background: linear-gradient(135deg, var(--rose-profond), var(--bordeaux-f));
 }
-#navigation .lien-pro a { opacity: .62; font-size: .68rem; }
-#navigation .lien-pro a:hover { opacity: 1; background: var(--rose-ivoire); color: var(--rose-profond); }
 
 /* ---------- Accueil : photo romantique + voile tendre ---------- */
 #accueil {

@@ -378,7 +378,7 @@
     txt.style.marginTop = '8px';
     txt.innerHTML = chemin
       ? 'Photo introuvable<br><code>' + chemin + '</code>'
-      : 'Photo à venir<br><span style="opacity:.75">à ajouter dans galerie.js</span>';
+      : 'Photo à venir, très bientôt';
     cadre.appendChild(icone);
     cadre.appendChild(txt);
   }
@@ -865,8 +865,7 @@
         vide.className = 'galerie-vide';
         vide.style.columnSpan = 'all';
         vide.innerHTML = '<div class="grand">👨‍👩‍👧‍👦</div><p>Les photos de ce groupe apparaîtront ici.</p>' +
-          '<p style="margin-top:10px">Ajoutez vos images avec <code>studio.html</code> en choisissant la catégorie « ' +
-          nomCategorie(bloc.categorie) + ' ».</p>';
+          '<p style="margin-top:10px">Merci pour votre patience — le carnet se complète au fil des souvenirs.</p>';
         grille.appendChild(vide);
       }
       section.appendChild(grille);
