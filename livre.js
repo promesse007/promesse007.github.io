@@ -288,6 +288,9 @@
 
   /* ---- chapitres ---- */
   LIVRE.chapitres.forEach(function (ch) {
+    /* Le dernier chapitre est assemblé à part après les autres, juste avant
+       le livre d'or : il ne faut pas créer ici une seconde page d'introduction. */
+    if (ch.num === 'VI') return;
     var cible;                                    /* position de la 1re page du chapitre */
     var liste = ch.photos.slice();                /* copie de travail (on peut retirer la photo d'ouverture) */
 
@@ -339,6 +342,11 @@
     pageNumero(pt, pt._pos);
     SommairePos.items.push({ num: chVI.num, titre: chVI.titre, cible: cibleVI });
     cibles[chVI.num] = cibleVI;
+    chVI.photos.forEach(function (ph) {
+      var pleine = ph.pleine || (REG.pleines && REG.pleines.indexOf(ph.n) !== -1);
+      if (pleine) pagePleine(ph.n, ph.legende, 'Chapitre ' + chVI.num + ' — ' + chVI.titre);
+      else pagePhoto(ph);
+    });
     pageLivreDor();
   }
 
