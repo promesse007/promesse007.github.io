@@ -184,12 +184,8 @@ window.PHOTOS = [
 
   /* ----- Les photos de groupe ----- */
   { src: 'images/galerie/studio-42.webp', cat: 'groupe',    legende: "La famille réunie pour la séance photo" },
-  { src: 'images/galerie/studio-43.webp', cat: 'groupe',    legende: "La famille réunie — séance de groupe" },
+  { src: 'images/galerie/studio-43.webp', cat: 'groupe',    legende: "La famille réunie — séance de groupe" }
 
-  /* ----- Invitation ----- */
-  { src: 'images/affiche.webp',           cat: 'civil',     legende: "Notre invitation de mariage" }
 ];
 
-/* Pour ajouter d'autres photos plus tard, copiez ce modèle dans la liste ci-dessus :
-{ src: 'images/galerie/ma-photo.jpg', cat: 'preparatifs', legende: 'Ma légende' },
-*/
+/* Les photos sont ajoutées par le propriétaire depuis l'administration. */
