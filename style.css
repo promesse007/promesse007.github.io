@@ -1238,3 +1238,49 @@ html[data-theme="bordeaux"] #accueil::before,
 html[data-theme="bordeaux"] #accueil::after {
   border-color: rgba(201, 162, 39, .35);
 }
+
+/* ---------- Ajustements tablette et téléphone ---------- */
+@media (max-width: 900px) {
+  #navigation ul {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    white-space: nowrap;
+  }
+  #navigation ul::-webkit-scrollbar { display: none; }
+  #navigation a { padding: 9px 12px; font-size: .7rem; }
+  #accueil { background-attachment: scroll; }
+  .accueil-interne h1 { font-size: clamp(2.8rem, 8.5vw, 4.8rem); }
+  .accueil-phrase { max-width: 44rem; margin-right: auto; margin-left: auto; }
+}
+
+@media (max-width: 680px) {
+  #navigation ul { padding: 7px 8px; gap: 2px; }
+  #navigation a { padding: 9px 10px; font-size: .66rem; letter-spacing: .06em; }
+  #accueil { min-height: min(760px, 88svh); padding: 72px 18px 48px; }
+  .accueil-interne .petit { font-size: .64rem; letter-spacing: .2em; }
+  .accueil-interne h1 { font-size: clamp(2.7rem, 10vw, 4rem); line-height: 1.08; }
+  .accueil-phrase { font-size: clamp(1rem, 4.5vw, 1.25rem); line-height: 1.5; }
+  .accueil-infos { gap: 10px 16px; }
+  #bouton-decouvrir, #bouton-infos { padding: 14px 22px; font-size: .72rem; letter-spacing: .12em; }
+  section.zone { padding: 54px 16px; }
+  .recit-bloc { padding: 16px; gap: 18px; }
+  .grille-album { columns: 150px 2; column-gap: 10px; }
+  .vignette { margin-bottom: 10px; padding: 4px; }
+  .grille-souvenirs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .cadre-souvenirs, .cadre-livre { padding: 18px 14px; }
+  .deux-champs-souvenirs { grid-template-columns: 1fr; }
+  #panneau-reglages { right: 10px; bottom: 130px; width: min(340px, calc(100vw - 20px)); max-height: 70svh; }
+  #bouton-haut { left: 12px; bottom: 12px; }
+  #musique { right: 12px; bottom: 12px; }
+  #reglages { right: 14px; bottom: 72px; }
+}
+
+@media (max-width: 380px) {
+  .grille-album { columns: 1; }
+  .grille-souvenirs { grid-template-columns: 1fr; }
+  .accueil-interne h1 { font-size: clamp(2.45rem, 11vw, 3.2rem); }
+  #bouton-decouvrir, #bouton-infos { display: block; width: 100%; margin: 12px 0 0; }
+}
