@@ -11,6 +11,10 @@
 // • GET  /admin/souvenirs            — tout, y compris « attente » (admin)
 // • POST /admin/souvenirs/:id/publier — modération
 // • POST /admin/souvenirs/:id/refuser — modération (supprime le souvenir)
+// • GET  /contenu                    — configuration publique du site
+// • GET/PUT /admin/contenu           — lecture et enregistrement en ligne (admin)
+// • POST /admin/media                — téléversement d'une photo du site (admin)
+// • GET  /media/:id                  — image publique gérée dans l'admin
 //
 // L'administrateur s'authentifie avec l'en-tête X-Admin-Cle
 // (la clé ADMIN_SECRET — jamais écrite dans le site public).
@@ -33,13 +37,35 @@ const MIME_OK = new Set(["image/jpeg", "image/png", "image/webp"]);
 function cors() {
   return {
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, X-Admin-Cle",
     "Access-Control-Max-Age": "86400",
   };
 }
 
 const app = new Hono();
+
+const MAX_CONTENU = 3 * 1024 * 1024;
+const MAX_MEDIA = 8 * 1024 * 1024;
+const MEDIA_MIME_OK = new Set(["image/jpeg", "image/png", "image/webp"]);
+
+function uuidValide(id: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
+}
+
+/* Liste les médias réellement référencés dans le contenu (source de vérité). */
+function collecterMediaIds(noeud: unknown, vus: Set<string>): void {
+  if (typeof noeud === "string") {
+    const m = noeud.match(/\/media\/([0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})/i);
+    if (m) vus.add(m[1]);
+  } else if (Array.isArray(noeud)) {
+    noeud.forEach((x) => collecterMediaIds(x, vus));
+  } else if (noeud && typeof noeud === "object") {
+    for (const valeur of Object.values(noeud as Record<string, unknown>)) {
+      collecterMediaIds(valeur, vus);
+    }
+  }
+}
 
 app.use("*", async (c, next) => {
   if (c.req.method === "OPTIONS") {
@@ -210,6 +236,109 @@ app.post("/admin/souvenirs/:id/refuser", async (c) =>
     return c.json({ ok: true, statut: "refuse" });
   })
 );
+
+/* ============ Contenu éditorial en ligne ============ */
+app.get("/contenu", async (c) => {
+  const r = await pool.query(`select payload from site_content where singleton = true`);
+  if (!r.rows.length) return c.json(null);
+  const publicPayload = { ...r.rows[0].payload };
+  // La liste d'invités ne sort jamais de la route protégée.
+  delete publicPayload.invites;
+  return c.json(publicPayload, 200, { "Cache-Control": "no-store" });
+});
+
+app.get("/admin/contenu", async (c) =>
+  gardeAdmin(c, async () => {
+    const r = await pool.query(`select payload, updated_at from site_content where singleton = true`);
+    return c.json(r.rows[0] || { payload: null, updated_at: null });
+  })
+);
+
+app.put("/admin/contenu", async (c) =>
+  gardeAdmin(c, async () => {
+    const taille = Number(c.req.raw.headers.get("content-length") || "0");
+    if (taille > MAX_CONTENU) return c.json({ erreur: "Le contenu dépasse la taille autorisée." }, 413);
+
+    let entree: any;
+    try {
+      entree = await c.req.json();
+    } catch {
+      return c.json({ erreur: "Données illisibles." }, 400);
+    }
+    const payload = entree && entree.payload;
+    if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+      return c.json({ erreur: "Configuration du site invalide." }, 400);
+    }
+    // La liste d'invités reste privée (localStorage) : jamais enregistrée ici.
+    delete payload.invites;
+    if (Buffer.byteLength(JSON.stringify(payload), "utf8") > MAX_CONTENU) {
+      return c.json({ erreur: "Le contenu dépasse la taille autorisée." }, 413);
+    }
+    const vusMedias = new Set<string>();
+    collecterMediaIds(payload, vusMedias);
+    const assets: string[] = Array.from(vusMedias);
+    if (assets.length > 500) return c.json({ erreur: "Trop de photos dans la configuration." }, 400);
+    payload.assets = assets;
+
+    const actuel = await pool.query(`select payload from site_content where singleton = true`);
+    const anciens: string[] = Array.isArray(actuel.rows[0]?.payload?.assets)
+      ? actuel.rows[0].payload.assets.filter((id: any) => typeof id === "string" && uuidValide(id))
+      : [];
+
+    await pool.query(
+      `insert into site_content (singleton, payload, updated_at)
+       values (true, $1::jsonb, now())
+       on conflict (singleton) do update set payload = excluded.payload, updated_at = now()`,
+      [JSON.stringify(payload)]
+    );
+
+    const supprimes = anciens.filter((id) => !assets.includes(id));
+    if (supprimes.length) {
+      await pool.query(`delete from site_assets where id = any($1::uuid[])`, [supprimes]);
+    }
+    return c.json({ ok: true, updated_at: new Date().toISOString(), photos_supprimees: supprimes.length });
+  })
+);
+
+/* ============ Photos ajoutées dans l'administration ============ */
+app.post("/admin/media", async (c) =>
+  gardeAdmin(c, async () => {
+    let formulaire: Record<string, any>;
+    try {
+      formulaire = await c.req.parseBody();
+    } catch {
+      return c.json({ erreur: "Fichier illisible." }, 400);
+    }
+    const fichier = formulaire.fichier;
+    if (!fichier || typeof fichier !== "object" || !("arrayBuffer" in fichier)) {
+      return c.json({ erreur: "Choisissez une image à envoyer." }, 400);
+    }
+    const mime = String((fichier as any).type || "").toLowerCase();
+    if (!MEDIA_MIME_OK.has(mime)) return c.json({ erreur: "Format accepté : JPEG, PNG ou WebP." }, 415);
+    const donnees = Buffer.from(await (fichier as any).arrayBuffer());
+    if (!donnees.length) return c.json({ erreur: "Le fichier est vide." }, 400);
+    if (donnees.length > MAX_MEDIA) return c.json({ erreur: "Image trop volumineuse (8 Mo maximum)." }, 413);
+    const nom = String(formulaire.nom || "photo.jpg").replace(/[^a-z0-9._-]/gi, "_").slice(0, 120) || "photo.jpg";
+    const r = await pool.query(
+      `insert into site_assets (file_name, mime_type, file_data) values ($1, $2, $3) returning id`,
+      [nom, mime, donnees]
+    );
+    return c.json({ ok: true, id: r.rows[0].id }, 201);
+  })
+);
+
+app.get("/media/:id", async (c) => {
+  const id = c.req.param("id");
+  if (!uuidValide(id)) return c.text("Identifiant invalide.", 400);
+  const r = await pool.query(`select mime_type, file_data from site_assets where id = $1`, [id]);
+  if (!r.rows.length) return c.text("Photo introuvable.", 404);
+  return c.body(new Uint8Array(r.rows[0].file_data), 200, {
+    ...cors(),
+    "Content-Type": r.rows[0].mime_type,
+    "Cache-Control": "public, max-age=3600, immutable",
+    "X-Content-Type-Options": "nosniff",
+  });
+});
 
 /* ============ Santé ============ */
 app.get("/", (c) => c.text("API des souvenirs — Bosseno Josiane & Olakiba Armand ♥"));

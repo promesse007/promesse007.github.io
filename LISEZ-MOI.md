@@ -51,6 +51,27 @@ publiez de nouveau `galerie.js`.
 > automatiquement la bonne date** — et la catégorie. Le souvenir porte
 > alors sa date et son moment avec lui.
 
+## 🌍 Enregistrer en ligne (nouveau) — tout le contenu sans repartir
+
+Depuis l'administration, un bouton **« 💾 Enregistrer en ligne »** publie
+d'un seul geste : les textes de l'histoire, les réglages (date, noms,
+musique…), les catégories, les photos, les textes du livre et le thème de
+couleurs.
+
+- Rien à redéployer : le site lit le contenu en ligne à chaque visite.
+- Dans les cartes « photos déjà publiées », un bouton
+  **« Envoyer en ligne »** téléverse l'image directement dans la base
+  (JPEG, PNG ou WebP, 8 Mo maximum) ; la photo redevenant absente de la
+  liste est supprimée automatiquement du stockage en ligne.
+- À l'ouverture, l'administration **se charge du contenu en ligne** quand
+  une clé est enregistrée : vos modifications partent toujours de la
+  version publiée, quel que soit l'appareil utilisé.
+- Les exports (`galerie.js`, `livre-data.js`) restent utiles comme
+  **repli** : si l'appareil d'un visiteur n'a pas d'accès à la base, le
+  site affiche le contenu embarqué dans les fichiers.
+- Tant que rien n'a été enregistré en ligne, le site utilise le repli —
+  rien ne change pour ces visites.
+
 ## 💬 Souvenirs des invités en ligne (modéré par vous)
 
 Section « **Souvenirs** » du site public : chaque invité peut déposer une

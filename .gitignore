@@ -6,7 +6,12 @@ correspondance-photos-studio.txt
 Thumbs.db
 desktop.ini
 .env
+.env.*
 node_modules
 .neon
-.neon
 CLE-MODERATION.txt
+
+# essais et outils locaux
+essai-admin-live.cjs
+serveur-local.cjs
+optimize-images.cjs

@@ -9,6 +9,9 @@
 (function () {
   'use strict';
 
+  /* Démarrage différé : le contenu du livre peut venir de la base en ligne. */
+  function demarrer() {
+
   var $  = function (s) { return document.querySelector(s); };
   var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
 
@@ -606,4 +609,10 @@
      8. DÉMARRAGE
      ========================================================== */
   if (!initStPageFlip()) initRepli();
+  } /* fin demarrer */
+
+  var attendre = (window.SiteContent && window.SiteContent.ready)
+    ? window.SiteContent.ready
+    : Promise.resolve();
+  attendre.then(function () { demarrer(); });
 })();

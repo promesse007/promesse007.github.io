@@ -280,6 +280,7 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
     </ul>
   </nav>
   <div class="bloc-retour"><a href="index.html">&#8592; Voir le site</a></div>
+  <div class="bloc-verrou"><button type="button" id="btn-sauver-ligne">&#128190; Enregistrer en ligne</button></div>
   <div class="bloc-verrou"><button type="button" id="btn-verrouiller">&#128274; Verrouiller</button></div>
 </aside>
 
@@ -611,6 +612,7 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
 <script src="livre-data.js"></script>
 <script src="acces-admin.js"></script>
 <script src="acces-config.js"></script>
+<script src="site-content.js"></script>
 <script>
 /* Toute la logique de l'administration est enfermée dans __demarrerAdmin :
    elle ne démarre QUE quand le cadenas a déverrouillé l'accès. */
@@ -823,6 +825,38 @@ window.__demarrerAdmin = function () {
     });
     pied.appendChild(sel);
 
+    if (locale) {
+      var enLigne = document.createElement('button');
+      enLigne.className = 'btn secondaire mini';
+      enLigne.textContent = 'Envoyer en ligne';
+      enLigne.style.marginRight = '6px';
+      enLigne.addEventListener('click', function () {
+        var cle = lireCleModo();
+        if (!cle) {
+          floater('Collez d\u2019abord votre clé dans « Souvenirs des invités » pour publier les photos.', 6000);
+          return;
+        }
+        enLigne.disabled = true;
+        window.SiteContent.uploadPhoto(p.src, p.nom || 'photo.jpg', cle)
+          .then(function (url) {
+            PHOTOS.push({
+              src: url,
+              cat: p.cat || 'meilleurs',
+              legende: p.legende || '',
+              moment: p.moment || '',
+              datePrise: p.datePrise || ''
+            });
+            rendPhotosPubliees();
+            floater('Photo ajoutée au contenu — cliquez sur « Enregistrer en ligne » pour la publier.', 7000);
+          })
+          .catch(function (e) {
+            floater('Échec de l\u2019envoi : ' + (e && e.message ? e.message : 'connexion impossible') + '.', 6000);
+          })
+          .then(function () { enLigne.disabled = false; });
+      });
+      pied.appendChild(enLigne);
+    }
+
     var sup = document.createElement('button');
     sup.className = 'btn dangereux mini';
     sup.textContent = 'Supprimer';
@@ -840,9 +874,9 @@ window.__demarrerAdmin = function () {
         });
       } else {
         PHOTOS = PHOTOS.filter(function (x) { return x !== p; });
-        floater('Retirée de la liste — pensez à télécharger le galerie.js mis à jour.');
         rendPhotosPubliees();
         rafraichirDashboard();
+        floater('Retirée de la liste — cliquez sur « Enregistrer en ligne » pour l\u2019effacer du site, ou exportez galerie.js.', 7000);
       }
     });
     pied.appendChild(sup);
@@ -1651,6 +1685,115 @@ window.__demarrerAdmin = function () {
   rendInvites();
   rendLivreSouvenirs();
   rafraichirDashboard();
+
+  /* ========== CONTENU EN LIGNE : CHARGEMENT À L'OUVERTURE ==========
+     Si une clé d'administration est déjà enregistrée sur cet appareil,
+     l'espace d'édition se charge du contenu en ligne (source officielle)
+     plutôt que du contenu local : modifier + « Enregistrer en ligne »
+     reste fidèle, quel que soit l'appareil utilisé. */
+  function appliquerContenuEnLigne(p) {
+    if (!p || typeof p !== 'object') return false;
+    if (Array.isArray(p.categories) && p.categories.length) {
+      CATS = p.categories.map(function (c) { return JSON.parse(JSON.stringify(c)); });
+    }
+    if (p.settings && typeof p.settings === 'object') {
+      REG = JSON.parse(JSON.stringify(p.settings));
+    }
+    if (Array.isArray(p.history)) {
+      HIST = p.history.map(function (h) { return JSON.parse(JSON.stringify(h)); });
+    }
+    if (Array.isArray(p.photos)) {
+      PHOTOS = p.photos.map(function (x) {
+        if (typeof x === 'string') return { src: x, cat: 'meilleurs', legende: '', moment: '', datePrise: '' };
+        return {
+          src: x.src, cat: x.cat || 'meilleurs',
+          legende: x.legende || '', moment: x.moment || '', datePrise: x.datePrise || ''
+        };
+      });
+    }
+    if (Array.isArray(p.family)) window.FAMILLE = p.family;
+    if (p.book && typeof p.book === 'object') LIV = JSON.parse(JSON.stringify(p.book));
+    if (p.theme && typeof p.theme === 'object' &&
+        typeof p.theme.principale === 'string' && hexValide(p.theme.principale) &&
+        typeof p.theme.accent === 'string' && hexValide(p.theme.accent)) {
+      cVars = {
+        principale: p.theme.principale, accent: p.theme.accent,
+        fond: (p.theme.fond && hexValide(p.theme.fond)) ? p.theme.fond : DEFAUTS.fond,
+        surface: (p.theme.surface && hexValide(p.theme.surface)) ? p.theme.surface : DEFAUTS.surface,
+        texte: (p.theme.texte && hexValide(p.theme.texte)) ? p.theme.texte : DEFAUTS.texte,
+        doux: (p.theme.doux && hexValide(p.theme.doux)) ? p.theme.doux : DEFAUTS.doux
+      };
+      var couleur = ['principale', 'accent', 'fond', 'surface', 'texte', 'doux'];
+      couleur.forEach(function (k) {
+        if ($('#c-' + k)) $('#c-' + k).value = cVars[k];
+        if ($('#t-' + k)) $('#t-' + k).value = cVars[k];
+      });
+      try { appliquerAdmin(); } catch (e) {}
+    }
+    initPhotos();
+    rendHistoire();
+    rendInvites();
+    rendLivreSouvenirs();
+    rafraichirDashboard();
+    return true;
+  }
+
+  function chargerContenuEnLigne() {
+    var cle = lireCleModo();
+    if (!cle || !window.SiteContent || !window.SiteContent.loadAdmin) return;
+    window.SiteContent.loadAdmin(cle)
+      .then(function (p) {
+        var donnees = p && p.payload ? p.payload : p;
+        if (!donnees) return; /* rien encore en ligne : on garde le contenu local */
+        if (appliquerContenuEnLigne(donnees)) {
+          floater('Contenu en ligne chargé — vos modifications partent de la version publiée.', 6000);
+        }
+      })
+      .catch(function () { /* hors ligne ou clé absente : contenu local conservé */ });
+  }
+  setTimeout(chargerContenuEnLigne, 300);
+
+  /* ========== ENREGISTREMENT EN LIGNE ========== */
+  function contenuActuel() {
+    return {
+      categories: CATS,
+      settings: REG,
+      history: HIST,
+      photos: PHOTOS,
+      family: window.FAMILLE || [],
+      book: LIV || null,
+      theme: {
+        principale: cVars.principale, accent: cVars.accent,
+        fond: cVars.fond, surface: cVars.surface,
+        texte: cVars.texte, doux: cVars.doux
+      }
+    };
+  }
+
+  var btnSauverLigne = document.getElementById('btn-sauver-ligne');
+  if (btnSauverLigne) {
+    btnSauverLigne.addEventListener('click', function () {
+      var cle = lireCleModo();
+      if (!cle) {
+        floater('Collez d\u2019abord votre clé dans « Souvenirs des invités », puis réessayez.', 6000);
+        return;
+      }
+      btnSauverLigne.disabled = true;
+      var ancienTexte = btnSauverLigne.textContent;
+      btnSauverLigne.textContent = '\u23F3 Enregistrement…';
+      window.SiteContent.save(contenuActuel(), cle)
+        .then(function () {
+          floater('Contenu enregistré en ligne — les visiteurs le voient dès leur prochaine visite.', 6000);
+        })
+        .catch(function (e) {
+          floater('Échec de l\u2019enregistrement : ' + (e && e.message ? e.message : 'connexion impossible') + '.', 6000);
+        })
+        .then(function () {
+          btnSauverLigne.disabled = false;
+          btnSauverLigne.textContent = ancienTexte;
+        });
+    });
+  }
 };
 </script>
 
@@ -1897,8 +2040,13 @@ window.__demarrerAdmin = function () {
     idTelech.hidden = !idTelech.dataset.empreinte;
     idMessage.textContent = ' ';
     if (message) dire(message);
-    window.__demarrerAdmin();
     window.scrollTo(0, 0);
+    var pretContenu = (window.SiteContent && window.SiteContent.ready)
+      ? window.SiteContent.ready : Promise.resolve();
+    pretContenu.then(function () {
+      window.__demarrerAdmin();
+      window.scrollTo(0, 0);
+    });
   }
   function verrouiller() {
     try { sessionStorage.removeItem('acces-session'); } catch (e) {}

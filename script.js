@@ -6,6 +6,10 @@
 (function () {
   'use strict';
 
+  /* Démarrage différé : attendre le contenu en ligne éventuel avant
+     de lire les listes (CATEGORIES, REGLAGES, PHOTOS, HISTOIRE, FAMILLE). */
+  function demarrer() {
+
   /* ---------- Raccourcis ---------- */
   var REG   = window.REGLAGES   || {};
   var CATS  = window.CATEGORIES || [];
@@ -1040,6 +1044,11 @@
       var img = new Image();
       img.onload = function () { resoudre(img); };
       img.onerror = rejeter;
+      /* les photos gérées en ligne viennent d'un autre domaine :
+         CORS autorisé par l'API, sinon le film ne s'enregistre pas */
+      if (/^https?:\/\//i.test(src) && location.origin && src.indexOf(location.origin) !== 0) {
+        img.crossOrigin = 'anonymous';
+      }
       img.src = src;
     });
   }
@@ -1471,4 +1480,10 @@
   rafraichirAlbum();
   initFilm();
 
+  } /* fin demarrer */
+
+  var attendre = (window.SiteContent && window.SiteContent.ready)
+    ? window.SiteContent.ready
+    : Promise.resolve();
+  attendre.then(function () { demarrer(); });
 })();
