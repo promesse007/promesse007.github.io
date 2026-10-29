@@ -10,20 +10,7 @@
      de lire les listes (CATEGORIES, REGLAGES, PHOTOS, HISTOIRE, FAMILLE). */
   function demarrer() {
 
-  /* ---------- Menu hamburger ---------- */
-(function () {
-  'use strict';
-  var menuHamburger = document.getElementById('menu-hamburger');
-  var navigationUl = document.getElementById('navigation').querySelector('ul');
-  if (menuHamburger && navigationUl) {
-    menuHamburger.addEventListener('click', function () {
-      navigationUl.classList.toggle('ouvert');
-    });
-  }
-})();
-
-/* Démarrage différé : attendre le contenu en ligne éventuel avant
-   de lire les listes (CATEGORIES, REGLAGES, PHOTOS, HISTOIRE, FAMILLE). */
+  /* ---------- Raccourcis ---------- */
   var REG   = window.REGLAGES   || {};
   var CATS  = window.CATEGORIES || [];
   var PHOTOS= window.PHOTOS     || [];
