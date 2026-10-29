@@ -367,8 +367,8 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
       </div>
     </div>
     <div class="carte">
-      <h2>Photos publiées (galerie.js)</h2>
-      <p class="descr">Modifiez la légende ou la catégorie, supprimez avec confirmation, puis téléchargez le fichier mis à jour tout en bas.</p>
+      <h2>Photos publiées</h2>
+      <p class="descr">La suppression est envoyée immédiatement au site si votre clé est enregistrée dans « Souvenirs des invités ». Sans clé, la photo est seulement retirée de cette page : ajoutez la clé puis utilisez « Enregistrer en ligne ».</p>
       <div class="deux-cols">
         <div>
           <label>Filtrer par catégorie</label>
@@ -387,9 +387,9 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
       <div class="photos-admin" id="liste-locales"></div>
     </div>
     <div class="carte">
-      <h2>Télécharger la version mise à jour</h2>
-      <p class="descr">Après vos modifications, téléchargez le nouveau <code>galerie.js</code>, remplacez l'ancien dans le dossier du site, puis repoussez sur GitHub (le site en ligne se met à jour tout seul).</p>
-      <button class="btn fonce" id="adm-exporter">&#8679; Télécharger galerie.js mis à jour</button>
+      <h2>Copie de secours hors ligne</h2>
+      <p class="descr">L’enregistrement en ligne suffit pour mettre à jour le site et le livre. Cet export <code>galerie.js</code> ne sert que de copie de secours pour le contenu statique hors ligne.</p>
+      <button class="btn fonce" id="adm-exporter">&#8679; Télécharger la copie de secours galerie.js</button>
     </div>
   </section>
 
@@ -574,7 +574,7 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
         <button class="btn principal" id="couleurs-enregistrer">&#128190; Enregistrer les modifications</button>
         <button class="btn dangereux" id="couleurs-restaurer" style="margin-left:8px">Restaurer le thème par défaut</button>
       </div>
-      <p class="descr" style="margin-top:10px">« Enregistrer » garde les couleurs sur cet appareil — le site les applique dès la prochaine visite. « Restaurer » remet « Sakura &amp; or doux ».</p>
+      <p class="descr" style="margin-top:10px">« Enregistrer » publie la palette sur le site et dans le livre des souvenirs. Une clé d’administration est nécessaire. « Restaurer » remet « Sakura &amp; or doux ».</p>
     </div>
     <div class="carte">
       <h2>Musique</h2>
@@ -876,7 +876,11 @@ window.__demarrerAdmin = function () {
         PHOTOS = PHOTOS.filter(function (x) { return x !== p; });
         rendPhotosPubliees();
         rafraichirDashboard();
-        floater('Retirée de la liste — cliquez sur « Enregistrer en ligne » pour l\u2019effacer du site, ou exportez galerie.js.', 7000);
+        if (lireCleModo()) {
+          enregistrerContenuEnLigne('Photo supprimée du site pour tous les visiteurs.');
+        } else {
+          floater('Photo retirée ici, mais pas encore du site : ajoutez votre clé dans « Souvenirs des invités », puis enregistrez en ligne.', 7000);
+        }
       }
     });
     pied.appendChild(sup);
@@ -1568,6 +1572,7 @@ window.__demarrerAdmin = function () {
     var courant = getComputedStyle(document.documentElement).getPropertyValue(paire[1]).trim();
     ci.value = hexValide(courant) ? courant : DEFAUTS[cle];
     ti.value = ci.value;
+    cVars[cle] = ci.value;
     function maj(val) {
       if (!hexValide(val)) return;
       cVars[cle] = val;
@@ -1645,8 +1650,9 @@ window.__demarrerAdmin = function () {
       final[k] = v;
     });
     if (Object.keys(final).length === 6) {
+      cVars = JSON.parse(JSON.stringify(final));
       ecrireTheme(final);
-      floater('Couleurs enregistrées ✓ — le site les appliquera à la prochaine visite.');
+      enregistrerContenuEnLigne('Palette enregistrée en ligne — le site et le livre l’appliqueront à la prochaine visite.');
     }
   });
   $('#couleurs-restaurer').addEventListener('click', function () {
@@ -1661,7 +1667,8 @@ window.__demarrerAdmin = function () {
       localStorage.removeItem('theme-perso');
       localStorage.removeItem('theme-etendu');
     } catch (e) {}
-    floater('Thème par défaut restauré (Sakura & or doux).');
+    floater('Thème Sakura & or doux restauré en aperçu. Enregistrement en ligne…');
+    enregistrerContenuEnLigne('Thème Sakura & or doux restauré sur le site et dans le livre.');
   });
 
   /* si des couleurs étendues avaient été enregistrées : les recharger ici */
@@ -1770,28 +1777,43 @@ window.__demarrerAdmin = function () {
     };
   }
 
+  function enregistrerContenuEnLigne(messageSucces) {
+    var cle = lireCleModo();
+    if (!cle) {
+      floater('Collez d’abord votre clé dans « Souvenirs des invités » pour publier les changements.', 6000);
+      return Promise.resolve(false);
+    }
+    if (!window.SiteContent || !window.SiteContent.save) {
+      floater('Enregistrement en ligne indisponible. Vérifiez votre connexion puis réessayez.', 6000);
+      return Promise.resolve(false);
+    }
+    var ancienTexte = btnSauverLigne ? btnSauverLigne.textContent : '';
+    if (btnSauverLigne) {
+      btnSauverLigne.disabled = true;
+      btnSauverLigne.textContent = '⏳ Enregistrement…';
+    }
+    return window.SiteContent.save(contenuActuel(), cle)
+      .then(function () {
+        floater(messageSucces || 'Modifications enregistrées en ligne — visibles par vos visiteurs.', 6000);
+        return true;
+      })
+      .catch(function (e) {
+        floater('Échec de l’enregistrement : ' + (e && e.message ? e.message : 'connexion impossible') + '. Vos changements ne sont pas encore publiés.', 7000);
+        return false;
+      })
+      .then(function (ok) {
+        if (btnSauverLigne) {
+          btnSauverLigne.disabled = false;
+          btnSauverLigne.textContent = ancienTexte;
+        }
+        return ok;
+      });
+  }
+
   var btnSauverLigne = document.getElementById('btn-sauver-ligne');
   if (btnSauverLigne) {
     btnSauverLigne.addEventListener('click', function () {
-      var cle = lireCleModo();
-      if (!cle) {
-        floater('Collez d\u2019abord votre clé dans « Souvenirs des invités », puis réessayez.', 6000);
-        return;
-      }
-      btnSauverLigne.disabled = true;
-      var ancienTexte = btnSauverLigne.textContent;
-      btnSauverLigne.textContent = '\u23F3 Enregistrement…';
-      window.SiteContent.save(contenuActuel(), cle)
-        .then(function () {
-          floater('Contenu enregistré en ligne — les visiteurs le voient dès leur prochaine visite.', 6000);
-        })
-        .catch(function (e) {
-          floater('Échec de l\u2019enregistrement : ' + (e && e.message ? e.message : 'connexion impossible') + '.', 6000);
-        })
-        .then(function () {
-          btnSauverLigne.disabled = false;
-          btnSauverLigne.textContent = ancienTexte;
-        });
+      enregistrerContenuEnLigne();
     });
   }
 };

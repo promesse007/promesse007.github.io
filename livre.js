@@ -133,7 +133,9 @@
     cadre.tabIndex = 0;
     var img = document.createElement('img');
     img.alt = ph.legende || ('Photo ' + deux(ph.n));
-    img.setAttribute('loading', 'lazy');
+    /* livre.js ne donne un vrai src qu'aux pages proches du lecteur ;
+       laisser le navigateur charger cette petite fenêtre sans second lazy-load. */
+    img.setAttribute('loading', 'eager');
     img.src = attente;
     brancherImage(img, ph.n);
     cadre.appendChild(img);
@@ -171,7 +173,7 @@
     cadre.tabIndex = 0;
     var img = document.createElement('img');
     img.alt = legende || ('Photo ' + deux(n));
-    img.setAttribute('loading', 'lazy');
+    img.setAttribute('loading', 'eager');
     img.src = attente;
     brancherImage(img, n);
     cadre.appendChild(img);

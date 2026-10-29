@@ -26,6 +26,34 @@
             fond: t.fond || '', surface: t.surface || '', texte: t.texte || '', doux: t.doux || ''
           }));
         } catch (e) {}
+
+        /* Le lecteur du livre utilise ses propres variables CSS : lui
+           transmettre la palette publiée, sans affecter l'admin. */
+        if (document.getElementById('corps-livre')) {
+          var hex = /^#[0-9a-f]{6}$/i;
+          var racine = document.documentElement.style;
+          function nuance(couleur, part, eclaircir) {
+            if (!hex.test(couleur || '')) return couleur;
+            var n = parseInt(couleur.slice(1), 16);
+            var canaux = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+            canaux = canaux.map(function (v) {
+              return Math.max(0, Math.min(255, Math.round(eclaircir ? v + (255 - v) * part : v * (1 - part))));
+            });
+            return '#' + canaux.map(function (v) { return ('0' + v.toString(16)).slice(-2); }).join('');
+          }
+          if (hex.test(t.principale)) {
+            racine.setProperty('--bordeaux', t.principale);
+            racine.setProperty('--bordeaux-f', nuance(t.principale, .3, false));
+          }
+          if (hex.test(t.accent)) {
+            racine.setProperty('--dore', t.accent);
+            racine.setProperty('--dore-clair', nuance(t.accent, .35, true));
+          }
+          if (hex.test(t.fond || '')) racine.setProperty('--ivoire', t.fond);
+          if (hex.test(t.surface || '')) racine.setProperty('--blanc', t.surface);
+          if (hex.test(t.texte || '')) racine.setProperty('--encre', t.texte);
+          if (hex.test(t.doux || '')) racine.setProperty('--doux', t.doux);
+        }
       }
     }
 
