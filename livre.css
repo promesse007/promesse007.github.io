@@ -366,6 +366,10 @@ body {
   .entete-livre { margin-bottom: 8px; }
   .livre-lecteur { height: 70vh; height: 70svh; min-height: 300px; }
 }
+@media (max-height: 600px) and (min-width: 641px) {
+  /* Sur un écran d'ordinateur bas, le livre prime : la page peut défiler. */
+  .livre-lecteur { height: 88vh; height: 88svh; min-height: 320px; }
+}
 @media (prefers-reduced-motion: reduce) {
   .petal-livre { display: none; }
   * { transition: none !important; }
