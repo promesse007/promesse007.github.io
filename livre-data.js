@@ -9,8 +9,6 @@
    ========================================================== */
 
 window.LIVRE = {
-  credit: window.REGLAGES.livre.credit,
-
   /* musique d'ambiance : coupée par défaut, le lecteur ♪ du livre permet de l'activer */
   musique: window.REGLAGES.livre.musique,
 

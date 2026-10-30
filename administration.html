@@ -492,13 +492,11 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
       <p>Les textes du livre numérique — titres, introductions, légendes des photos.</p>
     </div>
     <div class="carte">
-      <h2>Couverture &amp; crédit</h2>
+      <h2>Couverture du livre</h2>
       <div class="deux-cols">
         <div><label>Sous-titre de couverture</label><input type="text" id="lb-soustitre"></div>
         <div><label>Ligne du bas de couverture</label><input type="text" id="lb-bascouv"></div>
       </div>
-      <label>Crédit photographique (dernière page)</label>
-      <input type="text" id="lb-credit">
     </div>
     <div id="blocs-livre"></div>
     <div class="carte">
@@ -1455,7 +1453,6 @@ window.__demarrerAdmin = function () {
     if (!LIV) return;
     $('#lb-soustitre').value = LIV.sousTitreCouverture || '';
     $('#lb-bascouv').value   = LIV.basCouverture || '';
-    $('#lb-credit').value    = LIV.credit || '';
     $('#lb-dor-titre').value = (LIV.livreDor || {}).titre || '';
     $('#lb-dor-intro').value = (LIV.livreDor || {}).intro || '';
 
@@ -1508,7 +1505,6 @@ window.__demarrerAdmin = function () {
 
   $('#lb-soustitre').addEventListener('change', function () { LIV.sousTitreCouverture = this.value; });
   $('#lb-bascouv').addEventListener('change',   function () { LIV.basCouverture = this.value; });
-  $('#lb-credit').addEventListener('change',    function () { LIV.credit = this.value; });
   $('#lb-dor-titre').addEventListener('change', function () { LIV.livreDor.titre = this.value; });
   $('#lb-dor-intro').addEventListener('change', function () { LIV.livreDor.intro = this.value; });
 

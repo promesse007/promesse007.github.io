@@ -59,8 +59,7 @@ window.REGLAGES = {
     a:        44,
     sans:     [14],
     pleines:  [31, 36],        /* photos en pleine page */
-    musique:  'audio/musique.mp3',
-    credit:   'Photographies : Ferol\u2019B Photography'
+    musique:  'audio/musique.mp3'
   }
 };
 

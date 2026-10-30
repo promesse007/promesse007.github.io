@@ -350,13 +350,13 @@
     pageLivreDor();
   }
 
-  /* ---- page crédit (fin du livre) ---- */
+  /* ---- dernière page du couple (sans crédit photographique) ---- */
   var creditEl = document.createElement('article');
   creditEl.className = 'page-credit';
   creditEl.innerHTML =
     '<span class="orneme">&#10086;</span>' +
-    '<p class="credit">' + (LIVRE.credit || 'Photographies : Ferol\u2019B Photography') + '</p>' +
-    '<p class="gratitude">Avec toute notre gratitude</p>';
+    '<p class="credit">Josiane &amp; Armand</p>' +
+    '<p class="gratitude">Notre histoire continue, souvenir après souvenir</p>';
   faire(creditEl);
 
   /* ---- remplissage du sommaire (positions désormais connues) ---- */
@@ -573,22 +573,41 @@
     var active = false;
     bouton.addEventListener('click', function () {
       if (!active) {
-        if (!REG.musique) { floater('Aucune musique configurée (audio/musique.mp3 absent).'); return; }
-        piste.src = REG.musique;
+        if (!REG.musique) {
+          floater('Aucune musique n’est configurée. Ajoutez un fichier audio dans le dossier audio du site.');
+          return;
+        }
+        piste.src = new URL(REG.musique, document.baseURI).href;
+        piste.load();
         piste.play().then(function () {
           active = true;
+          bouton.textContent = '♫';
           bouton.setAttribute('aria-pressed', 'true');
+          bouton.setAttribute('aria-label', 'Arrêter la musique');
+          bouton.title = 'Arrêter la musique';
           bouton.style.background = 'var(--bordeaux)';
           bouton.style.color = '#fff';
-          floater('Musique d\u2019ambiance activée — re-cliquez pour l\u2019arrêter.');
+          floater('Musique activée — cliquez sur ♫ pour l’arrêter.');
         }).catch(function () {
-          floater('Le fichier musical n\u2019a pas pu être lu (audio/musique.mp3 manquant ?).');
+          active = false;
+          piste.pause();
+          piste.removeAttribute('src');
+          piste.load();
+          bouton.textContent = '♪';
+          bouton.setAttribute('aria-pressed', 'false');
+          bouton.setAttribute('aria-label', 'Écouter la musique');
+          bouton.title = 'Écouter la musique';
+          floater('La lecture ne démarre pas : le fichier audio/musique.mp3 manque sur le site ou ne peut pas être lu.');
         });
       } else {
         active = false;
         piste.pause();
-        piste.src = '';
+        piste.removeAttribute('src');
+        piste.load();
+        bouton.textContent = '♪';
         bouton.setAttribute('aria-pressed', 'false');
+        bouton.setAttribute('aria-label', 'Écouter la musique');
+        bouton.title = 'Écouter la musique';
         bouton.style.background = '';
         bouton.style.color = '';
         floater('Musique coupée.');
