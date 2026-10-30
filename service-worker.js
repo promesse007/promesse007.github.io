@@ -1,11 +1,11 @@
 /* Cache léger du cœur de l'application. Les photos et vidéos restent en ligne. */
 'use strict';
 
-var CACHE_NAME = 'album-josiane-armand-v9';
+var CACHE_NAME = 'album-josiane-armand-v10';
 var APP_FILES = [
   './',
   './index.html',
-  './style.css?v=souvenirs-mobile-20261030',
+  './style.css?v=floral-palettes-20261030',
   './galerie.js',
   './site-content.js',
   './intelligence.js',

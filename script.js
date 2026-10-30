@@ -252,20 +252,22 @@
   (function petales() {
     var boite = $('#petales');
     if (!boite) return;
-    var nombre = window.innerWidth < 640 ? 14 : 24;
+    var nombre = window.innerWidth < 640 ? 28 : 44;
     var i, petale, taille;
     for (i = 0; i < nombre; i++) {
       petale = document.createElement('span');
       petale.className = 'petale';
-      taille = 7 + Math.random() * 11;
-      petale.style.width  = taille + 'px';
-      petale.style.height = (taille * 0.82) + 'px';
-      petale.style.left   = (Math.random() * 100) + 'vw';
-      petale.style.animationDuration = (10 + Math.random() * 12) + 's';
-      petale.style.animationDelay    = (-Math.random() * 20) + 's';
-      if (Math.random() > 0.65) {
-        petale.style.background = 'radial-gradient(circle at 32% 32%, #E4CFA8, #C8A96B)';
+      if (Math.random() > .62) petale.classList.add('petale-rouge');
+      if (Math.random() > .78) {
+        petale.classList.add('fleur-decor');
+        petale.setAttribute('data-fleur', Math.random() > .5 ? '✿' : '❀');
       }
+      taille = petale.classList.contains('fleur-decor') ? 20 + Math.random() * 9 : 8 + Math.random() * 12;
+      petale.style.width  = taille + 'px';
+      petale.style.height = petale.classList.contains('fleur-decor') ? taille + 'px' : (taille * 0.82) + 'px';
+      petale.style.left   = (Math.random() * 100) + 'vw';
+      petale.style.animationDuration = (12 + Math.random() * 14) + 's';
+      petale.style.animationDelay    = (-Math.random() * 24) + 's';
       boite.appendChild(petale);
     }
   })();
@@ -1320,7 +1322,43 @@
       '--rose-profond': '#1C1C1E', '--rose-ivoire': '#FAFAF8',
       '--ivoire': '#FAFAF8', '--champagne': '#E8E6E2', '--or-doux': '#A8A29A',
       '--ombre': '0 14px 34px rgba(0, 0, 0, .14)',
-      '--ombre-forte': '0 20px 50px rgba(0, 0, 0, .20)' } }
+      '--ombre-forte': '0 20px 50px rgba(0, 0, 0, .20)' } },
+    floral: { vars: {
+      '--bordeaux': '#C2185B', '--bordeaux-f': '#85123D', '--dore': '#D2A257', '--dore-clair': '#EBD3A8',
+      '--creme': '#FFFEFC', '--beige': '#FFF0F4', '--beige-foncé': '#F7DEE6',
+      '--encre': '#452C35', '--texte-doux': '#846A76', '--rose-sakura': '#FFE0E8', '--rose-poudre': '#E9B2C1',
+      '--rose-profond': '#C2185B', '--rose-ivoire': '#FFF8FA', '--ivoire': '#FFFEFC', '--champagne': '#F3E5D2', '--or-doux': '#D2A257',
+      '--ombre': '0 14px 34px rgba(194, 24, 91, .11)', '--ombre-forte': '0 20px 50px rgba(194, 24, 91, .17)' } },
+    pivoine: { vars: {
+      '--bordeaux': '#A84368', '--bordeaux-f': '#752B49', '--dore': '#D7A6B3', '--dore-clair': '#EBD0D7',
+      '--creme': '#FFFCFD', '--beige': '#F8E9EE', '--beige-foncé': '#F0DCE4',
+      '--encre': '#452F38', '--texte-doux': '#846F78', '--rose-sakura': '#F8DCE5', '--rose-poudre': '#DFAFBE',
+      '--rose-profond': '#A84368', '--rose-ivoire': '#FFF7F9', '--ivoire': '#FFFCFD', '--champagne': '#F0E3DF', '--or-doux': '#D7A6B3',
+      '--ombre': '0 14px 34px rgba(168, 67, 104, .11)', '--ombre-forte': '0 20px 50px rgba(168, 67, 104, .17)' } },
+    corail: { vars: {
+      '--bordeaux': '#D4555F', '--bordeaux-f': '#A93643', '--dore': '#D9A653', '--dore-clair': '#EAD2A6',
+      '--creme': '#FFFEFB', '--beige': '#FFF0EA', '--beige-foncé': '#F8DED5',
+      '--encre': '#493236', '--texte-doux': '#8A7072', '--rose-sakura': '#FFD9D5', '--rose-poudre': '#EAB0AC',
+      '--rose-profond': '#D4555F', '--rose-ivoire': '#FFF8F5', '--ivoire': '#FFFEFB', '--champagne': '#F2E4D4', '--or-doux': '#D9A653',
+      '--ombre': '0 14px 34px rgba(212, 85, 95, .11)', '--ombre-forte': '0 20px 50px rgba(212, 85, 95, .17)' } },
+    lavande: { vars: {
+      '--bordeaux': '#76547D', '--bordeaux-f': '#50375A', '--dore': '#C6A5BE', '--dore-clair': '#E3CFDF',
+      '--creme': '#FFFCFF', '--beige': '#F1EAF5', '--beige-foncé': '#E8DDED',
+      '--encre': '#362F3B', '--texte-doux': '#776E7D', '--rose-sakura': '#F4E7F3', '--rose-poudre': '#DCC6DD',
+      '--rose-profond': '#76547D', '--rose-ivoire': '#FCF8FC', '--ivoire': '#FFFCFF', '--champagne': '#EEE6ED', '--or-doux': '#C6A5BE',
+      '--ombre': '0 14px 34px rgba(118, 84, 125, .11)', '--ombre-forte': '0 20px 50px rgba(118, 84, 125, .17)' } },
+    sauge: { vars: {
+      '--bordeaux': '#687B60', '--bordeaux-f': '#465541', '--dore': '#CBAA77', '--dore-clair': '#E4D2B0',
+      '--creme': '#FFFEFA', '--beige': '#EEF1E9', '--beige-foncé': '#E1E7DA',
+      '--encre': '#343A32', '--texte-doux': '#737B70', '--rose-sakura': '#F3E7E5', '--rose-poudre': '#DCC5C1',
+      '--rose-profond': '#687B60', '--rose-ivoire': '#FBFCF8', '--ivoire': '#FFFEFA', '--champagne': '#EEE7D9', '--or-doux': '#CBAA77',
+      '--ombre': '0 14px 34px rgba(104, 123, 96, .11)', '--ombre-forte': '0 20px 50px rgba(104, 123, 96, .17)' } },
+    bleuNuit: { vars: {
+      '--bordeaux': '#40516F', '--bordeaux-f': '#29354C', '--dore': '#D2B56C', '--dore-clair': '#E8D7A8',
+      '--creme': '#FFFEFC', '--beige': '#EEF1F7', '--beige-foncé': '#E1E7F0',
+      '--encre': '#2E3542', '--texte-doux': '#707988', '--rose-sakura': '#E9EAF2', '--rose-poudre': '#C5CBD9',
+      '--rose-profond': '#40516F', '--rose-ivoire': '#F9FAFC', '--ivoire': '#FFFEFC', '--champagne': '#EEE9DC', '--or-doux': '#D2B56C',
+      '--ombre': '0 14px 34px rgba(64, 81, 111, .11)', '--ombre-forte': '0 20px 50px rgba(64, 81, 111, .17)' } }
   };
 
   function appliquerTheme(cle) {

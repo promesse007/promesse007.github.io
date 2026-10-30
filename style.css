@@ -15,6 +15,8 @@
   --rose-sakura:      #F4C7D3;
   --rose-poudre:      #E8B4C2;
   --rose-profond:     #B85C78;
+  --fleur-rose:       #F4C7D3;
+  --fleur-rouge:      #C83E62;
   --rose-ivoire:      #FFF1F5;
   --ivoire:           #FFFCF8;
   --champagne:        #E8D7C3;
@@ -127,9 +129,17 @@ h2.titre {
 .petale {
   position: absolute; top: -12vh;
   border-radius: 60% 0 60% 0;
-  background: radial-gradient(circle at 32% 32%, var(--rose-sakura), var(--rose-poudre));
+  background: radial-gradient(circle at 32% 32%, var(--fleur-rose), var(--rose-poudre));
   animation: tombe linear infinite;
 }
+.petale-rouge { background: radial-gradient(circle at 32% 32%, #F28CA4, var(--fleur-rouge)); }
+.petale.fleur-decor {
+  display:grid; place-items:center; border-radius:0; background:none !important;
+  color:var(--fleur-rose); font-size:1.45rem; line-height:1;
+  text-shadow:0 2px 8px rgba(184,92,120,.15);
+}
+.petale.fleur-decor.petale-rouge { color:var(--fleur-rouge); }
+.petale.fleur-decor::before { content:attr(data-fleur); }
 @keyframes tombe {
   0%   { transform: translateY(-12vh) rotate(0deg);   opacity: 0; }
   10%  { opacity: .5; }
