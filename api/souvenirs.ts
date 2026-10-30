@@ -15,7 +15,6 @@
 // • GET/PUT /admin/contenu           — lecture et enregistrement en ligne (admin)
 // • POST /admin/media                — téléversement d'une photo du site (admin)
 // • GET  /media/:id                  — image publique gérée dans l'admin
-// • POST /confirmations              — réponse privée de présence des invités
 // • GET  /admin/confirmations         — réponses et enfants des mariés (admin)
 //
 // L'administrateur s'authentifie avec l'en-tête X-Admin-Cle
@@ -239,63 +238,7 @@ app.post("/admin/souvenirs/:id/refuser", async (c) =>
   })
 );
 
-/* ============ Réponses privées au formulaire de présence ============ */
-const COTES_INVITES = new Set(["famille_josiane", "famille_armand", "amis"]);
-const REPONSES_PRESENCE = new Set(["oui", "non", "attente"]);
-
-app.post("/confirmations", async (c) => {
-  const taille = Number(c.req.raw.headers.get("content-length") || "0");
-  if (taille > 20 * 1024) return c.json({ erreur: "Le formulaire est trop volumineux." }, 413);
-
-  let entree: any;
-  try {
-    entree = await c.req.json();
-  } catch {
-    return c.json({ erreur: "Réponse illisible." }, 400);
-  }
-
-  // Champ piège anti-robot : ne confirme rien à un bot et n'enregistre aucune donnée.
-  if (typeof entree?.site_web === "string" && entree.site_web.trim()) {
-    return c.json({ ok: true, message: "Réponse transmise." }, 201);
-  }
-
-  const nom = String(entree?.nom || "").trim().slice(0, 100);
-  const telephone = String(entree?.telephone || "").trim().slice(0, 40);
-  const cote = String(entree?.cote || "");
-  const presence = String(entree?.presence || "");
-  const adultes = Number(entree?.adultes);
-  if (!nom) return c.json({ erreur: "Indiquez votre nom." }, 400);
-  if (!COTES_INVITES.has(cote)) return c.json({ erreur: "Choisissez le côté correspondant." }, 400);
-  if (!REPONSES_PRESENCE.has(presence)) return c.json({ erreur: "Choisissez une réponse." }, 400);
-  if (!Number.isInteger(adultes) || adultes < 0 || adultes > 20 || (presence !== "non" && adultes < 1)) {
-    return c.json({ erreur: "Le nombre d'adultes doit être entre 1 et 20 si vous venez." }, 400);
-  }
-
-  const enfantsBruts = entree?.enfants;
-  if (!Array.isArray(enfantsBruts) || enfantsBruts.length > 12) {
-    return c.json({ erreur: "La liste peut contenir au maximum 12 enfants." }, 400);
-  }
-  const enfants: Array<{ nom: string; age: number | null }> = [];
-  for (const enfant of enfantsBruts) {
-    const nomEnfant = String(enfant?.nom || "").trim().slice(0, 60);
-    const age = enfant?.age === null || enfant?.age === "" ? null : Number(enfant.age);
-    if (!nomEnfant || (age !== null && (!Number.isInteger(age) || age < 0 || age > 17))) {
-      return c.json({ erreur: "Vérifiez le prénom et l'âge des enfants (0 à 17 ans)." }, 400);
-    }
-    enfants.push({ nom: nomEnfant, age });
-  }
-  if (presence === "non" && (adultes !== 0 || enfants.length)) {
-    return c.json({ erreur: "Une réponse « non » ne peut pas inclure d'accompagnants." }, 400);
-  }
-
-  const r = await pool.query(
-    `insert into confirmations_presence (nom, telephone, cote, presence, adultes, enfants)
-     values ($1, $2, $3, $4, $5, $6::jsonb) returning id`,
-    [nom, telephone, cote, presence, adultes, JSON.stringify(enfants)]
-  );
-  return c.json({ ok: true, id: r.rows[0].id, message: "Merci, votre réponse a bien été transmise aux mariés." }, 201);
-});
-
+/* ============ Historique privé et enfants des mariés ============ */
 app.get("/admin/confirmations", async (c) =>
   gardeAdmin(c, async () => {
     const [reponses, enfants] = await Promise.all([

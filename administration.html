@@ -152,6 +152,46 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
   aside nav button { justify-content:center; font-size:1.05rem; }
   main { margin-left:64px; padding:22px 16px 60px; }
 }
+@media (max-width:620px) {
+  body { font-size:14px; }
+  aside {
+    position:sticky; top:0; bottom:auto; width:100%; max-height:none;
+    padding:8px 10px; overflow:visible; border-right:0;
+    border-bottom:1px solid rgba(200,169,107,.3); box-shadow:0 5px 18px rgba(73,52,61,.08);
+  }
+  aside .marque { display:none; }
+  aside .sous { display:none; }
+  aside nav ul { flex-direction:row; gap:4px; overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:thin; padding-bottom:3px; }
+  aside nav li { flex:0 0 auto; }
+  aside nav button, aside nav button .tx { display:inline-flex; }
+  aside nav button { width:auto; min-height:38px; justify-content:flex-start; gap:6px; padding:8px 10px; font-size:.74rem; white-space:nowrap; }
+  .bloc-retour, .bloc-verrou { display:inline-block; margin:6px 4px 0 0; vertical-align:middle; }
+  .bloc-retour a, .bloc-verrou button { padding:7px 10px; font-size:.68rem; }
+  main { margin:0; padding:16px 12px 40px; }
+  .en-tete-sec { padding-bottom:12px; margin-bottom:16px; }
+  .en-tete-sec h1 { font-size:1.45rem; }
+  .en-tete-sec p { font-size:.8rem; }
+  .statistiques { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin-bottom:16px; }
+  .carte-stat { padding:13px 12px; border-radius:14px; }
+  .carte-stat .nb { font-size:1.7rem; }
+  .carte-stat .lbl { font-size:.64rem; letter-spacing:.08em; }
+  .carte-stat .note { font-size:.68rem; }
+  .carte { padding:16px 14px; margin-bottom:14px; border-radius:15px; }
+  .carte h2 { font-size:1.1rem; margin-bottom:10px; }
+  .carte > p.descr, .descr { font-size:.78rem; margin-bottom:10px; }
+  .btn { min-height:38px; padding:8px 12px; font-size:.76rem; }
+  .btn.mini { min-height:34px; padding:6px 10px; font-size:.7rem; }
+  input[type="text"], input[type="tel"], input[type="search"], input[type="url"], input[type="password"], input[type="date"], input[type="number"], textarea, input[type="datetime-local"], select { padding:10px 11px; font-size:16px; }
+  textarea { min-height:84px; }
+  .table-enroule { max-width:calc(100vw - 52px); }
+  table { font-size:.76rem; }
+  th, td { padding:8px 10px; }
+  .photos-admin { grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:9px; }
+  .mod-ligne { gap:9px; padding:11px 0; }
+  .mod-apercu { width:64px; height:82px; }
+  .mod-meta { font-size:.72rem; }
+  .honnete { padding:11px 12px; font-size:.76rem; }
+}
 @media print { aside, #annonce, .petal-admin { display:none !important; } main { margin:0; } }
 @media (prefers-reduced-motion: reduce) { .petal-admin { display:none; } * { transition:none !important; } }
 
@@ -431,11 +471,11 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
   <section id="sec-invites" hidden>
     <div class="en-tete-sec">
       <h1>Gestion des invités</h1>
-      <p>Réponses envoyées depuis le formulaire public, liste privée synchronisée et enfants des mariés.</p>
+      <p>Gestion interne des invités et des enfants des mariés. Le site ne recueille plus de confirmations de présence.</p>
     </div>
     <div class="carte">
-      <h2>Réponses reçues depuis l’accueil</h2>
-      <p class="descr">Les réponses en ligne sont privées et chargées depuis la base partagée. Elles ne sont pas publiées dans la galerie.</p>
+      <h2>Anciennes confirmations</h2>
+      <p class="descr">Historique privé des réponses reçues avant le retrait du formulaire public. Les nouvelles confirmations se gèrent directement avec les invités et dans la liste interne ci-dessous.</p>
       <p class="descr" id="presence-admin-etat" role="status" aria-live="polite">Ouvrez cette rubrique pour charger les réponses.</p>
       <button class="btn secondaire" id="presence-admin-rafraichir">&#8635; Recharger les réponses</button>
       <div class="table-enroule" style="margin-top:14px">
@@ -480,7 +520,7 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
         <button class="btn principal" id="invite-ajouter">&plus; Ajouter l'invité</button>
         <button class="btn secondaire" id="invites-csv" style="margin-left:8px">Exporter en CSV</button>
       </div>
-      <p class="honnete" style="margin-top:14px"><b>À savoir</b> : cette ancienne liste manuelle reste locale à cet appareil. Pour les réponses reçues du formulaire d’accueil, utilisez le tableau « Réponses reçues depuis l’accueil » ci-dessus : il est synchronisé entre les sites.</p>
+      <p class="honnete" style="margin-top:14px"><b>À savoir</b> : cette liste manuelle est conservée sur cet appareil. Utilisez-la pour centraliser les invités que vous gérez directement.</p>
     </div>
     <div class="carte">
       <h2>Liste des invités</h2>
