@@ -52,10 +52,10 @@ body {
 
 /* ---------- scène du livre ---------- */
 .livre-lecteur {
-  width: min(1120px, 100%);
-  height: min(76vh, 720px);
-  height: min(76svh, 720px);
-  min-height: 340px;
+  width: min(1320px, 100%);
+  height: min(82vh, 820px);
+  height: min(82svh, 820px);
+  min-height: 400px;
   position: relative; z-index: 2;
   margin: 0 auto;
 }
@@ -95,7 +95,7 @@ body {
 .page-couverture .sur-titre { font-size: .66rem; letter-spacing: .34em; text-transform: uppercase; color: var(--dore-clair); }
 .page-couverture h2 {
   font-family: var(--manuscrite); font-weight: 400;
-  font-size: clamp(1.7rem, 7vw, 3rem); line-height: 1.15;
+  font-size: clamp(1.5rem, 4vw, 2.25rem); line-height: 1.15;
   color: #fff; margin: 10px 0;
 }
 .page-couverture .sous-ligne { font-family: var(--titre); font-style: italic; font-size: .95rem; color: #FFE9C8; }
@@ -132,8 +132,14 @@ body {
 }
 .page-chapitre .ornement { color: var(--dore); letter-spacing: .5em; margin-bottom: 18px; }
 .page-chapitre p.intro {
-  font-size: .88rem; line-height: 1.85; color: var(--encre);
+  font-size: 1rem; line-height: 1.72; color: var(--encre);
   text-align: justify; hyphens: auto;
+}
+.page-chapitre, .page-texte, .page-livredor {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dore) transparent;
 }
 
 /* page photo */
@@ -197,7 +203,7 @@ body {
 .attente-photo .ic { font-size: 1.6rem; color: var(--dore); }
 
 /* page remerciements */
-.page-texte p.intro { font-size: .88rem; line-height: 1.9; color: var(--encre); text-align: justify; margin-bottom: 14px; }
+.page-texte p.intro { font-size: 1rem; line-height: 1.72; color: var(--encre); text-align: justify; margin-bottom: 14px; }
 
 /* livre d'or du livre */
 .page-livredor { justify-content: center; }
@@ -342,7 +348,7 @@ body {
   .livre-lecteur { height: min(66vh, 620px); height: min(66svh, 620px); min-height: 300px; }
   .page-du-livre { padding: 16px 12px; }
   .page-photo { padding: 12px 8px 34px; }
-  .page-chapitre p.intro, .page-texte p.intro, .page-livredor p.intro { font-size: .78rem; line-height: 1.58; }
+  .page-chapitre p.intro, .page-texte p.intro, .page-livredor p.intro { font-size: .86rem; line-height: 1.62; }
   .page-livredor form { gap: 7px; }
   .page-livredor label { font-size: .62rem; }
   .page-livredor input, .page-livredor textarea { font-size: .78rem; padding: 8px 9px; }
@@ -358,7 +364,7 @@ body {
 @media (max-height: 600px) {
   body { padding-top: max(8px, env(safe-area-inset-top)); padding-bottom: max(18px, env(safe-area-inset-bottom)); }
   .entete-livre { margin-bottom: 8px; }
-  .livre-lecteur { height: 58vh; height: 58svh; min-height: 260px; }
+  .livre-lecteur { height: 70vh; height: 70svh; min-height: 300px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .petal-livre { display: none; }

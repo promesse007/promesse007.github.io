@@ -530,6 +530,7 @@ ul.actions-rapides { list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
         </div>
       </div>
       <button class="btn principal" id="mod-cle-enregistrer" style="margin-top:14px">&#128274; Enregistrer la clé et charger les souvenirs</button>
+      <p class="descr" id="mod-etat" role="status" aria-live="polite" style="margin-top:12px">Pour protéger l’administration, collez la clé puis cliquez sur « Enregistrer la clé et charger les souvenirs ».</p>
     </div>
     <div class="carte" id="mod-carte-attente" hidden>
       <h2>&#9203; En attente de ta décision</h2>
@@ -657,6 +658,7 @@ window.__demarrerAdmin = function () {
       b.classList.add('actif');
       $$('main > section').forEach(function (s) { s.hidden = true; });
       $('#sec-' + b.getAttribute('data-sec')).hidden = false;
+      if (b.getAttribute('data-sec') === 'moderation') chargerModeration();
       window.scrollTo(0, 0);
     });
   });
@@ -1163,7 +1165,13 @@ window.__demarrerAdmin = function () {
   }
 
   function chargerModeration() {
-    if (!$('#mod-carte-attente') || !cleModo()) return;
+    var etat = $('#mod-etat');
+    if (!$('#mod-carte-attente')) return;
+    if (!cleModo()) {
+      if (etat) etat.textContent = 'Clé non enregistrée pour cette adresse. Collez-la ci-dessus. Chaque adresse du site (Render ou GitHub Pages) garde sa propre clé.';
+      return;
+    }
+    if (etat) etat.textContent = 'Chargement des souvenirs en attente…';
     fetch(URL_API + '/admin/souvenirs', { headers: entetesModo() })
       .then(function (r) { if (!r.ok) throw new Error('réponse ' + r.status); return r.json(); })
       .then(function (liste) {
@@ -1177,10 +1185,14 @@ window.__demarrerAdmin = function () {
         $('#mod-carte-publies').hidden = publies.length === 0;
         enAttente.forEach(function (s) { zoneA.appendChild(carteModeration(s, true)); });
         publies.forEach(function (s) { zoneP.appendChild(carteModeration(s, false)); });
+        if (etat) etat.textContent = enAttente.length
+          ? enAttente.length + ' souvenir(s) en attente de votre décision · ' + publies.length + ' publié(s).'
+          : 'Aucun souvenir en attente · ' + publies.length + ' souvenir(s) publié(s).';
         if (!liste.length) floater('Aucun souvenir déposé pour l\'instant — les invités déposent depuis le site en ligne.');
         else floater(enAttente.length + ' souvenir(s) en attente · ' + publies.length + ' publié(s).');
       })
-      .catch(function () {
+      .catch(function (err) {
+        if (etat) etat.textContent = 'Impossible de charger la liste (' + (err && err.message ? err.message : 'connexion ou clé') + '). Vérifiez la clé pour cette adresse et réessayez.';
         floater('Chargement impossible : clé fausse ou connexion manquante.');
       });
   }
@@ -1189,6 +1201,8 @@ window.__demarrerAdmin = function () {
   $('#mod-cle-enregistrer').addEventListener('click', function () {
     var cle = $('#mod-cle').value.trim();
     if (!cle) { floater('La clé est vide — colle-la depuis CLE-MODERATION.txt.'); return; }
+    var etat = $('#mod-etat');
+    if (etat) etat.textContent = 'Vérification de la clé auprès du serveur…';
     sauverCleModo(cle);
     fetch(URL_API + '/admin/souvenirs', { headers: { 'X-Admin-Cle': cle } })
       .then(function (r) {
@@ -1201,6 +1215,7 @@ window.__demarrerAdmin = function () {
       })
       .catch(function () {
         sauverCleModo('');
+        if (etat) etat.textContent = 'Clé refusée. Vérifiez-la, puis réessayez sur cette même adresse du site.';
         floater('Cette clé est refusée par le serveur — vérifie-la (copie complète, sans espaces).');
       });
   });

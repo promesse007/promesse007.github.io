@@ -401,13 +401,13 @@
     if (!Classe) return false;
     try {
       livre = new Classe(corps, {
-        width: 520,
-        height: 720,
+        width: 560,
+        height: 780,
         size: 'stretch',
-        minWidth: 220,
-        maxWidth: 1080,
-        minHeight: 260,
-        maxHeight: 840,
+        minWidth: 260,
+        maxWidth: 1320,
+        minHeight: 360,
+        maxHeight: 900,
         usePortrait: true,          /* page simple sur téléphone, double sur ordinateur */
         drawShadow: true,
         showCover: true,            /* la couverture reste seule ; ensuite pages doubles */
