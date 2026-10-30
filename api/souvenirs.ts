@@ -15,6 +15,8 @@
 // • GET/PUT /admin/contenu           — lecture et enregistrement en ligne (admin)
 // • POST /admin/media                — téléversement d'une photo du site (admin)
 // • GET  /media/:id                  — image publique gérée dans l'admin
+// • POST /confirmations              — réponse privée de présence des invités
+// • GET  /admin/confirmations         — réponses et enfants des mariés (admin)
 //
 // L'administrateur s'authentifie avec l'en-tête X-Admin-Cle
 // (la clé ADMIN_SECRET — jamais écrite dans le site public).
@@ -234,6 +236,115 @@ app.post("/admin/souvenirs/:id/refuser", async (c) =>
   gardeAdmin(c, async () => {
     await pool.query(`delete from souvenirs where id = $1`, [c.req.param("id")]);
     return c.json({ ok: true, statut: "refuse" });
+  })
+);
+
+/* ============ Réponses privées au formulaire de présence ============ */
+const COTES_INVITES = new Set(["famille_josiane", "famille_armand", "amis"]);
+const REPONSES_PRESENCE = new Set(["oui", "non", "attente"]);
+
+app.post("/confirmations", async (c) => {
+  const taille = Number(c.req.raw.headers.get("content-length") || "0");
+  if (taille > 20 * 1024) return c.json({ erreur: "Le formulaire est trop volumineux." }, 413);
+
+  let entree: any;
+  try {
+    entree = await c.req.json();
+  } catch {
+    return c.json({ erreur: "Réponse illisible." }, 400);
+  }
+
+  // Champ piège anti-robot : ne confirme rien à un bot et n'enregistre aucune donnée.
+  if (typeof entree?.site_web === "string" && entree.site_web.trim()) {
+    return c.json({ ok: true, message: "Réponse transmise." }, 201);
+  }
+
+  const nom = String(entree?.nom || "").trim().slice(0, 100);
+  const telephone = String(entree?.telephone || "").trim().slice(0, 40);
+  const cote = String(entree?.cote || "");
+  const presence = String(entree?.presence || "");
+  const adultes = Number(entree?.adultes);
+  if (!nom) return c.json({ erreur: "Indiquez votre nom." }, 400);
+  if (!COTES_INVITES.has(cote)) return c.json({ erreur: "Choisissez le côté correspondant." }, 400);
+  if (!REPONSES_PRESENCE.has(presence)) return c.json({ erreur: "Choisissez une réponse." }, 400);
+  if (!Number.isInteger(adultes) || adultes < 0 || adultes > 20 || (presence !== "non" && adultes < 1)) {
+    return c.json({ erreur: "Le nombre d'adultes doit être entre 1 et 20 si vous venez." }, 400);
+  }
+
+  const enfantsBruts = entree?.enfants;
+  if (!Array.isArray(enfantsBruts) || enfantsBruts.length > 12) {
+    return c.json({ erreur: "La liste peut contenir au maximum 12 enfants." }, 400);
+  }
+  const enfants: Array<{ nom: string; age: number | null }> = [];
+  for (const enfant of enfantsBruts) {
+    const nomEnfant = String(enfant?.nom || "").trim().slice(0, 60);
+    const age = enfant?.age === null || enfant?.age === "" ? null : Number(enfant.age);
+    if (!nomEnfant || (age !== null && (!Number.isInteger(age) || age < 0 || age > 17))) {
+      return c.json({ erreur: "Vérifiez le prénom et l'âge des enfants (0 à 17 ans)." }, 400);
+    }
+    enfants.push({ nom: nomEnfant, age });
+  }
+  if (presence === "non" && (adultes !== 0 || enfants.length)) {
+    return c.json({ erreur: "Une réponse « non » ne peut pas inclure d'accompagnants." }, 400);
+  }
+
+  const r = await pool.query(
+    `insert into confirmations_presence (nom, telephone, cote, presence, adultes, enfants)
+     values ($1, $2, $3, $4, $5, $6::jsonb) returning id`,
+    [nom, telephone, cote, presence, adultes, JSON.stringify(enfants)]
+  );
+  return c.json({ ok: true, id: r.rows[0].id, message: "Merci, votre réponse a bien été transmise aux mariés." }, 201);
+});
+
+app.get("/admin/confirmations", async (c) =>
+  gardeAdmin(c, async () => {
+    const [reponses, enfants] = await Promise.all([
+      pool.query(
+        `select id, nom, telephone, cote, presence, adultes, enfants, cree_le
+           from confirmations_presence order by cree_le desc`
+      ),
+      pool.query(`select id, nom, cote, age, cree_le from enfants_maries order by cote, cree_le`),
+    ]);
+    return c.json({ reponses: reponses.rows, enfants_maries: enfants.rows }, 200, { "Cache-Control": "no-store" });
+  })
+);
+
+app.delete("/admin/confirmations/:id", async (c) =>
+  gardeAdmin(c, async () => {
+    const id = c.req.param("id");
+    if (!uuidValide(id)) return c.json({ erreur: "Identifiant invalide." }, 400);
+    const r = await pool.query(`delete from confirmations_presence where id = $1 returning id`, [id]);
+    if (!r.rows.length) return c.json({ erreur: "Réponse introuvable." }, 404);
+    return c.json({ ok: true });
+  })
+);
+
+app.post("/admin/enfants-maries", async (c) =>
+  gardeAdmin(c, async () => {
+    let entree: any;
+    try { entree = await c.req.json(); }
+    catch { return c.json({ erreur: "Données illisibles." }, 400); }
+    const nom = String(entree?.nom || "").trim().slice(0, 60);
+    const cote = String(entree?.cote || "");
+    const age = entree?.age === null || entree?.age === "" || entree?.age === undefined ? null : Number(entree.age);
+    if (!nom) return c.json({ erreur: "Indiquez le prénom de l'enfant." }, 400);
+    if (cote !== "josiane" && cote !== "armand") return c.json({ erreur: "Choisissez Josiane ou Armand." }, 400);
+    if (age !== null && (!Number.isInteger(age) || age < 0 || age > 30)) return c.json({ erreur: "Âge invalide." }, 400);
+    const r = await pool.query(
+      `insert into enfants_maries (nom, cote, age) values ($1, $2, $3) returning id, nom, cote, age, cree_le`,
+      [nom, cote, age]
+    );
+    return c.json({ ok: true, enfant: r.rows[0] }, 201);
+  })
+);
+
+app.delete("/admin/enfants-maries/:id", async (c) =>
+  gardeAdmin(c, async () => {
+    const id = c.req.param("id");
+    if (!uuidValide(id)) return c.json({ erreur: "Identifiant invalide." }, 400);
+    const r = await pool.query(`delete from enfants_maries where id = $1 returning id`, [id]);
+    if (!r.rows.length) return c.json({ erreur: "Enfant introuvable." }, 404);
+    return c.json({ ok: true });
   })
 );
 

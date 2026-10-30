@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=Inter:wght@300;400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=responsive-2026-10b">
+<link rel="stylesheet" href="style.css?v=rsvp-20261030">
 </head>
 <body>
 
@@ -51,6 +51,7 @@
     <li><a href="#galerie">Galerie</a></li>
     <li><a href="livre.html">Le livre</a></li>
     <li><a href="#famille">Famille &amp; invités</a></li>
+    <li><a href="#confirmation-presence">Confirmer sa présence</a></li>
     <li><a href="#souvenirs">Souvenirs</a></li>
     <li><a href="#livre-or">Livre d'or</a></li>
   </ul>
@@ -234,6 +235,70 @@
       </div>
 
       <div id="famille-liste"><!-- rempli par script.js --></div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       CONFIRMATION DE PRÉSENCE — réponses privées pour les mariés
+       ========================================================== -->
+  <section id="confirmation-presence" class="zone">
+    <div class="contour">
+      <div class="centre">
+        <p class="surtitre">Nous serons heureux de vous accueillir</p>
+        <h2 class="titre">Confirmer sa présence</h2>
+        <p class="sous-titre">Amis et famille, dites-nous si vous pourrez être avec nous.</p>
+        <div class="separateur">&#9829;</div>
+      </div>
+      <div class="cadre-souvenirs cadre-presence">
+        <form id="formulaire-presence" novalidate>
+          <div class="deux-champs-souvenirs">
+            <div>
+              <label for="presence-nom">Votre nom</label>
+              <input id="presence-nom" type="text" maxlength="100" autocomplete="name" required>
+            </div>
+            <div>
+              <label for="presence-telephone">Téléphone (facultatif)</label>
+              <input id="presence-telephone" type="tel" maxlength="40" autocomplete="tel" placeholder="Ex. +242 …">
+            </div>
+          </div>
+          <div class="deux-champs-souvenirs">
+            <div>
+              <label for="presence-cote">Vous venez du côté</label>
+              <select id="presence-cote" required>
+                <option value="famille_josiane">Famille de Josiane</option>
+                <option value="famille_armand">Famille d’Armand</option>
+                <option value="amis">Amis</option>
+              </select>
+            </div>
+            <div>
+              <label for="presence-reponse">Votre réponse</label>
+              <select id="presence-reponse" required>
+                <option value="oui">Oui, je serai présent(e)</option>
+                <option value="attente">Je ne sais pas encore</option>
+                <option value="non">Non, je ne pourrai pas venir</option>
+              </select>
+            </div>
+          </div>
+          <div id="presence-accompagnants">
+            <div class="deux-champs-souvenirs">
+              <div>
+                <label for="presence-adultes">Nombre d’adultes (vous compris)</label>
+                <input id="presence-adultes" type="number" min="1" max="20" value="1">
+              </div>
+              <div>
+                <label for="presence-enfants">Enfants des invités (facultatif)</label>
+                <textarea id="presence-enfants" rows="3" maxlength="600" placeholder="Un prénom et un âge par ligne, ex. Lina — 6 ans"></textarea>
+              </div>
+            </div>
+            <p class="descr-presence">Les enfants de Josiane et Armand seront ajoutés séparément par les mariés.</p>
+          </div>
+          <label class="champ-cache" aria-hidden="true" for="presence-site-web">Ne pas remplir</label>
+          <input class="champ-cache" id="presence-site-web" type="text" tabindex="-1" autocomplete="off">
+          <button type="submit" id="presence-envoyer">Envoyer ma réponse</button>
+          <p class="reponse-souvenir" id="presence-reponse-message" role="status" aria-live="polite"></p>
+        </form>
+        <div class="encadre-souvenirs"><b>Réponse privée</b><br>Votre nom, votre réponse et les informations sur les enfants seront visibles uniquement par Josiane et Armand dans leur administration.</div>
+      </div>
     </div>
   </section>
 
@@ -439,6 +504,7 @@
 <script src="site-content.js"></script>
 <script src="intelligence.js"></script>
 <script src="souvenirs.js"></script>
+<script src="presence.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

@@ -719,6 +719,22 @@ section.zone:nth-of-type(even) .recit-bloc { background: var(--creme); }
   box-shadow: var(--ombre-forte);
 }
 #formulaire-souvenir button:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+#formulaire-presence { display: grid; gap: 14px; }
+#formulaire-presence label { display: block; margin-bottom: 6px; font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--bordeaux); }
+#formulaire-presence input:not(.champ-cache), #formulaire-presence textarea, #formulaire-presence select {
+  width: 100%; padding: 12px 14px; border: 1px solid rgba(201,162,39,.4);
+  border-radius: 10px; background: var(--creme); color: var(--encre); font: inherit; font-size: .95rem;
+}
+#formulaire-presence input:focus, #formulaire-presence textarea:focus, #formulaire-presence select:focus { outline: 2px solid var(--dore); outline-offset: 1px; }
+#formulaire-presence textarea { resize: vertical; }
+#formulaire-presence button {
+  font: inherit; font-weight: 700; cursor: pointer; border: none; border-radius: 999px;
+  padding: 13px 26px; color: #fff; background: linear-gradient(135deg, var(--rose-profond), var(--bordeaux-f));
+}
+#formulaire-presence button:disabled { opacity: .55; cursor: wait; }
+.cadre-presence { margin-top: 30px; }
+.descr-presence { margin-top: 8px; font-size: .84rem; color: var(--texte-doux); }
+.champ-cache { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
 .deux-champs-souvenirs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .reponse-souvenir { font-size: .92rem; min-height: 22px; }
 .reponse-souvenir.ok { color: var(--rose-profond); }
